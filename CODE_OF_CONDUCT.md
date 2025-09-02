@@ -37,9 +37,11 @@ This Code of Conduct applies within all project spaces, including GitHub issues,
 ## Enforcement
 Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the project team at:
 
-**[support@manicemu.site](mailto: support@manicemu.site)**  
+**[support@manicemu.site](mailto:support@manicemu.site)**
 
-**[mafty.manicemu@gmail.com](mailto: mafty.manicemu@gmail.com)**  
+**[daiuno1999@gmail.com](mailto:daiuno1999@gmail.com)**
+
+**[mafty.manicemu@gmail.com](mailto:mafty.manicemu@gmail.com)**
 
 All complaints will be reviewed and investigated promptly and fairly.
 
