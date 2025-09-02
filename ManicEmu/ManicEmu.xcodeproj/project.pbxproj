@@ -4434,7 +4434,7 @@
 			);
 			mainGroup = A5A001E624555A5F006E0F0E;
 			packageReferences = (
-				576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */,
+				576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */,
 				57DF84BD2D637A1A00AA0AAB /* XCRemoteSwiftPackageReference "DominantColors" */,
 				57F632CC2D7050B9007270E8 /* XCRemoteSwiftPackageReference "SMBClient" */,
 				57F632E12D714E46007270E8 /* XCRemoteSwiftPackageReference "WebDAVKitSwift" */,
@@ -4445,12 +4445,12 @@
 				5717445C2DA264FF007CCE25 /* XCRemoteSwiftPackageReference "zstd" */,
 				5717445F2DA2652F007CCE25 /* XCRemoteSwiftPackageReference "OpenSSL" */,
 				571BB9382DA44D6B00830134 /* XCRemoteSwiftPackageReference "SwiftSDL2" */,
-				570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "../ChromaColorPicker" */,
+				570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "ChromaColorPicker" */,
 				575A39CA2DCCFA6B00B28FC2 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 				570A27FE2DCF03CF001249C6 /* XCRemoteSwiftPackageReference "PLzmaSDK" */,
 				57F0D8492DE2E7A600760F57 /* XCRemoteSwiftPackageReference "SwiftCloudDrive" */,
 				5706B0BC2DFDE4570066122E /* XCRemoteSwiftPackageReference "BlurUIKit" */,
-				5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */,
+				5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "KeyboardKit" */,
 			);
 			productRefGroup = A5A001F024555A5F006E0F0E /* Products */;
 			projectDirPath = "";
@@ -4516,13 +4516,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManicEmu/Pods-ManicEmu-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ManicEmu/Pods-ManicEmu-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -5231,7 +5227,7 @@
 /* Begin PBXTargetDependency section */
 		576DD4482E0FFAC900644424 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			productRef = 576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */;
+			productRef = 576DD4472E0FFAC900644424 /* plugin:RswiftGenerateInternalResources */;
 		};
 		57BFBEB12DD489C700AABF98 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -7034,11 +7030,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "../ChromaColorPicker" */ = {
+		570F59BA2DC91FC8007BFD92 /* XCLocalSwiftPackageReference "ChromaColorPicker" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../ChromaColorPicker;
 		};
-		5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "../KeyboardKit" */ = {
+		5744C6602E34D6E10088081A /* XCLocalSwiftPackageReference "KeyboardKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../KeyboardKit;
 		};
@@ -7109,7 +7105,7 @@
 				minimumVersion = 2.8.7;
 			};
 		};
-		576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */ = {
+		576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/mac-cain13/R.swift";
 			requirement = {
@@ -7235,12 +7231,12 @@
 		};
 		576060282D24E8BD00A98B0C /* RswiftLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */;
 			productName = RswiftLibrary;
 		};
-		576DD4472E0FFAC900644424 /* RswiftGenerateInternalResources */ = {
+		576DD4472E0FFAC900644424 /* plugin:RswiftGenerateInternalResources */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R" */;
+			package = 576060272D24E8BD00A98B0C /* XCRemoteSwiftPackageReference "R.swift" */;
 			productName = "plugin:RswiftGenerateInternalResources";
 		};
 		57DA89122D82B0C20074052A /* SmartCodable */ = {

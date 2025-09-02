@@ -104,6 +104,10 @@ More platforms coming soon!
 6. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities
 7. Wait for SPM to finish loading. Press CMD+R to run Manic EMU
 
+  **PS.**
+- Some Apple services require a Developer Program account to work properly—like App Groups, In-App Purchases, and iCloud. You’ll need to set these up yourself. If you don’t have a Developer Program account, you can remove these services before compiling.
+- Some third-party services also need your own API keys to function correctly. You can configure these in the `Cipher` section of `Constant.swift`.   
+
 
 ## Acknowledgements
 This project is made possible by the contributions of many outstanding open-source projects:
