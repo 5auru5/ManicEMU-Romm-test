@@ -110,11 +110,7 @@ This project is made possible by the contributions of many outstanding open-sour
 - Additional dependencies (see `SPM` and `Podfile` listings)
 
 ## Links
-
-<p float="left">
-	<a src="https://manicemu.site"><img src="manicemu-badge.png" height="80"></a>
-	<a src="https://discord.gg/qsaTHzknAZ"><img src="discord-badge.png" height="80"></a>
-</p>
+[<img src="manicemu-badge.png" height="80">](https://manicemu.site) [<img src="discord-badge.png" height="80">](https://discord.gg/qsaTHzknAZ)
 
 
 
