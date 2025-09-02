@@ -1,4 +1,4 @@
---------------------------------Citra-------------------------------
+## Citra
 GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
 
@@ -360,7 +360,7 @@ sd_card.png                        | CC BY-ND 3.0  | https://icons8.com
 star.png                           | CC BY-ND 3.0  | https://icons8.com
 
 
---------------------------------melonDS-------------------------------
+## melonDS
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
@@ -1036,7 +1036,7 @@ the library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.  But first, please read
 <http://www.gnu.org/philosophy/why-not-lgpl.html>.
 
------------------------------mupen64plus-libretro-nx----------------------------
+## mupen64plus-libretro-nx
                     GNU GENERAL PUBLIC LICENSE
                        Version 2, June 1991
 
@@ -1377,7 +1377,7 @@ consider it more useful to permit linking proprietary applications with the
 library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.
 
-------------------------------beetle-psx-libretro------------------------------
+## beetle-psx-libretro
 
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
@@ -1722,7 +1722,7 @@ Public License instead of this License.
 
 
 
---------------------------------PokeMini-------------------------------
+## PokeMini
 PokeMini - Pokémon-Mini Emulator
 Copyright (C) 2014  JustBurn
 
@@ -1740,7 +1740,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
---------------------------------beetle-vb-libretro-------------------------------
+## beetle-vb-libretro
 
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
@@ -2084,7 +2084,7 @@ library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 
 
---------------------------------Yabause-------------------------------
+## Yabause
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
 
@@ -2428,7 +2428,7 @@ Public License instead of this License.
 
 
 
------------------------------beetle-saturn-libretro-------------------------------
+## beetle-saturn-libretro
 
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
@@ -2772,7 +2772,7 @@ library.  If this is what you want to do, use the GNU Library General
 Public License instead of this License.
 
 
---------------------------------nestopia-------------------------------
+## nestopia
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
 
@@ -3055,7 +3055,7 @@ POSSIBILITY OF SUCH DAMAGES.
          END OF TERMS AND CONDITIONS
 
 
---------------------------------ppsspp-------------------------------
+## ppsspp
 PSPSDK BSD-compatible copyright notice (Some parts of the PSPSDK were used in this emulator (defines, constants, headers))
 
 Copyright (c) 2005  adresd
@@ -3428,7 +3428,7 @@ library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.
 
 
---------------------------------vbam-libretro-------------------------------
+## vbam-libretro
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
 
@@ -3772,7 +3772,7 @@ Public License instead of this License.
 
 
 
---------------------------------gambatte-libretro-------------------------------
+## gambatte-libretro
         GNU GENERAL PUBLIC LICENSE
            Version 2, June 1991
 
@@ -4114,7 +4114,7 @@ library.  If this is what you want to do, use the GNU Lesser General
 Public License instead of this License.
 
 
---------------------------------picodrive-------------------------------
+## picodrive
 
  Redistribution and use of this code or any derivative works are permitted
  provided that the following conditions are met:
@@ -4148,7 +4148,7 @@ Public License instead of this License.
 
 
 
- --------------------------------mGBA-------------------------------
+ ## mGBA
  Mozilla Public License Version 2.0
 ==================================
 
@@ -4524,7 +4524,7 @@ Exhibit B - "Incompatible With Secondary Licenses" Notice
   defined by the Mozilla Public License, v. 2.0.
 
 
---------------------------------bsnes-libretro-------------------------------
+## bsnes-libretro
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
