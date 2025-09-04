@@ -245,12 +245,12 @@ extension CheatCodeListView {
         Sheet.find(identifier: String(describing: CheatCodeListView.self)).count > 0 ? true : false
     }
     
-    static func show(game: Game, gameViewRect: CGRect, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
+    static func show(game: Game, gameViewRect: CGRect, menuInsets: UIEdgeInsets? = nil, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
         Sheet.lazyPush(identifier: String(describing: CheatCodeListView.self)) { sheet in
-            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
             
             let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.BackgroundPrimary
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
@@ -277,10 +277,10 @@ extension CheatCodeListView {
             
             let listView = CheatCodeListView(game: game)
             listView.didTapAdd = {
-                AddCheatCodeView.show(game: game, gameViewRect: gameViewRect)
+                AddCheatCodeView.show(game: game, gameViewRect: gameViewRect, menuInsets: menuInsets)
             }
             listView.didTapEdt = { gameCheat in
-                AddCheatCodeView.show(game: game, gameCheat: gameCheat, gameViewRect: gameViewRect)
+                AddCheatCodeView.show(game: game, gameCheat: gameCheat, gameViewRect: gameViewRect, menuInsets: menuInsets)
             }
             listView.didTapClose = { [weak sheet] in
                 sheet?.pop()

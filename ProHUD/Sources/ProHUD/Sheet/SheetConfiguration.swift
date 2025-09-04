@@ -15,6 +15,9 @@ public class SheetConfiguration: CommonConfiguration {
     /// 卡片距离屏幕的间距
     public var windowEdgeInset: CGFloat = 16
     
+    /// 卡片距离屏幕的底部距离
+    public var bottomEdgeInset: CGFloat? = nil
+    
     /// 是否是全屏的页面
     public var isFullScreen = false
     

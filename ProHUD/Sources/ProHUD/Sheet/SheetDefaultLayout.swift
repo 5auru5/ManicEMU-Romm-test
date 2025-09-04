@@ -57,10 +57,14 @@ extension SheetTarget: DefaultLayout {
                     // iPad且窗口宽度较宽时居中弹出
                     make.centerY.equalToSuperview()
                 } else {
-                    if isPortrait {
-                        make.bottom.equalToSuperview().inset(config.windowEdgeInset)
+                    if let bottomEdgeInset = config.bottomEdgeInset {
+                        make.bottom.equalToSuperview().inset(bottomEdgeInset)
                     } else {
-                        make.bottom.equalToSuperview().inset(AppContext.safeAreaInsets.bottom)
+                        if isPortrait {
+                            make.bottom.equalToSuperview().inset(config.windowEdgeInset)
+                        } else {
+                            make.bottom.equalToSuperview().inset(AppContext.safeAreaInsets.bottom)
+                        }
                     }
                 }
                 make.width.equalTo(width)

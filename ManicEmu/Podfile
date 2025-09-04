@@ -41,7 +41,7 @@ target 'ManicEmu' do
   pod 'SideMenu', '~> 6.5'
   pod 'VisualEffectView', '~> 5.0'
   pod 'FluentDarkModeKit', '~> 1.0.4'
-  pod "Device", '~> 3.7'
+  pod "Device", :git => 'https://github.com/LeeAoshuang/Device.git', :branch => 'master'
   pod 'SFSafeSymbols', '~> 5.0'
   pod "Haptica", '~> 3.0'
   pod 'IQKeyboardManagerSwift', '~> 8.0'

@@ -124,4 +124,8 @@ extension TouchControllerSkin: ControllerSkinBase
         
         return compositeScreenSize
     }
+    
+    public func menuInsets(for traits: ControllerSkin.Traits) -> UIEdgeInsets? {
+        return nil
+    }
 }

@@ -17,7 +17,7 @@ class RetroAchievementsListViewController: BaseViewController {
     }()
     
     private lazy var listView: RetroAchievementListView = {
-        let view = RetroAchievementListView(game: self.game)
+        let view = RetroAchievementListView(game: self.game, bottomInset: self.bottomInset)
         return view
     }()
     
@@ -27,15 +27,18 @@ class RetroAchievementsListViewController: BaseViewController {
     
     private let game: Game
     
+    private var bottomInset: CGFloat? = nil
+    
     deinit {
         if let quitGamingNotification {
             NotificationCenter.default.removeObserver(quitGamingNotification)
         }
     }
     
-    init(game: Game) {
+    init(game: Game, bottomInset: CGFloat? = nil) {
         self.game = game
         super.init(nibName: nil, bundle: nil)
+        self.bottomInset = bottomInset
     }
     
     @MainActor required init?(coder: NSCoder) {

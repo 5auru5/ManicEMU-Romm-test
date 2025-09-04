@@ -15,7 +15,11 @@ class RetroAchievementListView: BaseView {
         view.register(cellWithClass: RetroAchievementsListCell.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
-        view.contentInset = UIEdgeInsets(top: 90, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        var bottomInset = Constants.Size.ContentInsetBottom
+        if let prefferdBottomInset = self.bottomInset, bottomInset < prefferdBottomInset {
+            bottomInset = prefferdBottomInset
+        }
+        view.contentInset = UIEdgeInsets(top: 90, left: 0, bottom: bottomInset, right: 0)
         let blankView = BlankSlateEmptyView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 70, color: Constants.Color.LabelSecondary), title: R.string.localizable.achievementsNotSupport(game.aliasName ?? game.name))
         blankView.label.isHidden = true
         view.blankSlateView = blankView
@@ -25,10 +29,12 @@ class RetroAchievementListView: BaseView {
     
     private var game: Game
     private var cheevosGame: CheevosGame? = nil
+    private var bottomInset: CGFloat? = nil
     
-    init(game: Game) {
+    init(game: Game, bottomInset: CGFloat? = nil) {
         self.game = game
         super.init(frame: .zero)
+        self.bottomInset = bottomInset
         backgroundColor = .clear
         
         addSubview(collectionView)

@@ -561,12 +561,12 @@ extension GameInfoView {
         Sheet.find(identifier: String(describing: GameInfoView.self)).count > 0 ? true : false
     }
     
-    static func show(game: Game, gameViewRect: CGRect, selection: ((GameSaveState)->Void)? = nil, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
+    static func show(game: Game, gameViewRect: CGRect, menuInsets: UIEdgeInsets? = nil, selection: ((GameSaveState)->Void)? = nil, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
         Sheet.lazyPush(identifier: String(describing: GameInfoView.self)) { sheet in
-            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
             
             let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.BackgroundPrimary
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

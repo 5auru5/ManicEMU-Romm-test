@@ -283,12 +283,12 @@ extension ControllersSettingView {
         Sheet.find(identifier: String(describing: ControllersSettingView.self)).count > 0 ? true : false
     }
     
-    static func show(gameType: GameType, gameViewRect: CGRect, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
+    static func show(gameType: GameType, gameViewRect: CGRect, menuInsets: UIEdgeInsets? = nil, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil) {
         Sheet.lazyPush(identifier: String(describing: ControllersSettingView.self)) { sheet in
-            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, hideCompletion: hideCompletion)
+            sheet.configGamePlayingStyle(gameViewRect: gameViewRect, menuInsets: menuInsets, hideCompletion: hideCompletion)
             
             let view = UIView()
-            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
+            let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
             containerView.backgroundColor = Constants.Color.BackgroundPrimary
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

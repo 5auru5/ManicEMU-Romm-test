@@ -736,6 +736,7 @@ class PlayViewController: GameViewController {
                 }
                 GameSettingView.show(game: manicGame,
                                      gameViewRect: gameView.frame,
+                                     menuInsets: getMenuInset(),
                                      didSelectItem: { [weak self] item, sheet in
                     //点击菜单选项
                     guard let self = self else { return true }
@@ -1278,7 +1279,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            GameInfoView.show(game: manicGame, gameViewRect: gameView.frame, selection: { [weak self, weak menuSheet] saveState in
+            GameInfoView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInset(), selection: { [weak self, weak menuSheet] saveState in
                 guard let self = self else { return }
                 func loadSave() {
                     if self.manicGame.gameType == ._3ds {
@@ -1325,7 +1326,7 @@ extension PlayViewController {
                 if menuSheet == nil {
                     pauseEmulation()
                 }
-                CheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
+                CheatCodeListView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
                     }
@@ -1336,7 +1337,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            SkinSettingsView.show(game: manicGame, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
+            SkinSettingsView.show(game: manicGame, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
@@ -1348,7 +1349,7 @@ extension PlayViewController {
                 pauseEmulation()
             }
             if manicGame.gameType.isLibretroType {
-                FilterSelectionView.show(game: self.manicGame, snapshot: nil, gameViewRect: self.gameView.frame, hideCompletion: { [weak self] in
+                FilterSelectionView.show(game: self.manicGame, snapshot: nil, gameViewRect: self.gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
                     }
@@ -1358,7 +1359,7 @@ extension PlayViewController {
                 if manicGame.gameType == .ds, let temp = snapshot {
                     snapshot = temp.cropped(to: CGRect(origin: .zero, size: CGSize(width: temp.size.width, height: temp.size.height/2)))
                 }
-                FilterSelectionView.show(game: manicGame, snapshot: snapshot, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
+                FilterSelectionView.show(game: manicGame, snapshot: snapshot, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
                     }
@@ -1419,7 +1420,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            let vc = WebViewController(url: Constants.URLs.AirPlayUsageGuide, isShow: true)
+            let vc = WebViewController(url: Constants.URLs.AirPlayUsageGuide, isShow: true, bottomInset: getMenuInset()?.bottom ?? nil)
             vc.didClose = { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
@@ -1431,7 +1432,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            ControllersSettingView.show(gameType: manicGame.gameType, gameViewRect: gameView.frame, hideCompletion: { [weak self] in
+            ControllersSettingView.show(gameType: manicGame.gameType, gameViewRect: gameView.frame, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
@@ -1454,7 +1455,7 @@ extension PlayViewController {
             if menuSheet == nil {
                 pauseEmulation()
             }
-            GameSettingView.show(game: manicGame, gameViewRect: gameView.frame, isEditingMode: true, hideCompletion: { [weak self] in
+            GameSettingView.show(game: manicGame, gameViewRect: gameView.frame, isEditingMode: true, menuInsets: getMenuInset(), hideCompletion: { [weak self] in
                 if menuSheet == nil {
                     self?.resumeEmulationAndHandleAudio()
                 }
@@ -1599,7 +1600,7 @@ extension PlayViewController {
                 pauseEmulation()
             }
             func openRetroAchievementsList() {
-                let vc = RetroAchievementsListViewController(game: manicGame)
+                let vc = RetroAchievementsListViewController(game: manicGame, bottomInset: getMenuInset()?.bottom ?? nil)
                 vc.didClose = { [weak self] in
                     if menuSheet == nil {
                         self?.resumeEmulationAndHandleAudio()
@@ -2670,6 +2671,24 @@ extension PlayViewController {
             leaderboardView.isHidden = true
             self.leaderboardView = leaderboardView
         }
+    }
+    
+    private func getMenuInset() -> UIEdgeInsets? {
+        var menuInsets: UIEdgeInsets? = nil
+        if let traits = controllerView.controllerSkinTraits, let insets = controllerView.controllerSkin?.menuInsets(for: traits) {
+            func absoluteValue(for inset: Double, dimension: Double) -> Double {
+                guard inset > 0 && inset <= 1.0 else { return inset }
+                let absoluteValue = inset * dimension
+                return absoluteValue
+            }
+            var absoluteMenuInsets = UIEdgeInsets.zero
+            absoluteMenuInsets.left = absoluteValue(for: insets.left, dimension: self.view.bounds.width)
+            absoluteMenuInsets.right = absoluteValue(for: insets.right, dimension: self.view.bounds.width)
+            absoluteMenuInsets.top = absoluteValue(for: insets.top, dimension: self.view.bounds.height)
+            absoluteMenuInsets.bottom = absoluteValue(for: insets.bottom, dimension: self.view.bounds.height)
+            menuInsets = absoluteMenuInsets
+        }
+        return menuInsets
     }
 }
 

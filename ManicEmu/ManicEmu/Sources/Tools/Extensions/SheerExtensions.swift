@@ -11,7 +11,7 @@ import ProHUD
 
 
 extension SheetTarget {
-    func configGamePlayingStyle(isForGameMenu: Bool = false, gameViewRect:CGRect, hideCompletion: (()->Void)? = nil) {
+    func configGamePlayingStyle(isForGameMenu: Bool = false, gameViewRect:CGRect, menuInsets: UIEdgeInsets? = nil, hideCompletion: (()->Void)? = nil) {
         //设置点击背景的回调
         self.onTappedBackground { sheet in
             sheet.pop(completon: hideCompletion)
@@ -52,5 +52,33 @@ extension SheetTarget {
         }
         self.config.cardMaxWidth = sheetSize.width
         self.config.cardMaxHeight = sheetSize.height
+        
+        
+        if let menuInsets {
+            //设置了菜单的边距
+            var prefferdHeight = Constants.Size.WindowHeight - menuInsets.top - menuInsets.bottom
+            
+            if UIDevice.isPhone, !UIDevice.isLandscape {
+                prefferdHeight -= Constants.Size.ContentInsetTop
+            }
+            
+            if prefferdHeight < self.config.cardMaxHeight! {
+                self.config.cardMaxHeight = prefferdHeight
+            }
+            
+            var prefferdWidth = Constants.Size.WindowWidth - menuInsets.left - menuInsets.right
+            
+            if UIDevice.isPhone, UIDevice.isLandscape {
+                prefferdWidth = prefferdWidth - Constants.Size.SafeAera.left - Constants.Size.SafeAera.right
+            }
+            
+            if prefferdWidth < self.config.cardMaxWidth! {
+                self.config.cardMaxWidth = prefferdWidth
+            }
+            
+            if menuInsets.bottom > 0 {
+                self.config.bottomEdgeInset = menuInsets.bottom
+            }
+        }
     }
 }

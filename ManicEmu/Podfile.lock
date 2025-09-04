@@ -194,7 +194,7 @@ DEPENDENCIES:
   - Closures (from `../Closures/Xcode/Closures`)
   - CloudServiceKit (from `../CloudServiceKit`)
   - CollectionViewPagingLayout (from `../CollectionViewPagingLayout`)
-  - Device (~> 3.7)
+  - Device (from `https://github.com/LeeAoshuang/Device.git`, branch `master`)
   - DNSPageView (from `../DNSPageView`)
   - Fireworks (from `https://github.com/tomkowz/fireworks.git`, branch `master`)
   - FLEX
@@ -238,7 +238,6 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - BetterSegmentedControl
-    - Device
     - FLEX
     - FluentDarkModeKit
     - Fuse
@@ -282,6 +281,9 @@ EXTERNAL SOURCES:
     :path: "../CloudServiceKit"
   CollectionViewPagingLayout:
     :path: "../CollectionViewPagingLayout"
+  Device:
+    :branch: master
+    :git: https://github.com/LeeAoshuang/Device.git
   DNSPageView:
     :path: "../DNSPageView"
   Fireworks:
@@ -317,6 +319,9 @@ EXTERNAL SOURCES:
     :path: "../ZIPFoundation"
 
 CHECKOUT OPTIONS:
+  Device:
+    :commit: 7ff1e9987d8348f59cdf756ef515ca5a1ce13f91
+    :git: https://github.com/LeeAoshuang/Device.git
   Fireworks:
     :commit: c54a983649510ddaf1ff315000626eb43486410b
     :git: https://github.com/tomkowz/fireworks.git
@@ -378,6 +383,6 @@ SPEC CHECKSUMS:
   VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: cc4c8f981e09ce8534f6ff56af8841770c085798
+PODFILE CHECKSUM: c6716083ae00e5f7023f75cbece2ea336910aced
 
 COCOAPODS: 1.16.2

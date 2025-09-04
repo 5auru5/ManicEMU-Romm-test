@@ -30,7 +30,11 @@ class WebViewController: BaseViewController {
         if self.loadUrlWhenInit {
             view.load(URLRequest(url: url))
         }
-        view.scrollView.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: Constants.Size.ContentInsetBottom, right: 0)
+        var bottomInset = Constants.Size.ContentInsetBottom
+        if let prefferdBottomInset = self.bottomInset, bottomInset < prefferdBottomInset {
+            bottomInset = prefferdBottomInset
+        }
+        view.scrollView.contentInset = UIEdgeInsets(top: Constants.Size.ItemHeightMid, left: 0, bottom: bottomInset, right: 0)
         return view
     }()
     
@@ -99,11 +103,13 @@ class WebViewController: BaseViewController {
     
     private var loadUrlWhenInit: Bool
     
+    private var bottomInset: CGFloat? = nil
+    
     deinit {
         webView.navigationDelegate = nil
     }
 
-    init(url: URL = URL(string: Constants.URLs.ManicEMU)!, showClose: Bool = true, isShow: Bool? = nil) {
+    init(url: URL = URL(string: Constants.URLs.ManicEMU)!, showClose: Bool = true, isShow: Bool? = nil, bottomInset: CGFloat? = nil) {
         self.url = url
         self.showClose = showClose
         self.loadUrlWhenInit = true
@@ -111,6 +117,7 @@ class WebViewController: BaseViewController {
             Self.isShow = isShow
         }
         super.init(nibName: nil, bundle: nil)
+        self.bottomInset = bottomInset
     }
     
     init(searchGame: Game) {
