@@ -721,3 +721,5 @@ Press the controller button to complete mapping...";
 "ThreeDSNandImportFailed" = "Incorrect nand.zip imported!";
 "HoldFastForward" = "Hold %@ FF";
 "HoldMaxFastForward" = "Hold Max FF";
+"Microphone" = "Microphone";
+"MicrophoneTips" = "Enabling the microphone will request access and keep it active during gameplay, which may stop music playback from other apps in the background.";

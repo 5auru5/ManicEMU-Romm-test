@@ -30,4 +30,5 @@ enum ExtraKey: String {
     case pspRenderer
     case globalAchievements
     case globalHardcore
+    case microphone
 }

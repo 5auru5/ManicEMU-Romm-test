@@ -1594,10 +1594,20 @@ extension PlayViewController {
             
         case .simBlowing:
             //MARK: handleMenuGameSetting.simBlowing
-            guard manicGame.gameType == ._3ds else { return false }
-            threeDSCore?.setSimBlowing(start: true)
-            DispatchQueue.main.asyncAfter(delay: 5) { [weak self] in
-                self?.threeDSCore?.setSimBlowing(start: false)
+            if manicGame.gameType == ._3ds {
+                threeDSCore?.setSimBlowing(start: true)
+                DispatchQueue.main.asyncAfter(delay: 5) { [weak self] in
+                    self?.threeDSCore?.setSimBlowing(start: false)
+                }
+            } else if manicGame.gameType == .ds {
+                LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_mic_input": "blow"], flush: false)
+                DispatchQueue.main.asyncAfter(delay: 5) { [weak self] in
+                    var restoreInput = "silence"
+                    if self?.manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false {
+                        restoreInput = "microphone"
+                    }
+                    LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_mic_input": restoreInput], flush: false)
+                }
             }
             
         case .palette:
@@ -1924,15 +1934,20 @@ extension PlayViewController {
                 systemType = "ds"
             }
             
-            //wfc
+            //麦克风
+            let microphone = manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false
+            
+            //设置配置
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.melonDSDS.name,
                                                        configs: ["melonds_firmware_language": dsLanguageOption,
                                                                  "melonds_console_mode": systemType,
+                                                                 "melonds_mic_input": microphone ? "microphone" : "silence",
                                                                  "melonds_mic_input_active": "always",
                                                                  "melonds_number_of_screen_layouts": "1",
                                                                  "melonds_screen_layout1": "custom",
                                                                  "melonds_show_cursor": "disabled"],
                                                        reload: false)
+            //wfc
             LibretroCore.sharedInstance().setNDSWFCDNS( WFC.currentDNS());
             
         } else if manicGame.gameType == .gba {
@@ -2031,11 +2046,14 @@ extension PlayViewController {
             enableLibretroLog = "true"
             libretroLogLevel = "0"
             #endif
+            let enableMircophone = manicGame.gameType == .ds && (manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false)
             LibretroCore.sharedInstance().updateLibretroConfigs([
                 "fastforward_frameskip": manicGame.gameType == .ps1 ? "false" : "true",
                 "log_verbosity": enableLibretroLog,
                 "libretro_log_level": libretroLogLevel,
-                "camera_driver": ((manicGame.gameType == .gb || manicGame.gameType == .gbc) && manicGame.defaultCore == 1) ? "null" : "avfoundation"
+                "camera_driver": ((manicGame.gameType == .gb || manicGame.gameType == .gbc) && manicGame.defaultCore == 1) ? "null" : "avfoundation",
+                "microphone_enable": enableMircophone ? "true" : "false",
+                "microphone_driver": "coreaudio"
             ])
             if manicGame.isN64ParaLLEl {
                 LibretroCore.sharedInstance().setReloadDelay(1)

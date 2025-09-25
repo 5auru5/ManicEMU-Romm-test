@@ -683,6 +683,42 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
     
+    private lazy var microphoneContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: R.string.localizable.on()) { [weak self] _ in
+            guard let self = self else { return }
+            self.microphoneButton.titleLabel.text = R.string.localizable.microphone() + " " + R.string.localizable.on()
+            if let game {
+                game.updateExtra(key: ExtraKey.microphone.rawValue, value: true)
+            }
+        }))
+        actions.append(UIAction(title: R.string.localizable.off()) { [weak self] _ in
+            guard let self = self else { return }
+            self.microphoneButton.titleLabel.text = R.string.localizable.microphone() + " " + R.string.localizable.off()
+            if let game {
+                game.updateExtra(key: ExtraKey.microphone.rawValue, value: false)
+            }
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(title: R.string.localizable.microphoneTips(), children: actions))
+        return view
+    }()
+    
+    private lazy var microphoneButton: SymbolButton = {
+        let title: String
+        if game?.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false {
+            title = R.string.localizable.microphone() + " " + R.string.localizable.on()
+        } else {
+            title = R.string.localizable.microphone() + " " + R.string.localizable.off()
+        }
+        let view = SymbolButton(image: R.image.customMicrophone()?.applySymbolConfig(color: Constants.Color.LabelPrimary), title: title, horizontalContian: true)
+        view.titleLabel.numberOfLines = 0
+        view.addTapGesture { [weak self] gesture in
+            guard let self = self else { return }
+            self.microphoneContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
     private lazy var psxModeContextMenuButton: ContextMenuButton = {
         var actions: [UIMenuElement] = []
         actions.append(UIAction(title: Constants.Strings.PSXController) { [weak self] _ in
@@ -1232,6 +1268,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     private func updateDSFunctionButton() {
         languageContextMenuButton.removeFromSuperview()
         languageButton.removeFromSuperview()
+        microphoneContextMenuButton.removeFromSuperview()
+        microphoneButton.removeFromSuperview()
         ndsSystemTypeContextMenuButton.removeFromSuperview()
         ndsSystemTypeButton.removeFromSuperview()
         gbaSlotContextMenuButton.removeFromSuperview()
@@ -1249,6 +1287,18 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.edges.equalTo(languageButton)
             }
             
+            //麦克风
+            functionButtonContainerView.addSubview(microphoneContextMenuButton)
+            functionButtonContainerView.addSubview(microphoneButton)
+            microphoneButton.snp.makeConstraints { make in
+                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
+            microphoneContextMenuButton.snp.makeConstraints { make in
+                make.edges.equalTo(microphoneButton)
+            }
+            
             var enableGBASlot = true
             if let game, let mode = game.getExtraString(key: ExtraKey.ndsSystemMode.rawValue), mode == "DSi" {
                 enableGBASlot = false
@@ -1258,7 +1308,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             functionButtonContainerView.addSubview(ndsSystemTypeContextMenuButton)
             functionButtonContainerView.addSubview(ndsSystemTypeButton)
             ndsSystemTypeButton.snp.makeConstraints { make in
-                make.leading.equalTo(languageButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                make.leading.equalTo(microphoneButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                 make.centerY.equalToSuperview()
                 make.size.equalTo(Constants.Size.IconSizeHuge)
                 if !enableGBASlot {

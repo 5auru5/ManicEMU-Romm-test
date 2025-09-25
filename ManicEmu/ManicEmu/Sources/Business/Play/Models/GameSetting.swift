@@ -652,7 +652,7 @@ struct GameSetting: SettingCellItem {
             }
             return true
         case .ds:
-            if type == .resolution || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk {
+            if type == .resolution || type == .consoleHome || type == .amiibo || type == .palette || type == .swapDisk {
                 return false
             }
             return true
