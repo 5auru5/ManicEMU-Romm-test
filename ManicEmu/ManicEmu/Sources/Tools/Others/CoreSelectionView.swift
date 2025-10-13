@@ -56,7 +56,7 @@ class CoreSelectionView: BaseView {
             }
             
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             containerView.makeBlur()
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

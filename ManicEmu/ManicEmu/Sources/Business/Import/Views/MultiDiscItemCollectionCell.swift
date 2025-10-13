@@ -18,14 +18,14 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
     
     let deleteIcon = SymbolButton(image: nil, title: R.string.localizable.removeTitle(), titleFont: Constants.Font.body(size: .m), titleColor: Constants.Color.Main, titleAlignment: .right, horizontalContian: true)
     
-    private let sortIcon = SymbolButton(image: .init(symbol: .line3Horizontal, font: Constants.Font.title(size: .s), color: Constants.Color.BackgroundTertiary))
+    private let sortIcon = SymbolButton(image: .init(symbol: .line3Horizontal, font: Constants.Font.title(size: .s), color: Constants.Color.BackgroundSecondary))
     
     private var itemViews: [BIOSCollectionViewCell.ItemView] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
@@ -41,7 +41,7 @@ class MultiDiscItemCollectionCell: UICollectionViewCell {
         }
         
         addSubview(deleteIcon)
-        deleteIcon.backgroundColor = Constants.Color.BackgroundPrimary
+        deleteIcon.backgroundColor = Constants.Color.Background
         deleteIcon.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.height.equalTo(Constants.Size.ItemHeightMin)

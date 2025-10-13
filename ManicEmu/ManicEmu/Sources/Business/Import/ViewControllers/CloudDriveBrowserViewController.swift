@@ -32,7 +32,10 @@ class CloudDriveBrowserViewController: BaseViewController {
     }
     
     private var downloadManageButton: UIBarButtonItem = {
-        let view = DownloadButton()
+        let view = DownloadButton(enableGlass: false)
+        if #available(iOS 26.0, *) {
+            view.backgroundColor = .clear
+        }
         view.addTapGesture { gesture in
             topViewController()?.present(DownloadViewController(), animated: true)
         }

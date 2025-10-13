@@ -8,11 +8,10 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import UIKit
-import TKSwitcherCollection
 
 class ImportServiceListCollectionViewCell: UICollectionViewCell {
-    private var iconView: UIImageView = {
-        let view = UIImageView()
+    private var iconView: ServiceIconView = {
+        let view = ServiceIconView(roundCorner: .allCorners)
         return view
     }()
     
@@ -22,12 +21,10 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
-    var switchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    var switchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         view.alpha = 0
         return view
     }()
@@ -63,14 +60,14 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell {
         switchButton.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
-            make.height.equalTo(28)
-            make.width.equalTo(46)
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
         }
-        
-        mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            self.switchButton.onColor = Constants.Color.Main
-            self.switchButton.reload()
+        if #available(iOS 26.0, *) {} else {
+            switchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
     }
     
@@ -81,7 +78,11 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell {
     //TODO: 需要处理图片的尺寸
     func setData(service: ImportService) {
         
-        iconView.image = service.iconImage
+        iconView.imageView.image = service.iconImage
+        iconView.backgroundColor = service.iconBackgroundColor
+        iconView.borderColor = service.iconBorderColor
+        iconView.radius = service.iconCornerRadius
+        titleLabel.text = service.title
         
         var matt = NSMutableAttributedString(string: service.title, attributes: [.font: Constants.Font.title(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
         if let detail = service.detail {
@@ -97,10 +98,10 @@ class ImportServiceListCollectionViewCell: UICollectionViewCell {
         
         if service.type == .wifi {
             switchButton.alpha = 1
-            switchButton.setOn(WebServer.shard.isRunning, animate: false)
+            switchButton.setOn(WebServer.shard.isRunning, animated: false)
         } else {
             switchButton.alpha = 0
-            switchButton.setOn(false, animate: false)
+            switchButton.setOn(false, animated: false)
         }
     }
     

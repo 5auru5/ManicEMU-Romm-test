@@ -17,7 +17,7 @@ class PSXSBIImportViewController: BaseViewController {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     

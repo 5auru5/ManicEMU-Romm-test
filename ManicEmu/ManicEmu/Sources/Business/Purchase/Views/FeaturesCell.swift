@@ -13,12 +13,12 @@ class FeaturesCell: UICollectionViewCell {
     private var titleLabel: UILabel = {
         let view = UILabel()
         view.font = Constants.Font.title(size: .s, weight: .semibold)
-        view.textColor = Constants.Color.LabelPrimary
+        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         return view
     }()
     
     var questionButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .questionmarkCircleFill, size: 12))
+        let view = SymbolButton(image: UIImage(symbol: .questionmarkCircleFill, size: 12, color: Constants.Color.LabelPrimary.forceStyle(.dark)))
         view.delayInteractiveTouchEnd = true
         view.backgroundColor = .clear
         return view
@@ -40,7 +40,7 @@ class FeaturesCell: UICollectionViewCell {
             let label = UILabel()
             label.text = string
             label.font = Constants.Font.caption(size: .l)
-            label.textColor = Constants.Color.LabelPrimary
+            label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             label.adjustsFontSizeToFitWidth = true
             view.addSubview(label)
             label.snp.makeConstraints { make in
@@ -92,7 +92,7 @@ class FeaturesCell: UICollectionViewCell {
             make.height.equalTo(Constants.Size.IconSizeMin.height)
         }
         
-        let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold)))
+        let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
         if Locale.isRTLLanguage {
             titleLeftView.transform = CGAffineTransform(scaleX: -1, y: 1)
         }
@@ -108,7 +108,7 @@ class FeaturesCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
         }
         
-        let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold)))
+        let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
         titleRightView.semanticContentAttribute = .forceLeftToRight
         if !Locale.isRTLLanguage {
             titleRightView.transform = CGAffineTransform(scaleX: -1, y: 1)

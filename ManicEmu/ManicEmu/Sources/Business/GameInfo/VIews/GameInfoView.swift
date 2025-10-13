@@ -31,7 +31,7 @@ class GameInfoView: BaseView {
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -41,7 +41,7 @@ class GameInfoView: BaseView {
     }()
     
     private lazy var infoButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .info, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .info, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
@@ -111,7 +111,7 @@ class GameInfoView: BaseView {
     private var isGameSaveStatesPageEmpty: Bool {
         (self.isManualGameSaveStatesPage && self.manualGameSaveStates.count == 0) || (!self.isManualGameSaveStatesPage && self.autoGameSaveStates.count == 0)
     }
-    private lazy var deleteImage = UIImage(symbol: .trash, backgroundColor: Constants.Color.Red, imageSize: .init(Constants.Size.ItemHeightMin)).withRoundedCorners()
+    private lazy var deleteImage = UIImage(symbol: .trash, color: Constants.Color.LabelPrimary.forceStyle(.dark), backgroundColor: Constants.Color.Red, imageSize: .init(Constants.Size.ItemHeightMin)).withRoundedCorners()
     
     ///点击关闭按钮回调
     var didTapClose: (()->Void)? = nil
@@ -543,7 +543,7 @@ extension GameInfoView: SwipeCollectionViewCellDelegate {
                                                      completionAnimation: .fill(.manual(timing: .with)))
         options.expansionDelegate = self
         options.transitionStyle = .border
-        options.backgroundColor = Constants.Color.BackgroundPrimary
+        options.backgroundColor = Constants.Color.Background
         options.maximumButtonWidth = Constants.Size.ItemHeightMin + Constants.Size.ContentSpaceTiny*2
         return options
     }
@@ -573,7 +573,7 @@ extension GameInfoView {
             
             let view = UIView()
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()

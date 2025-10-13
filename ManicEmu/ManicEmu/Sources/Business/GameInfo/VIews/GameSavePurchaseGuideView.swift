@@ -47,7 +47,7 @@ class GameSavePurchaseGuideView: UIView {
             make.leading.top.bottom.equalToSuperview()
         }
         
-        let appNameImage = GradientImageView(image: R.image.app_title()?.scaled(toSize: CGSize(width: 138, height: 11.3)))
+        let appNameImage = UIImageView(image: UIImage(.dm, light: (R.image.app_title_light()?.scaled(toSize: CGSize(width: 138, height: 11.3)))!, dark: (R.image.app_title()?.scaled(toSize: CGSize(width: 138, height: 11.3)))!))
         containerView.addSubview(appNameImage)
         appNameImage.snp.makeConstraints { make in
             make.leading.equalTo(becomeLabel.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
@@ -77,7 +77,7 @@ class GameSavePurchaseGuideView: UIView {
             make.top.equalTo(containerView.snp.bottom).offset(Constants.Size.ContentSpaceUltraTiny)
         }
         
-        let button = SymbolButton(image: nil, title: R.string.localizable.goToUpgrade(), titleFont: Constants.Font.caption(size: .l, weight: .semibold), titlePosition: .left, imageAndTitlePadding: 0)
+        let button = SymbolButton(image: nil, title: R.string.localizable.goToUpgrade(), titleFont: Constants.Font.caption(size: .l, weight: .semibold), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), titlePosition: .left, imageAndTitlePadding: 0)
         button.enableRoundCorner = true
         let buttonBackground = UIView(frame: CGRect(origin: .zero, size: CGSize(width: 100, height: 30)))
         buttonBackground.addGradient(colors: Constants.Color.Gradient, direction: .leftToRight)

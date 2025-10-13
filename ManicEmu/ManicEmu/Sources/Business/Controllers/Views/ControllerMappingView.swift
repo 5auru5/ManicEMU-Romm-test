@@ -23,9 +23,10 @@ class ControllerMappingView: UIView {
     
     private lazy var navigationSymbolTitle: SymbolButton = {
         let defaultTitle = self.gameType.localizedShortName
-        let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold)),
+        let view = SymbolButton(image: UIImage(symbol: .chevronUpChevronDown, font: Constants.Font.caption(weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)),
                                 title: defaultTitle,
                                 titleFont: Constants.Font.title(size: .s),
+                                titleColor: Constants.Color.LabelPrimary.forceStyle(.dark),
                                 edgeInsets: .zero,
                                 titlePosition: .left,
                                 imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
@@ -45,6 +46,12 @@ class ControllerMappingView: UIView {
                     self.gameType = allGameTypes[index]
                     self.navigationSymbolTitle.titleLabel.text = itemTitles[index]
                     self.updateDatas()
+                    var titleColor = Constants.Color.LabelPrimary
+                    if #available(iOS 26.0, *), self.gameType != .psp {
+                        titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+                    }
+                    self.closeButton.imageView.image = UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: titleColor)
+                    self.resetButton.titleLabel.textColor = titleColor
                 }))
             }
             self.contextMenuButton.menu = UIMenu(children: items)
@@ -54,7 +61,11 @@ class ControllerMappingView: UIView {
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        var titleColor = Constants.Color.LabelPrimary
+        if #available(iOS 26.0, *), gameType != .psp {
+            titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        }
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: titleColor), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -65,11 +76,17 @@ class ControllerMappingView: UIView {
     }()
     
     private lazy var resetButton: SymbolButton = {
+        var titleColor = Constants.Color.LabelPrimary
+        if #available(iOS 26.0, *), gameType != .psp {
+            titleColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        }
         let view = SymbolButton(image: nil,
                                 title: R.string.localizable.controllerMappingReset(),
                                 titleFont: Constants.Font.body(size: .m),
+                                titleColor: titleColor,
                                 edgeInsets: UIEdgeInsets(top: 0, left: Constants.Size.ContentSpaceTiny+3, bottom: 0, right: Constants.Size.ContentSpaceTiny),
-                                titlePosition: .left)
+                                titlePosition: .left,
+                                enableGlass: true)
         view.titleLabel.textAlignment = .center
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
@@ -113,7 +130,7 @@ class ControllerMappingView: UIView {
         let view = UILabel()
         view.numberOfLines = 0
         view.textAlignment = .center
-        view.textColor = Constants.Color.LabelPrimary
+        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         view.font = Constants.Font.body(size: .l, weight: .semibold)
         view.text = R.string.localizable.controllerMappingGuideTitle()
         return view

@@ -44,7 +44,7 @@ class LanServiceEditViewController: BaseViewController {
     }()
     
     private lazy var confirmButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.landServiceEditConnect()) { [weak self] in
+        let view = HowToButton(title: R.string.localizable.landServiceEditConnect(), enableGlass: true) { [weak self] in
             guard let self = self else { return }
             //点击连接处理
             self.collectionView.endEditing(true)

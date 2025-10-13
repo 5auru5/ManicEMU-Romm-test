@@ -91,8 +91,8 @@ class BrowserItemCollectionViewCell: UICollectionViewCell {
             if isSelected {
                 checkboxImageView.image = UIImage(symbol: .checkmarkCircleFill,
                                                   size: Constants.Size.IconSizeTiny.height,
-                                                  colors: [Constants.Color.LabelPrimary, UIWindow.applicationWindow?.tintColor ?? Constants.Color.Main])
-                selectedBackgroundView?.backgroundColor = Constants.Color.BackgroundSecondary
+                                                  colors: [Constants.Color.LabelPrimary.forceStyle(.dark), UIWindow.applicationWindow?.tintColor ?? Constants.Color.Main])
+                selectedBackgroundView?.backgroundColor = Constants.Color.BackgroundPrimary
             } else {
                 checkboxImageView.image = UIImage(symbol: .circle,
                                                   size: Constants.Size.IconSizeTiny.height,
@@ -109,8 +109,8 @@ class BrowserItemCollectionViewCell: UICollectionViewCell {
             iconImageView.image = (isFolder ? R.image.file_browser_folder() : R.image.file_browser_document())
             iconImageView.tintColor = nil
         } else {
-            titleLabel.textColor = Constants.Color.LabelTertiary
-            detailLabel.textColor = Constants.Color.LabelQuaternary
+            titleLabel.textColor = Constants.Color.LabelSecondary
+            detailLabel.textColor = Constants.Color.LabelTertiary
             iconImageView.image = (isFolder ? R.image.file_browser_folder() : R.image.file_browser_document())?.withRenderingMode(.alwaysTemplate)
             iconImageView.tintColor = Constants.Color.LabelTertiary
         }

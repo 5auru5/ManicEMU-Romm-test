@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import BetterSegmentedControl
-import TKSwitcherCollection
 
 class CoverStyleCollectionViewCell: UICollectionViewCell {
     
@@ -23,9 +22,9 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
                                              normalTextColor: Constants.Color.LabelSecondary,
                                             selectedTextColor: Constants.Color.LabelPrimary)
         let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.BackgroundPrimary),
+            .backgroundColor(Constants.Color.Background),
             .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.BackgroundSecondary),
+            .indicatorViewBackgroundColor(Constants.Color.BackgroundPrimary),
             .cornerRadius(16)
         ]
         let view = BetterSegmentedControl(frame: .zero,
@@ -58,7 +57,7 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         view.minimumValue = 0
         view.maximumValue = 1
         view.minimumTrackTintColor = Constants.Color.Main
-        view.maximumTrackTintColor = Constants.Color.BackgroundTertiary
+        view.maximumTrackTintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -66,16 +65,14 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .center
         view.layerCornerRadius = 6
-        view.image = UIImage(symbol: .square, font: Constants.Font.body(size: .s, weight: .medium))
+        view.image = UIImage(symbol: .square, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
     }()
     
-    private var forceSquareSwitchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    private var forceSquareSwitchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -83,16 +80,14 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .center
         view.layerCornerRadius = 6
-        view.image = UIImage(symbol: .characterTextbox, font: Constants.Font.body(size: .s, weight: .medium))
+        view.image = UIImage(symbol: .characterTextbox, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
     }()
     
-    private var hideGameTitleSwitchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    private var hideGameTitleSwitchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -107,7 +102,7 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         let theme = Theme.defalut
         let style = theme.coverStyle
@@ -173,7 +168,7 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         
         //开关
         let forceSquareContainer = UIView()
-        forceSquareContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        forceSquareContainer.backgroundColor = Constants.Color.Background
         forceSquareContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
         addSubview(forceSquareContainer)
         forceSquareContainer.snp.makeConstraints { make in
@@ -212,11 +207,18 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         }
         
         forceSquareContainer.addSubview(forceSquareSwitchButton)
-        forceSquareSwitchButton.setOn(theme.forceSquare, animate: false)
+        forceSquareSwitchButton.setOn(theme.forceSquare, animated: false)
         forceSquareSwitchButton.snp.makeConstraints { make in
             make.centerY.equalTo(forceSquareIconView)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            forceSquareSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         forceSquareSwitchButton.onChange { [weak self] value in
             self?.updateCoverForceSquare(value)
@@ -224,7 +226,7 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         
         //隐藏游戏标题
         let hideGameTitleContainer = UIView()
-        hideGameTitleContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        hideGameTitleContainer.backgroundColor = Constants.Color.Background
         hideGameTitleContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
         addSubview(hideGameTitleContainer)
         hideGameTitleContainer.snp.makeConstraints { make in
@@ -256,11 +258,18 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         }
         
         hideGameTitleContainer.addSubview(hideGameTitleSwitchButton)
-        hideGameTitleSwitchButton.setOn(theme.hideGameTitle, animate: false)
+        hideGameTitleSwitchButton.setOn(theme.hideGameTitle, animated: false)
         hideGameTitleSwitchButton.snp.makeConstraints { make in
             make.centerY.equalTo(hideGameTitleIconView)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            hideGameTitleSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         hideGameTitleSwitchButton.onChange { [weak self] value in
             self?.updateGameTitle(value)
@@ -270,10 +279,6 @@ class CoverStyleCollectionViewCell: UICollectionViewCell {
         //通知更新主色
         mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
-            self.forceSquareSwitchButton.onColor = Constants.Color.Main
-            self.hideGameTitleSwitchButton.onColor = Constants.Color.Main
-            self.forceSquareSwitchButton.reload()
-            self.hideGameTitleSwitchButton.reload()
             self.forceSquareIconView.backgroundColor = Constants.Color.Main
             self.hideGameTitleIconView.backgroundColor = Constants.Color.Main
         }

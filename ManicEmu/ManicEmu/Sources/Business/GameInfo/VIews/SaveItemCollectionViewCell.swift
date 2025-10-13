@@ -52,7 +52,8 @@ class SaveItemCollectionViewCell: SwipeCollectionViewCell {
                                 titleFont: Constants.Font.caption(size: .l, weight: .medium),
                                 edgeInsets: UIEdgeInsets(top: 0, left: Constants.Size.ContentSpaceMin, bottom: 0, right: Constants.Size.ContentSpaceMin),
                                 titlePosition: .left,
-                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny)
+                                imageAndTitlePadding: Constants.Size.ContentSpaceUltraTiny,
+                                enableGlass: true)
         view.layerCornerRadius = 15
         return view
     }()
@@ -67,6 +68,13 @@ class SaveItemCollectionViewCell: SwipeCollectionViewCell {
         view.image = UIImage(symbol: .circle, size: Constants.Size.IconSizeMin.height, color: Constants.Color.LabelSecondary)
         return view
     }()
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+        }
+    }
     
     override var isSelected: Bool {
         willSet {
@@ -85,7 +93,7 @@ class SaveItemCollectionViewCell: SwipeCollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = Constants.Color.BackgroundPrimary
+        contentView.backgroundColor = Constants.Color.Background
         
         contentView.addSubview(selectImageView)
         selectImageView.snp.makeConstraints { make in

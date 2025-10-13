@@ -11,7 +11,7 @@ class SettingsMembershipGiftView: UIView {
     
     init(symbol: SFSymbol, title: String) {
         super.init(frame: .zero)
-        backgroundColor = Constants.Color.Background
+        backgroundColor = Constants.Color.Background.forceStyle(.dark)
         
         let gift = GradientImageView(image: UIImage(symbol: symbol))
         addSubview(gift)

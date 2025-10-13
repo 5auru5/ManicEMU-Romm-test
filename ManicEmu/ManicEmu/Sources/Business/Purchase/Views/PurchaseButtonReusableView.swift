@@ -140,11 +140,11 @@ class PurchaseButtonReusableView: UICollectionReusableView {
     
     func setData(title: String, descripton: String, enable: Bool) {
         descriptionLabel.text = descripton
-        buttonContainer.backgroundColor = enable ? Constants.Color.Main : Constants.Color.Main.darken(by: 0.7)
+        buttonContainer.backgroundColor = enable ? Constants.Color.Main : Constants.Color.Main.darken(by: UIDevice.isDarkMode ? 0.7 : 0.35)
         buttonContainer.isUserInteractionEnabled = enable
         buttonContainer.enableInteractive = false
         buttonLabel.text = title
-        buttonLabel.textColor = enable ? Constants.Color.LabelPrimary : Constants.Color.LabelPrimary.darken(by: 0.7)
+        buttonLabel.textColor = enable ? Constants.Color.LabelPrimary.forceStyle(.dark) : Constants.Color.LabelPrimary.forceStyle(.dark).darken(by: UIDevice.isDarkMode ? 0.7 : 0.35)
     }
     
     

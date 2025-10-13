@@ -1158,7 +1158,7 @@ extension GameListView: SectionIndexViewDataSource, SectionIndexViewDelegate {
             item.title = "?"
         }
         item.titleColor = Constants.Color.LabelTertiary
-        item.titleSelectedColor = Constants.Color.LabelPrimary
+        item.titleSelectedColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         item.selectedColor = Constants.Color.Main
         item.titleFont = Constants.Font.caption(size: .s, weight: .bold)
         return item

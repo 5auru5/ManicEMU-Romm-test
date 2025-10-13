@@ -139,43 +139,49 @@ struct Constants {
     struct Color {
         //文本
         static let LabelPrimary = UIColor(.dm,
-                                          light: UIColor(hexString: "#ffffff")!,
+                                          light: UIColor(hexString: "#323443")!,
                                           dark: UIColor(hexString: "#ffffff")!)
         static let LabelSecondary = UIColor(.dm,
-                                            light: UIColor(hexString: "#8F8F92")!,
+                                            light: UIColor(hexString: "#90929F")!,
                                             dark: UIColor(hexString: "#8F8F92")!)
         static let LabelTertiary = UIColor(.dm,
-                                           light: UIColor(hexString: "#403E46")!,
+                                           light: UIColor(hexString: "#C1C0C6")!,
                                            dark: UIColor(hexString: "#403E46")!)
-        static let LabelQuaternary = UIColor(.dm,
-                                             light: UIColor(hexString: "#3f3f3f", transparency: 0.8)!,
-                                             dark: UIColor(hexString: "#3f3f3f", transparency: 0.8)!)
         
         //分割线
         static let Border = UIColor(.dm,
-                                    light: .white.withAlphaComponent(0.1),
+                                    light: .black.withAlphaComponent(0.1),
                                     dark: .white.withAlphaComponent(0.1))
         
         //背景
         static let Background = UIColor(.dm,
-                                              light: UIColor(hexString: "#17171D")!,
+                                              light: UIColor(hexString: "#F1F4FE")!,
                                               dark: UIColor(hexString: "#17171D")!)
         
         static let BackgroundPrimary = UIColor(.dm,
-                                              light: UIColor(hexString: "#1E1E24")!,
-                                              dark: UIColor(hexString: "#1E1E24")!)
+                                              light: UIColor(hexString: "#FAFCFF")!,
+                                              dark: UIColor(hexString: "#222229")!)
         
         static let BackgroundSecondary = UIColor(.dm,
-                                           light: UIColor(hexString: "#26262E")!,
-                                           dark: UIColor(hexString: "#26262E")!)
-        
-        static let BackgroundTertiary = UIColor(.dm,
-                                           light: UIColor(hexString: "#464651")!,
+                                           light: UIColor(hexString: "#E1E2E5")!,
                                            dark: UIColor(hexString: "#464651")!)
+        //Input
+        static let InputBackground = UIColor(.dm,
+                                           light: UIColor(hexString: "#E8EBF2")!,
+                                           dark: UIColor(hexString: "#121217")!)
         
-        static let Selection = UIColor(.dm,
-                                       light: UIColor(hexString: "#2c2c30")!,
-                                       dark: UIColor(hexString: "#2c2c30")!)
+        //Segment
+        static let SegmentBackground = UIColor(.dm,
+                                               light: UIColor(hexString: "#E8EBF2")!,
+                                               dark: UIColor(hexString: "#222229")!)
+        
+        static let SegmentHighlight = UIColor(.dm,
+                                              light: UIColor(hexString: "#FAFCFF")!,
+                                              dark: UIColor(hexString: "#464651")!)
+        
+        static let AppearanceSegmentHighlight = UIColor(.dm,
+                                                        light: UIColor(hexString: "#FFFFFF")!,
+                                                        dark: UIColor(hexString: "#464651")!)
         
         //阴影
         static let Shadow = BackgroundPrimary
@@ -186,9 +192,6 @@ struct Constants {
         static var MainDynamicColor = UIColor(hexString: "#FF2442")!
         
         static let Main = UIColor(.dm) { traitCollection in
-//            if (traitCollection.userInterfaceStyle == .light) {
-//                return UIColor(hexString: "#FF2442")!
-//            }
             return MainDynamicColor
         }
         
@@ -320,6 +323,7 @@ struct Constants {
         static let HasShowSSPlayAlert = "HasShowSSPlayAlert"
         static let HasShowPS1PlayAlert = "HasShowPS1PlayAlert"
         static let HasShowJumpGameInfoAlert = "HasShowJumpGameInfoAlert"
+        static let Appearance = "Appearance"
     }
     
     struct Font {

@@ -49,7 +49,7 @@ class HomeViewController: BaseViewController {
     
     private lazy var pageViewManager: PageViewManager = {
         let style = PageStyle()
-        style.contentViewBackgroundColor = UIDevice.isPad ? .black : Constants.Color.Background
+        style.contentViewBackgroundColor = UIDevice.isPad ? UIColor(.dm, light: .white, dark: .black) : Constants.Color.Background
         let manager = PageViewManager(style: style, titles: HomeTabBar.BarSelection.allCases.map { String($0.rawValue) }, childViewControllers: childControllers)
         manager.contentView.getContentEdgeInsets = {
             if UIDevice.isPhone, UIDevice.isLandscape {
@@ -128,7 +128,7 @@ class HomeViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         
         self.setupViews()
         

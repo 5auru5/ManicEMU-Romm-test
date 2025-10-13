@@ -43,7 +43,7 @@ class AddCheatCodeTitleCell: UICollectionViewCell {
         }
         
         let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        textFieldContainer.backgroundColor = Constants.Color.Background
+        textFieldContainer.backgroundColor = Constants.Color.InputBackground
         addSubview(textFieldContainer)
         textFieldContainer.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()

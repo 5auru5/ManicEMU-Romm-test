@@ -87,7 +87,8 @@ class GamesListBlankSlateView: BaseView {
         welcomeLabelLeft.snp.makeConstraints { make in
             make.leading.top.bottom.equalToSuperview()
         }
-        let appNameImage = UIImageView(image: R.image.app_title()?.scaled(toSize: CGSize(width: 138, height: 11.3)))
+        
+        let appNameImage = UIImageView(image: UIImage(.dm, light: (R.image.app_title_light()?.scaled(toSize: CGSize(width: 138, height: 11.3)))!, dark: (R.image.app_title()?.scaled(toSize: CGSize(width: 138, height: 11.3)))!))
         welcomeContainer.addSubview(appNameImage)
         appNameImage.snp.makeConstraints { make in
             make.leading.equalTo(welcomeLabelLeft.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
@@ -106,7 +107,7 @@ class GamesListBlankSlateView: BaseView {
         
         //加入社区
         let channelLinkContainerView = UIView()
-        channelLinkContainerView.backgroundColor = Constants.Color.BackgroundPrimary
+        channelLinkContainerView.backgroundColor = Constants.Color.Background
         channelLinkContainerView.layerCornerRadius = 15
         addSubview(channelLinkContainerView)
         channelLinkContainerView.snp.makeConstraints { make in

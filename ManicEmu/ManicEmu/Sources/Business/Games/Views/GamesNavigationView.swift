@@ -11,19 +11,19 @@ import UIKit
 
 class GamesNavigationView: UIView {
     private var appTitle: UIImageView = {
-        let view = UIImageView(image: R.image.app_title())
+        let view = UIImageView(image: UIImage(.dm, light: R.image.app_title_light()!, dark: R.image.app_title()!))
         return view
     }()
     
     var controllerButton: SymbolButton = {
-        let view = SymbolButton(image: R.image.customArcadeStickConsoleFill()?.applySymbolConfig())
+        let view = SymbolButton(image: R.image.customArcadeStickConsoleFill()?.applySymbolConfig(), enableGlass: true)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.BackgroundPrimary
         return view
     }()
     
     var historyButton: SymbolButton = {
-        let view = SymbolButton(image: R.image.customFlagPatternCheckered()?.applySymbolConfig())
+        let view = SymbolButton(image: R.image.customFlagPatternCheckered()?.applySymbolConfig(), enableGlass: true)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.BackgroundPrimary
         return view

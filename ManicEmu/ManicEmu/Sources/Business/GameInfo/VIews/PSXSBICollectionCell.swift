@@ -22,7 +22,7 @@ class PSXSBICollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
@@ -31,7 +31,7 @@ class PSXSBICollectionCell: UICollectionViewCell {
         }
         
         addSubview(addFileButton)
-        addFileButton.backgroundColor = Constants.Color.BackgroundPrimary
+        addFileButton.backgroundColor = Constants.Color.Background
         addFileButton.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.height.equalTo(Constants.Size.ItemHeightMin)

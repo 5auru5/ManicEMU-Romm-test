@@ -12,7 +12,6 @@ target 'ManicEmu' do
   pod 'CloudServiceKit', :path => '../CloudServiceKit'
   pod 'HXPhotoPicker/Lite', :path => '../HXPhotoPicker'
   pod 'Closures', :path => '../Closures/Xcode/Closures'
-  pod 'TKSwitcherCollection', :path => '../TKSwitcherCollection'
   pod "GCDWebServer/WebUploader", :path => '../GCDWebServer'
   pod 'ProHUD', :path => '../ProHUD'
   pod 'BlankSlate', :path => '../BlankSlate'

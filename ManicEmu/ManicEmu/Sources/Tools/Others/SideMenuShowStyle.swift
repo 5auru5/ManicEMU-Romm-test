@@ -15,7 +15,7 @@ class SideMenuShowStyle: SideMenuPresentationStyle {
     private class CoverView: UIView {
         override init(frame: CGRect) {
             super.init(frame: frame)
-            self.backgroundColor = .black.withAlphaComponent(0.7)
+            self.backgroundColor = UIColor(.dm, light: .white.withAlphaComponent(0.35), dark: .black.withAlphaComponent(0.7))
         }
         
         required init?(coder: NSCoder) {
@@ -28,7 +28,7 @@ class SideMenuShowStyle: SideMenuPresentationStyle {
     required init() {
         super.init()
         /// Background color behind the views and status bar color
-        backgroundColor = .black
+        backgroundColor = UIColor(.dm, light: .white, dark: .black)
         /// The starting alpha value of the menu before it appears
         menuStartAlpha = 1
         /// Whether or not the menu is on top. If false, the presenting view is on top. Shadows are applied to the view on top.
@@ -38,7 +38,7 @@ class SideMenuShowStyle: SideMenuPresentationStyle {
         /// The amount the menu is scaled. Less than one shrinks the view, larger than one grows the view.
         menuScaleFactor = 1
         /// The color of the shadow applied to the top most view.
-        onTopShadowColor = .black
+        onTopShadowColor = UIColor(.dm, light: .white, dark: .black)
         /// The radius of the shadow applied to the top most view.
         onTopShadowRadius = 5
         /// The opacity of the shadow applied to the top most view.

@@ -26,7 +26,7 @@ class GameSettingView: BaseView {
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -781,7 +781,7 @@ extension GameSettingView {
             
             
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             if !isEditingMode {
                 containerView.makeBlur()
             }

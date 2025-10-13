@@ -184,8 +184,13 @@ class HomeTabBar: UIView {
         super.init(frame: frame)
         self.backgroundColor = .clear
         self.layer.cornerRadius = Constants.Size.HomeTabBarSize.height/2
-        self.makeShadow()
-        self.makeBlur(cornerRadius: Constants.Size.HomeTabBarSize.height/2)
+        if #available(iOS 26.0, *) {
+            self.makeGlass()
+        } else {
+            self.layer.borderWidth = 1
+            self.layer.borderColor = Constants.Color.Border.cgColor
+            self.makeBlur(cornerRadius: Constants.Size.HomeTabBarSize.height/2)
+        }
         
         addSubviews([indicatorView, gamesBar, importBar, settingsBar])
         updateViewsConstraints(isInit: true)
@@ -197,6 +202,16 @@ class HomeTabBar: UIView {
         }
         settingsBar.addTapGesture { [weak self] gesture in
             self?.currentSelection = .settings
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            if #available(iOS 26.0, *) { } else {
+                self.layer.borderWidth = 1
+                self.layer.borderColor = Constants.Color.Border.cgColor
+            }
         }
     }
     

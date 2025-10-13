@@ -113,8 +113,8 @@ extension FeaturesView: JXBannerDataSource {
         let pageControl = JXPageControlJump()
         pageControl.contentMode = .center
         pageControl.isAnimation = true
-        pageControl.activeColor = Constants.Color.LabelPrimary
-        pageControl.inactiveColor = Constants.Color.LabelPrimary.withAlphaComponent(0.15)
+        pageControl.activeColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        pageControl.inactiveColor = Constants.Color.LabelPrimary.forceStyle(.dark).withAlphaComponent(0.15)
         pageControl.indicatorSize = .init(6)
         pageControl.columnSpacing = Constants.Size.ContentSpaceUltraTiny
         pageControl.contentAlignment = JXPageControlAlignment(.center, .bottom)

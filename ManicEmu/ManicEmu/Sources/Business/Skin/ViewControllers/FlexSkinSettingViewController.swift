@@ -65,7 +65,8 @@ class FlexSkinSettingViewController: BaseViewController {
                                 title: R.string.localizable.controllerMappingReset(),
                                 titleFont: Constants.Font.body(size: .m),
                                 edgeInsets: UIEdgeInsets(top: 0, left: Constants.Size.ContentSpaceTiny, bottom: 0, right: Constants.Size.ContentSpaceTiny),
-                                titlePosition: .left)
+                                titlePosition: .left,
+                                enableGlass: true)
         view.titleLabel.textAlignment = .center
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in

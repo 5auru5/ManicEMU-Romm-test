@@ -10,8 +10,8 @@
 import UIKit
 
 class ImportFileCollectionViewCell: UICollectionViewCell {
-    private var iconView: UIImageView = {
-        let view = UIImageView()
+    private var iconView: ServiceIconView = {
+        let view = ServiceIconView(roundCorner: .allCorners)
         return view
     }()
     
@@ -89,7 +89,11 @@ class ImportFileCollectionViewCell: UICollectionViewCell {
     //TODO: 需要处理图片的尺寸
     func setData(service: ImportService) {
         
-        iconView.image = service.iconImage
+        iconView.imageView.image = service.iconImage
+        iconView.backgroundColor = service.iconBackgroundColor
+        iconView.borderColor = service.iconBorderColor
+        iconView.radius = service.iconCornerRadius
+        titleLabel.text = service.title
         
         var matt = NSMutableAttributedString(string: service.title, attributes: [.font: Constants.Font.title(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
         if let detail = service.detail {

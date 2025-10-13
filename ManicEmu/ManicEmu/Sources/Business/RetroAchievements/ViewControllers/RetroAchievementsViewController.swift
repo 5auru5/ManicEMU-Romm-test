@@ -10,6 +10,7 @@
 class RetroAchievementsViewController: BaseViewController {
     private let backgroundImageView: UIImageView = {
         let view = UIImageView(image: R.image.retro_bg())
+        view.contentMode = .scaleAspectFill
         return view
     }()
     
@@ -25,7 +26,11 @@ class RetroAchievementsViewController: BaseViewController {
             }
             self.loginView.removeFromSuperview()
             self.achievementsUser = AchievementsUser.getUser()
-            self.view.insertSubview(self.profileView, belowSubview: self.closeButton)
+            if UIDevice.isPhone {
+                self.view.insertSubview(self.profileView, belowSubview: self.closeButton)
+            } else {
+                self.view.addSubview(self.profileView)
+            }
             self.profileView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
@@ -77,6 +82,8 @@ class RetroAchievementsViewController: BaseViewController {
             }
         }
         
-        addCloseButton()
+        if UIDevice.isPhone {
+            addCloseButton()
+        }
     }
 }

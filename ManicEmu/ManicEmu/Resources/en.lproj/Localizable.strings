@@ -116,7 +116,7 @@
 "ToastFailed" = "Save Failed";
 
 // Games Section
-"GamesSearchPlaceHolder" = "Search games";
+"GamesSearchPlaceHolder" = "Search Games";
 "GamesRename" = "Rename";
 "GamesModifyCover" = "Edit Cover";
 "GamesSpecifySkin" = "Assign Skin";
@@ -725,3 +725,8 @@ Press the controller button to complete mapping...";
 "MicrophoneTips" = "Enabling the microphone will request access and keep it active during gameplay, which may stop music playback from other apps in the background.";
 "Texture" = "Texture";
 "TextureReplacement" = "Texture replacement";
+
+"Appearance" = "Appearance";
+"AppearanceLight" = "Light Mode";
+"AppearanceDark" = "Dark Mode";
+"AppearanceAuto" = "Follow the system";

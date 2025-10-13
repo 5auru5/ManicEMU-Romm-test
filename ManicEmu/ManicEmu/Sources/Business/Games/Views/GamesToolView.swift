@@ -291,6 +291,6 @@ class GamesToolIconView: UIView {
         super.layoutSubviews()
         layerCornerRadius = height/2
         layer.borderWidth = 1
-        layer.borderColor = UIColor.white.withAlphaComponent(0.05).cgColor
+        layer.borderColor = Constants.Color.Border.cgColor
     }
 }

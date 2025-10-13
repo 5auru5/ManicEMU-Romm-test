@@ -32,7 +32,7 @@ class ThemeSettingView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     
@@ -45,7 +45,7 @@ class ThemeSettingView: BaseView {
         view.register(cellWithClass: CoverStyleCollectionViewCell.self)
         view.register(cellWithClass: GameListStyleCollectionViewCell.self)
         view.register(cellWithClass: PlatformSortCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: PrimaryHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundColorHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -57,7 +57,7 @@ class ThemeSettingView: BaseView {
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -80,7 +80,7 @@ class ThemeSettingView: BaseView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -197,7 +197,7 @@ class ThemeSettingView: BaseView {
         var backgroundView: UIView = {
             let view = UIView()
             view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.BackgroundSecondary
+            view.backgroundColor = Constants.Color.BackgroundPrimary
             return view
         }()
         
@@ -262,7 +262,7 @@ extension ThemeSettingView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: PrimaryHaderReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundColorHaderReusableView.self, for: indexPath)
         let section = SectionIndex(rawValue: indexPath.section)!
         header.titleLabel.text = section.title
         return header

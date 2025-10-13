@@ -14,7 +14,7 @@ class PurchaseView: BaseView {
     
     private lazy var navigationView: UIView = {
         let view = UIView()
-        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)), enableGlass: true)
         closeButton.backgroundColor = .white.withAlphaComponent(0.1)
         closeButton.enableRoundCorner = true
         view.addSubview(closeButton)
@@ -32,7 +32,7 @@ class PurchaseView: BaseView {
         restorePurchase.isUserInteractionEnabled = true
         restorePurchase.enableInteractive = true
         restorePurchase.font = Constants.Font.caption(size: .l, weight: .regular)
-        restorePurchase.textColor = Constants.Color.LabelPrimary
+        restorePurchase.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         restorePurchase.text = R.string.localizable.restorePurchaseButton()
         view.addSubview(restorePurchase)
         restorePurchase.snp.makeConstraints { make in

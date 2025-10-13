@@ -8,7 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 class RetroAchievementsDetailView: BaseView {
-    init(achievement: CheevosAchievement, shaereMode: Bool = false, didTapClose: @escaping (()->Void)) {
+    init(achievement: CheevosAchievement, shareMode: Bool = false, didTapClose: @escaping (()->Void)) {
         super.init(frame: .zero)
         
         let coverImageView = UIImageView()
@@ -53,7 +53,7 @@ class RetroAchievementsDetailView: BaseView {
         let titleLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 0
-            let matt = NSMutableAttributedString(string: achievement.title ?? "", attributes: [.font: Constants.Font.title(weight: .semibold), .foregroundColor: UIColor.white])
+            let matt = NSMutableAttributedString(string: achievement.title ?? "", attributes: [.font: Constants.Font.title(weight: .semibold), .foregroundColor: shareMode ? Constants.Color.LabelPrimary.forceStyle(.dark) : Constants.Color.LabelPrimary])
             matt.append(NSAttributedString(string: "\n\(achievement._description ?? "")", attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
             let style = NSMutableParagraphStyle()
             style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
@@ -93,7 +93,8 @@ class RetroAchievementsDetailView: BaseView {
             }
         }
         
-        let seperator = SparkleSeperatorView(color: Constants.Color.BackgroundTertiary, lineColor: Constants.Color.BackgroundSecondary)
+        let seperatorColor = shareMode ? Constants.Color.Border.forceStyle(.dark) : Constants.Color.Border
+        let seperator = SparkleSeperatorView(color: seperatorColor, lineColor: seperatorColor)
         addSubview(seperator)
         seperator.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -109,7 +110,7 @@ class RetroAchievementsDetailView: BaseView {
             let view = UILabel()
             view.textAlignment = .center
             view.numberOfLines = 0
-            let matt = NSMutableAttributedString(string: "\(achievement.points) points", attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: UIColor.white])
+            let matt = NSMutableAttributedString(string: "\(achievement.points) points", attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: shareMode ? Constants.Color.LabelPrimary.forceStyle(.dark) : Constants.Color.LabelPrimary])
             if achievement.unlocked, let unlockDate = achievement.unlockTime {
                 matt.append(NSAttributedString(string: "\n\(unlockDate.dateTimeString())", attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
             }
@@ -127,7 +128,7 @@ class RetroAchievementsDetailView: BaseView {
             make.top.equalTo(seperator.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
         
-        if shaereMode {
+        if shareMode {
             let brandImageView = UIImageView(image: R.image.app_title())
             brandImageView.contentMode = .scaleAspectFit
             addSubview(brandImageView)
@@ -142,7 +143,7 @@ class RetroAchievementsDetailView: BaseView {
                 make.bottom.equalToSuperview()
             }
         } else {
-            let roundContainer = RoundAndBorderView(roundCorner: .allCorners, borderColor: UIColor.white.withAlphaComponent(0.1), borderWidth: 2)
+            let roundContainer = RoundAndBorderView(roundCorner: .allCorners, borderColor: Constants.Color.Border, borderWidth: 2)
             roundContainer.addTapGesture { gesture in
                 didTapClose()
             }
@@ -163,7 +164,7 @@ class RetroAchievementsDetailView: BaseView {
             let okLabel = UILabel()
             okLabel.text = R.string.localizable.gotIt()
             okLabel.font = Constants.Font.title(size: .s, weight: .semibold)
-            okLabel.textColor = .white
+            okLabel.textColor = Constants.Color.LabelPrimary
             roundContainer.addSubview(okLabel)
             okLabel.snp.makeConstraints { make in
                 make.center.equalToSuperview()

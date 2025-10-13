@@ -21,39 +21,56 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
             return view
         }()
         
-        var selectView: UIView = {
-            let view = UIView(frame: CGRect(origin: .zero, size: .init(48)))
-            let outerColor = UIColor.white
-            let innerColor = Constants.Color.BackgroundSecondary
-            let outerWidth = 2.0
-            let innerWidth = 2.0
-            let totalWidth = innerWidth + outerWidth
-            let radius = min(view.bounds.width, view.bounds.height) / 2
+        class SelectView: UIView {
+            private let outerLayer = CAShapeLayer()
+            private let innerLayer = CAShapeLayer()
+            private let outerColor = UIColor(.dm, light: Constants.Color.LabelPrimary.forceStyle(.light), dark: .white)
+            private let innerColor = Constants.Color.BackgroundPrimary
             
-            // Outer border layer
-            let outerLayer = CAShapeLayer()
-            outerLayer.path = UIBezierPath(ovalIn: view.bounds.insetBy(dx: outerWidth / 2, dy: outerWidth / 2)).cgPath
-            outerLayer.strokeColor = outerColor.cgColor
-            outerLayer.fillColor = UIColor.clear.cgColor
-            outerLayer.lineWidth = totalWidth
-            view.layer.addSublayer(outerLayer)
+            override init(frame: CGRect) {
+                super.init(frame: frame)
+                
+                let outerWidth = 2.0
+                let innerWidth = 2.0
+                let totalWidth = innerWidth + outerWidth
+                let radius = min(bounds.width, bounds.height) / 2
+                
+                // Outer border layer
+                outerLayer.path = UIBezierPath(ovalIn: bounds.insetBy(dx: outerWidth / 2, dy: outerWidth / 2)).cgPath
+                outerLayer.strokeColor = outerColor.cgColor
+                outerLayer.fillColor = UIColor.clear.cgColor
+                outerLayer.lineWidth = totalWidth
+                layer.addSublayer(outerLayer)
+                
+                // Inner border layer
+                let innerInset = outerWidth
+                innerLayer.path = UIBezierPath(ovalIn: bounds.insetBy(dx: innerInset + innerWidth / 2, dy: innerInset + innerWidth / 2)).cgPath
+                innerLayer.strokeColor = innerColor.cgColor
+                innerLayer.fillColor = UIColor.clear.cgColor
+                innerLayer.lineWidth = innerWidth
+                layer.addSublayer(innerLayer)
+                
+                // Make the view itself circular
+                layer.cornerRadius = radius
+                clipsToBounds = true
+                backgroundColor = .clear
+                isHidden = true
+            }
             
-            // Inner border layer
-            let innerInset = outerWidth
-            let innerLayer = CAShapeLayer()
-            innerLayer.path = UIBezierPath(ovalIn: view.bounds.insetBy(dx: innerInset + innerWidth / 2, dy: innerInset + innerWidth / 2)).cgPath
-            innerLayer.strokeColor = innerColor.cgColor
-            innerLayer.fillColor = UIColor.clear.cgColor
-            innerLayer.lineWidth = innerWidth
-            view.layer.addSublayer(innerLayer)
+            required init?(coder: NSCoder) {
+                fatalError("init(coder:) has not been implemented")
+            }
             
-            // Make the view itself circular
-            view.layer.cornerRadius = radius
-            view.clipsToBounds = true
-            view.backgroundColor = .clear
-            view.isHidden = true
-            return view
-        }()
+            override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+                super.traitCollectionDidChange(previousTraitCollection)
+                if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                    outerLayer.strokeColor = outerColor.cgColor
+                    innerLayer.strokeColor = innerColor.cgColor
+                }
+            }
+        }
+        
+        var selectView: SelectView = SelectView(frame: CGRect(origin: .zero, size: .init(48)))
         
         override init(frame: CGRect) {
             super.init(frame: frame)
@@ -84,14 +101,14 @@ class ThemeColorCollectionViewCell: UICollectionViewCell {
     
     private var roundContainerView: UIView = {
         let view = UIView()
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         view.layerCornerRadius = Constants.Size.CornerRadiusMax
         return view
     }()
     
     private var addButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.title()))
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.title()), enableGlass: true)
+        view.backgroundColor = Constants.Color.Background
         view.enableRoundCorner = true
         return view
     }()

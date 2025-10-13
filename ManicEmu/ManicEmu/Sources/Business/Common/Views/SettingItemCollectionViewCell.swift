@@ -28,7 +28,7 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
     private var disableCover: UIView = {
         let view = UIView()
         view.isHidden = true
-        view.backgroundColor = .black.withAlphaComponent(0.4)
+        view.backgroundColor = Constants.Color.Background.withAlphaComponent(0.8)
         view.layerCornerRadius = Constants.Size.CornerRadiusMid
         return view
     }()
@@ -55,7 +55,7 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
     
     private var roundAndBorderView: RoundAndBorderView = {
         let view = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        view.makeBlur(blurColor: Constants.Color.BackgroundSecondary)
+        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
         return view
     }()
     
@@ -157,10 +157,10 @@ class SettingItemCollectionViewCell: UICollectionViewCell {
             enableInteractive = true
         }
         if isPlus {
-            editIcon.image = UIImage(symbol: .plus, font: Constants.Font.caption(size: .l, weight: .medium))
+            editIcon.image = UIImage(symbol: .plus, font: Constants.Font.caption(size: .l, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             editButton.backgroundColor = Constants.Color.Green
         } else {
-            editIcon.image = UIImage(symbol: .minus, font: Constants.Font.caption(size: .l, weight: .medium))
+            editIcon.image = UIImage(symbol: .minus, font: Constants.Font.caption(size: .l, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             editButton.backgroundColor = Constants.Color.Red
         }
         disableCover.isHidden = enable

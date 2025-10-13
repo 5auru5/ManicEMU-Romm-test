@@ -8,11 +8,38 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 class ContextMenuButton: UIButton {
-    init(image: UIImage? = nil, menu: UIMenu? = nil) {
+    /// 是否启用 Glass 效果（仅 iOS 26+ 有效）
+    private var isGlassEnabled: Bool = false
+    
+    init(image: UIImage? = nil, 
+         menu: UIMenu? = nil, 
+         enableGlass: Bool = false,
+         cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
         super.init(frame: .zero)
-        if let image = image {
-            setImageForAllStates(image)
+        
+        self.isGlassEnabled = enableGlass
+        
+        // 只有 iOS 26+ 且 enableGlass 为 true 时才使用 glass 效果
+        if #available(iOS 26.0, *), enableGlass {
+            // iOS 26 + Glass enabled: 使用 UIButton.Configuration.glass()
+            var config = UIButton.Configuration.glass()
+            config.cornerStyle = cornerStyle
+            
+            if let image = image {
+                config.image = image
+            }
+            
+            self.configuration = config
+            // iOS 26 的 Liquid Glass 自带按压效果，不需要 enableInteractive
+        } else {
+            // iOS 25 及以下 或 enableGlass 为 false: 使用传统方式
+            if let image = image {
+                setImageForAllStates(image)
+            }
+            // 使用 enableInteractive 提供按压动画
+            enableInteractive = true
         }
+        
         if let menu = menu {
             self.menu = menu
         }

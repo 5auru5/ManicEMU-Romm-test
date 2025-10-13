@@ -174,6 +174,10 @@ extension UIDevice {
     static var deviceInfo: String {
         return "Device:\(Device.version())\nVersion:\(UIDevice.current.systemVersion)"
     }
+    
+    static var isDarkMode: Bool {
+        ApplicationSceneDelegate.applicationWindow?.traitCollection.userInterfaceStyle == .dark
+    }
 }
 
 

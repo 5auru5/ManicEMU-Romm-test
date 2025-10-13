@@ -28,7 +28,7 @@ class PriceItemCollectionCell: UICollectionViewCell {
     private var promptLabel: UILabel = {
         let view = UILabel()
         view.textAlignment = .center
-        view.textColor = Constants.Color.LabelPrimary
+        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         view.font = Constants.Font.caption(weight: .bold)
         return view
     }()
@@ -140,8 +140,8 @@ class PriceItemCollectionCell: UICollectionViewCell {
             }
             
             
-            roundAndBorderView.borderColor = isSelected ? Constants.Color.Main : Constants.Color.LabelSecondary
-            roundAndBorderView.backgroundColor = isSelected ? Constants.Color.Main.withAlphaComponent(0.1) : Constants.Color.BackgroundSecondary
+            roundAndBorderView.borderColor = isSelected ? Constants.Color.Main : Constants.Color.Border
+            roundAndBorderView.backgroundColor = isSelected ? Constants.Color.Main.withAlphaComponent(0.1) : Constants.Color.BackgroundPrimary
         }
     }
 }

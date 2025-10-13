@@ -70,7 +70,7 @@ class DownloadManageView: BaseView {
             make.centerY.equalTo(icon)
         }
         
-        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let closeButton = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         closeButton.enableRoundCorner = true
         topBlurView.addSubview(closeButton)
         closeButton.addTapGesture { [weak self] gesture in

@@ -21,8 +21,8 @@ class DownloadButton: SymbolButton {
         }
     }
     
-    init() {
-        super.init(image: UIImage(symbol: .arrowDownToLine, font: Constants.Font.body(weight: .bold)))
+    init(enableGlass: Bool = true) {
+        super.init(image: UIImage(symbol: .arrowDownToLine, font: Constants.Font.body(weight: .bold)), enableGlass: enableGlass)
         enableRoundCorner = true
         detectDownloadStatus()
     }

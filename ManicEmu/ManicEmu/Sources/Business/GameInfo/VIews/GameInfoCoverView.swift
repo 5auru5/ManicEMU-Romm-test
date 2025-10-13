@@ -22,7 +22,7 @@ class GameInfoCoverView: BaseView {
     
     private var backgroundGradientView: UIView = {
         let view = GradientView()
-        view.setupGradient(colors: [.clear, Constants.Color.BackgroundPrimary], locations: [0.0, 1.0], direction: .topToBottom)
+        view.setupGradient(colors: [.clear, Constants.Color.Background], locations: [0.0, 1.0], direction: .topToBottom)
         return view
     }()
     
@@ -39,9 +39,13 @@ class GameInfoCoverView: BaseView {
     }()
     
     lazy var editCoverButton: ContextMenuButton = {
-        let view = ContextMenuButton(image: UIImage(symbol: .ellipsis), menu: generateMenu())
+        let view = ContextMenuButton(image: UIImage(symbol: .ellipsis), menu: generateMenu(), enableGlass: true)
         view.layerCornerRadius = Constants.Size.IconSizeMid.height/2
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        if #available(iOS 26.0, *) {
+            view.backgroundColor = .clear
+        } else {
+            view.backgroundColor = Constants.Color.BackgroundSecondary
+        }
         return view
     }()
     

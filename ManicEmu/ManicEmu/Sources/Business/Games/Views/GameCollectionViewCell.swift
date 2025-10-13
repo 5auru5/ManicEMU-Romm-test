@@ -38,6 +38,13 @@ class GameCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+        }
+    }
+    
     private var selectedBackground: UIView = {
         let view = UIView()
         view.backgroundColor = Constants.Color.BackgroundSecondary

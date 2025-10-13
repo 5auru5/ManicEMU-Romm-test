@@ -40,6 +40,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
     
     var controllerView: ControllerView = {
         let view = ControllerView()
+        view.backgroundColor = .black
         view.layerCornerRadius = Constants.Size.CornerRadiusMid
         view.isUserInteractionEnabled = false
         return view
@@ -52,7 +53,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         view.layer.shadowColor = Constants.Color.Shadow.cgColor
         view.layer.shadowOpacity = 0.5
         view.layer.shadowRadius = 2
-        view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary, Constants.Color.Main])
+        view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
         view.alpha = 0
         return view
     }()
@@ -68,7 +69,8 @@ class SkinCollectionViewCell: UICollectionViewCell {
                                 title: R.string.localizable.skinPreviewTitle(),
                                 titleFont: Constants.Font.body(),
                                 edgeInsets: UIEdgeInsets(top: Constants.Size.ContentSpaceTiny, left: Constants.Size.ContentSpaceMin, bottom: Constants.Size.ContentSpaceTiny, right: Constants.Size.ContentSpaceMin),
-                                titlePosition: .right)
+                                titlePosition: .right,
+                                enableGlass: true)
         view.enableRoundCorner = true
         return view
     }()
@@ -86,7 +88,7 @@ class SkinCollectionViewCell: UICollectionViewCell {
         enableInteractive = true
         delayInteractiveTouchEnd = true
         layerCornerRadius = Constants.Size.CornerRadiusMid
-        backgroundColor = .black
+        backgroundColor = Constants.Color.Background
         addSubview(controllerView)
         controllerView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
@@ -108,6 +110,13 @@ class SkinCollectionViewCell: UICollectionViewCell {
         addSubview(previewButton)
         previewButton.snp.makeConstraints { make in
             make.center.equalToSuperview()
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
         }
     }
     

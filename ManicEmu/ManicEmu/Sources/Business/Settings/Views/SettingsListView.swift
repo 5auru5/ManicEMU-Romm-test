@@ -15,7 +15,7 @@ class SettingsListView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.Background)
+        view.makeBlur()
         return view
     }()
     
@@ -25,7 +25,7 @@ class SettingsListView: BaseView {
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: SettingsItemCollectionViewCell.self)
         view.register(cellWithClass: MembershipCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundColorHaderReusableView.self)
         view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withClass: SettingsListFooterCollectionReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
@@ -100,7 +100,8 @@ class SettingsListView: BaseView {
         }
         for section in SectionIndex.allCases {
             if section == .general {
-                datas[section] = [SettingItem(type: .theme),
+                datas[section] = [SettingItem(type: .appearance),
+                                  SettingItem(type: .theme),
                                   SettingItem(type: .quickGame, isOn: Settings.defalut.quickGame),
                                   SettingItem(type: .autoSaveState, isOn: Settings.defalut.autoSaveState)]
             } else if section == .advance {
@@ -141,7 +142,7 @@ class SettingsListView: BaseView {
         return datas
     }()
     
-    private let MembershipViewHeight = 130.0
+    private let MembershipViewHeight = 120.0
     
     #if SIDE_LOAD
     private static let FooterHeight = 538.0
@@ -333,7 +334,7 @@ extension SettingsListView: UICollectionViewDataSource {
             let cell = collectionView.dequeueReusableCell(withClass: SettingsItemCollectionViewCell.self, for: indexPath)
             let item = items[SectionIndex(rawValue: indexPath.section)!]![indexPath.row]
             cell.setData(item: item)
-            cell.switchButton.onChange(handler: nil)
+            cell.switchButton.onChange(handler: { _ in })
             cell.switchButton.onDisableTap(handler: nil)
             if item.type == .quickGame {
                 cell.switchButton.onChange { value in
@@ -359,7 +360,7 @@ extension SettingsListView: UICollectionViewDataSource {
                         UIView.makeAlert(title: R.string.localizable.iCloudTipsTitle(),
                                          detail: R.string.localizable.iCloudTipsDetail(),
                                          confirmTitle: R.string.localizable.iCloudConfirm(), cancelAction: { [weak cell] in
-                            cell?.switchButton.setOn(false)
+                            cell?.switchButton.setOn(false, animated: true)
                         }, confirmAction: {
                             Settings.defalut.iCloudSyncEnable = value
                             if value, let iCloudServiceEnable = SyncManager.shared.iCloudServiceEnable, !iCloudServiceEnable {
@@ -400,6 +401,11 @@ extension SettingsListView: UICollectionViewDataSource {
                     //设置震动触感
                     Settings.defalut.updateExtra(key: ExtraKey.rumble.rawValue, value: value)
                 }
+            } else if item.type == .appearance {
+                cell.didSegmentChange = { [weak cell] index in
+                    Settings.appearance = Settings.Appearance(rawValue: index) ?? .dark
+                    cell?.setData(item: item)
+                }
             } else {
                 cell.switchButton.onChange { value in }
             }
@@ -409,10 +415,10 @@ extension SettingsListView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundHaderReusableView.self, for: indexPath)
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundColorHaderReusableView.self, for: indexPath)
             header.titleLabel.text = SectionIndex(rawValue: indexPath.section)?.title
             if UIDevice.isPad {
-                header.makeBlur(blurColor: Constants.Color.Background)
+                header.makeBlur()
             }
             return header
         } else {

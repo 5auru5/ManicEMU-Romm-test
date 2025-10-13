@@ -32,7 +32,7 @@ class AddCheatCodeView: BaseView {
     }()
     
     private lazy var confirmButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.saveTitle()) { [weak self] in
+        let view = HowToButton(title: R.string.localizable.saveTitle(), enableGlass: true) { [weak self] in
             guard let self = self else { return }
             self.collectionView.endEditing(true)
             if let editGameCheat = self.editGameCheat,
@@ -100,14 +100,14 @@ class AddCheatCodeView: BaseView {
     }()
     
     private var howToButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.howToFetch()) {
+        let view = HowToButton(title: R.string.localizable.howToFetch(), enableGlass: true) {
             topViewController()?.present(WebViewController(url: Constants.URLs.CheatCodesGuide), animated: true)
         }
         return view
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -298,15 +298,28 @@ class AddCheatCodeView: BaseView {
     }
     
     private func updateConfirmButton(enable: Bool) {
-        if enable {
-            confirmButton.backgroundColor = Constants.Color.Main
-            confirmButton.label.textColor = Constants.Color.LabelPrimary
-            confirmButton.isUserInteractionEnabled = true
+        if #available(iOS 26.0, *) {
+            if enable {
+                confirmButton.label.font = Constants.Font.caption(size: .l, weight: .semibold)
+                confirmButton.label.textColor = Constants.Color.LabelPrimary
+                confirmButton.isUserInteractionEnabled = true
+            } else {
+                confirmButton.label.font = Constants.Font.caption(size: .l, weight: .regular)
+                confirmButton.label.textColor = Constants.Color.LabelSecondary
+                confirmButton.isUserInteractionEnabled = false
+            }
         } else {
-            confirmButton.backgroundColor = Constants.Color.BackgroundSecondary
-            confirmButton.label.textColor = Constants.Color.LabelSecondary
-            confirmButton.isUserInteractionEnabled = false
+            if enable {
+                confirmButton.backgroundColor = Constants.Color.Main
+                confirmButton.label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+                confirmButton.isUserInteractionEnabled = true
+            } else {
+                confirmButton.backgroundColor = Constants.Color.BackgroundPrimary
+                confirmButton.label.textColor = Constants.Color.LabelSecondary
+                confirmButton.isUserInteractionEnabled = false
+            }
         }
+        
     }
 }
 
@@ -361,7 +374,7 @@ extension AddCheatCodeView {
             
             let view = UIView()
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()

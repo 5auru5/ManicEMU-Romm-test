@@ -28,9 +28,11 @@ class SettingsViewController: BaseViewController {
     
     private lazy var detailContentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .black
+        view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         return view
     }()
+    
+    private var detailContentViewController: UIViewController? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,10 +44,11 @@ class SettingsViewController: BaseViewController {
             }
         } else {
             view.addSubview(settingsListView)
-            view.backgroundColor = .black
+            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
             settingsListView.backgroundColor = Constants.Color.Background
             settingsListView.didTapDetail = { [weak self] vc in
                 guard let self = self else { return }
+                self.detailContentViewController = vc
                 self.detailContentView.subviews.forEach { $0.removeFromSuperview() }
                 self.detailContentView.addSubview(vc.view)
                 vc.view.snp.makeConstraints { make in
@@ -74,6 +77,7 @@ class SettingsViewController: BaseViewController {
             }
             
             let vc = ThemeViewController()
+            detailContentViewController = vc
             detailContentView.addSubview(vc.view)
             vc.view.snp.makeConstraints { make in
                 make.edges.equalToSuperview()

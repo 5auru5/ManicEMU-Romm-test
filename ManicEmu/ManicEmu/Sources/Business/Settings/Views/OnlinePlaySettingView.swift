@@ -12,6 +12,44 @@ import ManicEmuCore
 
 class OnlinePlaySettingView: BaseView {
     
+    class HaderReusableView: UICollectionReusableView {
+        var titleLabel: UILabel = {
+            let view = UILabel()
+            view.textColor = Constants.Color.LabelSecondary
+            view.font = Constants.Font.body(size: .s, weight: .semibold)
+            return view
+        }()
+        
+        var button: SymbolButton = {
+            let view = SymbolButton(image: R.image.customArrowTrianglehead2Clockwise()?.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .semibold), color: Constants.Color.LabelSecondary))
+            view.enableRoundCorner = true
+            view.backgroundColor = Constants.Color.Background
+            return view
+        }()
+        
+        override init(frame: CGRect) {
+            super.init(frame: frame)
+            addSubviews([titleLabel, button])
+            makeBlur()
+            
+            titleLabel.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            }
+            
+            button.snp.makeConstraints { make in
+                make.centerY.equalTo(titleLabel)
+                make.leading.equalTo(titleLabel.snp.trailing)
+                make.size.equalTo(Constants.Size.ItemHeightTiny)
+            }
+        }
+        
+        required init?(coder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+            
+    }
+    
     private enum SectionIndex: Int, CaseIterable {
         case desc, ds
         var title: String {
@@ -36,7 +74,7 @@ class OnlinePlaySettingView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     
@@ -46,7 +84,7 @@ class OnlinePlaySettingView: BaseView {
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: DSOnlinePlaySettingCell.self)
         view.register(cellWithClass: SettingDescriptionCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: PrimaryButtonHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: HaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -55,7 +93,7 @@ class OnlinePlaySettingView: BaseView {
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -79,7 +117,7 @@ class OnlinePlaySettingView: BaseView {
         }
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -196,7 +234,7 @@ extension OnlinePlaySettingView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: PrimaryButtonHaderReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: HaderReusableView.self, for: indexPath)
         let section = datas[indexPath.section]
         header.titleLabel.text = section.title
         header.button.addTapGesture { [weak self] gesture in

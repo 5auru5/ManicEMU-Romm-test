@@ -20,7 +20,7 @@ class GamesViewController: BaseViewController {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.Background)
+        view.makeBlur()
         return view
     }()
     
@@ -275,7 +275,7 @@ class GamesViewController: BaseViewController {
             
         } else {
             //iPad布局
-            view.backgroundColor = .black
+            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
             
             view.addSubview(gamesListView)
             gamesListView.snp.makeConstraints { make in
@@ -341,8 +341,8 @@ class GamesViewController: BaseViewController {
                     make.top.trailing.bottom.equalToSuperview()
                     make.leading.equalTo(gamesListView.snp.trailing)
                 }
-                controllersSettingView.backgroundColor = .black
-                playHistoryView.backgroundColor = .black
+                controllersSettingView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
+                playHistoryView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
                 cornerMaskViewForiPad.isHidden = false
             } else {
                 view.addSubview(controllersSettingView)
@@ -460,8 +460,8 @@ class GamesViewController: BaseViewController {
                         make.leading.equalTo(gamesListView.snp.trailing)
                     }
                 }
-                controllersSettingView.backgroundColor = .black
-                playHistoryView.backgroundColor = .black
+                controllersSettingView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
+                playHistoryView.backgroundColor = UIColor(.dm, light: .white, dark: .black)
                 cornerMaskViewForiPad.isHidden = false
             } else {
                 gamesNavigationView.controllerButton.isHidden = false

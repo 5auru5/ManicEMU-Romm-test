@@ -15,14 +15,14 @@ class PlatformSortCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let icon = SymbolButton(image: .init(symbol: .line3Horizontal, font: Constants.Font.title(size: .s), color: Constants.Color.BackgroundTertiary))
+    private let icon = SymbolButton(image: .init(symbol: .line3Horizontal, font: Constants.Font.title(size: .s), color: Constants.Color.BackgroundSecondary))
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         layerCornerRadius = Constants.Size.CornerRadiusMid
         
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in

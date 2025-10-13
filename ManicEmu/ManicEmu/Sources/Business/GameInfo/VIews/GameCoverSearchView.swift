@@ -16,12 +16,12 @@ class GameCoverSearchView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -42,7 +42,7 @@ class GameCoverSearchView: BaseView {
     
     lazy var collectionView: BlankSlateCollectionView = {
         let view = BlankSlateCollectionView(frame: .zero, collectionViewLayout: createLayout())
-        view.backgroundColor = Constants.Color.BackgroundPrimary
+        view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: GameCollectionViewCell.self)
         view.showsVerticalScrollIndicator = false

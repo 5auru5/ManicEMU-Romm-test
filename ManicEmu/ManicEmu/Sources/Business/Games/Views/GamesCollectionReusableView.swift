@@ -34,6 +34,8 @@ class GamesCollectionReusableView: UICollectionReusableView {
     
     var didTapPlatform: (()->Void)? = nil
     
+    private var highlightString: String? = nil
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         if UIDevice.isPad {
@@ -91,6 +93,8 @@ class GamesCollectionReusableView: UICollectionReusableView {
             }
             titleLabel.attributedText = NSAttributedString(string: title, attributes: [.font: Constants.Font.title(), .foregroundColor: Constants.Color.LabelPrimary]).highlightString(highlightString)
         }
+        skinButton.setTitleColor(Constants.Color.LabelSecondary, for: .normal)
+        self.highlightString = highlightString
         if UIDevice.isPhone, UIDevice.isLandscape {
             //隐藏模糊
             if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
@@ -109,63 +113,65 @@ class GamesCollectionReusableView: UICollectionReusableView {
     
     private static var brandImageCaches = [String: UIImage?]()
     static func getBrandImage(gameType: GameType) -> UIImage? {
-        let key = gameType.rawValue
+        let traitCollection = ApplicationSceneDelegate.applicationWindow?.traitCollection
+        let userInterfaceStyle = traitCollection?.userInterfaceStyle
+        let key = gameType.rawValue + (userInterfaceStyle == nil ? "" : "\(userInterfaceStyle!.rawValue)")
         if let image = Self.brandImageCaches[key] {
             return image
         } else {
             var image: UIImage? = nil
             if gameType == ._3ds {
-                image = R.image.sds_group_brand()
+                image = R.image.sds_group_brand(compatibleWith: traitCollection)
             } else if gameType == .ds {
-                image = R.image.ds_group_brand()
+                image = R.image.ds_group_brand(compatibleWith: traitCollection)
             } else if gameType == .gba {
-                image = R.image.gba_group_brand()
+                image = R.image.gba_group_brand(compatibleWith: traitCollection)
             } else if gameType == .gbc {
-                image = R.image.gbc_group_brand()
+                image = R.image.gbc_group_brand(compatibleWith: traitCollection)
             } else if gameType == .gb {
-                image = R.image.gb_group_brand()
+                image = R.image.gb_group_brand(compatibleWith: traitCollection)
             }  else if gameType == .nes {
-                image = R.image.nes_group_brand()
+                image = R.image.nes_group_brand(compatibleWith: traitCollection)
             } else if gameType == .snes {
-                image = R.image.snes_group_brand()
+                image = R.image.snes_group_brand(compatibleWith: traitCollection)
             } else if gameType == .psp {
-                image = R.image.psp_group_brand()
+                image = R.image.psp_group_brand(compatibleWith: traitCollection)
             } else if gameType == .md {
                 if Locale.prefersUS {
-                    image = R.image.md_group_brand_us()
+                    image = R.image.md_group_brand_us(compatibleWith: traitCollection)
                 } else {
-                    image = R.image.md_group_brand()
+                    image = R.image.md_group_brand(compatibleWith: traitCollection)
                 }
             } else if gameType == .mcd {
                 if Locale.prefersUS {
-                    image = R.image.mcd_group_brand_us()
+                    image = R.image.mcd_group_brand_us(compatibleWith: traitCollection)
                 } else {
-                    image = R.image.mcd_group_brand()
+                    image = R.image.mcd_group_brand(compatibleWith: traitCollection)
                 }
             } else if gameType == ._32x {
                 if Locale.prefersUS {
-                    image = R.image.s2x_group_brand_us()
+                    image = R.image.s2x_group_brand_us(compatibleWith: traitCollection)
                 } else {
-                    image = R.image.s2x_group_brand()
+                    image = R.image.s2x_group_brand(compatibleWith: traitCollection)
                 }
             } else if gameType == .ss {
-                image = R.image.ss_group_brand()
+                image = R.image.ss_group_brand(compatibleWith: traitCollection)
             } else if gameType == .sg1000 {
-                image = R.image.sg1000_group_brand()
+                image = R.image.sg1000_group_brand(compatibleWith: traitCollection)
             } else if gameType == .gg {
-                image = R.image.gg_group_brand()
+                image = R.image.gg_group_brand(compatibleWith: traitCollection)
             } else if gameType == .ms {
-                image = R.image.ms_group_brand()
+                image = R.image.ms_group_brand(compatibleWith: traitCollection)
             } else if gameType == .n64 {
-                image = R.image.n64_group_brand()
+                image = R.image.n64_group_brand(compatibleWith: traitCollection)
             } else if gameType == .vb {
-                image = R.image.vb_group_brand()
+                image = R.image.vb_group_brand(compatibleWith: traitCollection)
             } else if gameType == .pm {
-                image = R.image.pm_group_brand()
+                image = R.image.pm_group_brand(compatibleWith: traitCollection)
             } else if gameType == .ps1 {
-                image = R.image.ps1_group_brand()
+                image = R.image.ps1_group_brand(compatibleWith: traitCollection)
             } else if gameType == .dc {
-                image = R.image.dc_group_brand()
+                image = R.image.dc_group_brand(compatibleWith: traitCollection)
             }
             Self.brandImageCaches[key] = image
             return image

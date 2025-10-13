@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import RealmSwift
+import FluentDarkModeKit
 
 class ThemeManager {
     static let shared = ThemeManager()
@@ -41,6 +42,7 @@ class ThemeManager {
             }
         }
         
+        updateAppearance()
         updateIcon()
         updateThemeColor()
         updateCoverStyle()
@@ -84,11 +86,16 @@ class ThemeManager {
             let gradientColors = themeColor.colors.compactMap({ UIColor(hexString: $0) })
             if Constants.Color.MainDynamicColor.hexString != mainColor.hexString {
                 Constants.Color.MainDynamicColor = mainColor
-                ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .light
-                DispatchQueue.main.asyncAfter(delay: 0.01) {
-                    ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .dark
-                    NotificationCenter.default.post(name: Constants.NotificationName.MainColorChange, object: nil)
+                //刷新整个系统的外观 会驱使traitCollectionDidChange方法进行调用
+                if let userInterfaceStyle = ApplicationSceneDelegate.applicationWindow?.traitCollection.userInterfaceStyle {
+                    if userInterfaceStyle == .dark {
+                        ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .light
+                    } else {
+                        ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .dark
+                    }
                 }
+                self.updateAppearance()
+                NotificationCenter.default.post(name: Constants.NotificationName.MainColorChange, object: nil)
             }
             
             if Constants.Color.Gradient != gradientColors {
@@ -121,6 +128,17 @@ class ThemeManager {
             Constants.Size.GamesHideGroupTitle = theme.hideGroupTitle
             Constants.Size.GamesGroupTitleStyle = theme.groupTitleStyle
             NotificationCenter.default.post(name: Constants.NotificationName.GameListStyleChange, object: nil)
+        }
+    }
+    
+    func updateAppearance() {
+        switch Settings.appearance {
+        case .auto:
+            ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .unspecified
+        case .light:
+            ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .light
+        case .dark:
+            ApplicationSceneDelegate.applicationWindow?.overrideUserInterfaceStyle = .dark
         }
     }
 }

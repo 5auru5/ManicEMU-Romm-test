@@ -24,14 +24,14 @@ class FilterSelectionView: BaseView {
     }()
     
     private var howToFetchButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.howToFetch()) {
+        let view = HowToButton(title: R.string.localizable.howToFetch(), enableGlass: true) {
             topViewController()?.present(WebViewController(url: Constants.URLs.GameImportGuide), animated: true)
         }
         return view
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -190,7 +190,7 @@ class FilterSelectionView: BaseView {
         var backgroundView: UIView = {
             let view = UIView()
             view.layerCornerRadius = Constants.Size.CornerRadiusMax
-            view.backgroundColor = Constants.Color.BackgroundSecondary
+            view.backgroundColor = Constants.Color.BackgroundPrimary
             return view
         }()
         
@@ -281,7 +281,7 @@ extension FilterSelectionView {
             
             let view = UIView()
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()

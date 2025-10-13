@@ -18,7 +18,8 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
                                 titleAlignment: .left,
                                 edgeInsets: UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12),
                                 titlePosition: .right,
-                                imageAndTitlePadding: 4)
+                                imageAndTitlePadding: 4,
+                                enableGlass: true)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.Background
         return view
@@ -51,7 +52,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let view = UILabel()
         view.font = Constants.Font.body(size: .l)
-        view.textColor = Constants.Color.LabelPrimary
+        view.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         view.numberOfLines = 2
         view.layer.shadowColor = Constants.Color.Background.cgColor
         view.layer.shadowOpacity = 0.5
@@ -59,6 +60,14 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         view.layer.shadowRadius = 2
         return view
     }()
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            titleLabel.layer.shadowColor = Constants.Color.Background.cgColor
+            iconViewContainerView.makeShadow(ofColor: Constants.Color.BackgroundPrimary, radius: 15)
+        }
+    }
     
     private let subtitleIcon: UIImageView = {
         let view = UIImageView()

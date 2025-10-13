@@ -17,9 +17,9 @@ class PlayHistoryView: BaseView {
     private var topBlurView: UIView = {
         let view = UIView()
         if UIDevice.isPad {
-            view.backgroundColor = .black
+            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         } else {
-            view.makeBlur(blurColor: .black)
+            view.makeBlur(blurColor: UIColor(.dm, light: .white, dark: .black))
         }
         return view
     }()

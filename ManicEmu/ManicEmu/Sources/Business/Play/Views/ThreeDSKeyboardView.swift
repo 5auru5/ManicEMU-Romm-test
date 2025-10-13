@@ -36,7 +36,7 @@ struct ThreeDSKeyboardView {
             let textfiledWidth = UIDevice.isPhone ? 300 : 380
 
             let containerView = RoundAndBorderView(roundCorner: .allCorners)
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             containerView.makeBlur()
             //标题
             let titleLabel = UILabel()
@@ -58,8 +58,8 @@ struct ThreeDSKeyboardView {
             }
             
             //输入框
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: .white.withAlphaComponent(0.05), borderWidth: 1)
-            textFieldContainer.backgroundColor = Constants.Color.Background
+            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
+            textFieldContainer.backgroundColor = Constants.Color.InputBackground
             containerView.addSubview(textFieldContainer)
             textFieldContainer.snp.makeConstraints { make in
                 make.height.equalTo(Constants.Size.ItemHeightMid)
@@ -84,7 +84,7 @@ struct ThreeDSKeyboardView {
             textField.becomeFirstResponder()
             
             let line = UIView()
-            line.backgroundColor = Constants.Color.BackgroundSecondary
+            line.backgroundColor = Constants.Color.Border
             containerView.addSubview(line)
             line.snp.makeConstraints { make in
                 make.height.equalTo(1)

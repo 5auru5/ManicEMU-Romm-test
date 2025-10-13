@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import BetterSegmentedControl
-import TKSwitcherCollection
 
 class GameListStyleCollectionViewCell: UICollectionViewCell {
     
@@ -19,9 +18,9 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
                                              normalTextColor: Constants.Color.LabelSecondary,
                                             selectedTextColor: Constants.Color.LabelPrimary)
         let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.BackgroundPrimary),
+            .backgroundColor(Constants.Color.Background),
             .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.BackgroundSecondary),
+            .indicatorViewBackgroundColor(Constants.Color.BackgroundPrimary),
             .cornerRadius(16)
         ]
         let view = BetterSegmentedControl(frame: .zero,
@@ -47,9 +46,9 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
                                              normalTextColor: Constants.Color.LabelSecondary,
                                             selectedTextColor: Constants.Color.LabelPrimary)
         let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.BackgroundPrimary),
+            .backgroundColor(Constants.Color.Background),
             .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.BackgroundSecondary),
+            .indicatorViewBackgroundColor(Constants.Color.BackgroundPrimary),
             .cornerRadius(16)
         ]
         let view = BetterSegmentedControl(frame: .zero,
@@ -70,16 +69,14 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .center
         view.layerCornerRadius = 6
-        view.image = UIImage(symbol: .calendarDayTimelineTrailing, font: Constants.Font.body(size: .s, weight: .medium))
+        view.image = UIImage(symbol: .calendarDayTimelineTrailing, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
     }()
     
-    private var  hideScrollIndicatorButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    private var  hideScrollIndicatorButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -87,16 +84,14 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         let view = UIImageView()
         view.contentMode = .center
         view.layerCornerRadius = 6
-        view.image = UIImage(symbol: .listBullet, font: Constants.Font.body(size: .s, weight: .medium))
+        view.image = UIImage(symbol: .listBullet, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         return view
     }()
     
-    private var hideGroupTitleSwitchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    private var hideGroupTitleSwitchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -118,6 +113,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     private lazy var gameSortTypeButton: SymbolButton = {
         var title: String = (GameSortType(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortType.rawValue) ?? 0) ?? .title).title
         let view = SymbolButton(image: .symbolImage(.arrowUpArrowDown).applySymbolConfig(size: 13), title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         view.layerCornerRadius = Constants.Size.CornerRadiusMin
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -144,6 +140,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     private lazy var gameSortOrderButton: SymbolButton = {
         var title: String = (GameSortOrder(rawValue: Theme.defalut.getExtraInt(key: ExtraKey.gameSortOrder.rawValue) ?? 0) ?? .ascending).title
         let view = SymbolButton(image: .symbolImage(.chevronUpChevronDown).applySymbolConfig(size: 13), title: title, titleFont: Constants.Font.body(), horizontalContian: true, titlePosition: .left)
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         view.layerCornerRadius = Constants.Size.CornerRadiusMin
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -163,7 +160,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         let theme = Theme.defalut
         //游戏行数
@@ -190,7 +187,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         
         //隐藏滚动条
         let hideScrollIndicatorContainer = UIView()
-        hideScrollIndicatorContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        hideScrollIndicatorContainer.backgroundColor = Constants.Color.Background
         hideScrollIndicatorContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
         addSubview(hideScrollIndicatorContainer)
         hideScrollIndicatorContainer.snp.makeConstraints { make in
@@ -222,11 +219,18 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         }
         
         hideScrollIndicatorContainer.addSubview(hideScrollIndicatorButton)
-        hideScrollIndicatorButton.setOn(theme.hideIndicator, animate: false)
+        hideScrollIndicatorButton.setOn(theme.hideIndicator, animated: false)
         hideScrollIndicatorButton.snp.makeConstraints { make in
             make.centerY.equalTo(hideScrollIndicatorIconView)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            hideScrollIndicatorButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         hideScrollIndicatorButton.onChange { value in
             Theme.change { realm in
@@ -260,7 +264,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         
         //隐藏分组标题
         let hideGroupTitleContainer = UIView()
-        hideGroupTitleContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        hideGroupTitleContainer.backgroundColor = Constants.Color.Background
         hideGroupTitleContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
         addSubview(hideGroupTitleContainer)
         hideGroupTitleContainer.snp.makeConstraints { make in
@@ -292,11 +296,18 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         }
         
         hideGroupTitleContainer.addSubview(hideGroupTitleSwitchButton)
-        hideGroupTitleSwitchButton.setOn(theme.hideGroupTitle, animate: false)
+        hideGroupTitleSwitchButton.setOn(theme.hideGroupTitle, animated: false)
         hideGroupTitleSwitchButton.snp.makeConstraints { make in
             make.centerY.equalTo(hideGroupTitleIconView)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMin)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            hideGroupTitleSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         hideGroupTitleSwitchButton.onChange { value in
             Theme.change { realm in
@@ -316,7 +327,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         }
         
         let gameSortContainer = UIView()
-        gameSortContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        gameSortContainer.backgroundColor = Constants.Color.Background
         gameSortContainer.layerCornerRadius = Constants.Size.CornerRadiusMid
         addSubview(gameSortContainer)
         gameSortContainer.snp.makeConstraints { make in
@@ -345,10 +356,6 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         
         mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
-            self.hideScrollIndicatorButton.onColor = Constants.Color.Main
-            self.hideGroupTitleSwitchButton.onColor = Constants.Color.Main
-            self.hideScrollIndicatorButton.reload()
-            self.hideGroupTitleSwitchButton.reload()
             self.hideScrollIndicatorIconView.backgroundColor = Constants.Color.Main
             self.hideGroupTitleIconView.backgroundColor = Constants.Color.Main
         }

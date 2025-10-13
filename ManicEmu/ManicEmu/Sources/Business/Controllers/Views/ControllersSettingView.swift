@@ -19,9 +19,9 @@ class ControllersSettingView: BaseView {
     var topBlurView: UIView = {
         let view = UIView()
         if UIDevice.isPad {
-            view.backgroundColor = .black
+            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         } else {
-            view.makeBlur(blurColor: .black)
+            view.makeBlur(blurColor: UIColor(.dm, light: .white, dark: .black))
         }
         return view
     }()
@@ -37,7 +37,7 @@ class ControllersSettingView: BaseView {
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: ControllersCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BlackHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: LowestHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -214,13 +214,13 @@ extension ControllersSettingView: UICollectionViewDataSource {
             self?.showPlayerIndexSelection(at: cell?.contextMenuButton, controller: controller)
         }
         if !asSideMenu {
-            cell.backgroundColor = Constants.Color.BackgroundSecondary
+            cell.backgroundColor = Constants.Color.BackgroundPrimary
         }
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BlackHaderReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: LowestHaderReusableView.self, for: indexPath)
         header.titleLabel.text = R.string.localizable.controllersHeaderTitle()
         if !header.subviews.contains(where: { $0 is SymbolButton }) {
             let moreContextMenuButton: ContextMenuButton = {
@@ -236,7 +236,7 @@ extension ControllersSettingView: UICollectionViewDataSource {
             }()
             
             let moreButton: SymbolButton = {
-                let view = SymbolButton(symbol: .ellipsis)
+                let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
                 view.enableRoundCorner = true
                 return view
             }()
@@ -260,7 +260,7 @@ extension ControllersSettingView: UICollectionViewDataSource {
             }
         }
         if UIDevice.isPad {
-            header.backgroundColor = .black
+            header.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         }
         return header
     }
@@ -289,7 +289,7 @@ extension ControllersSettingView {
             
             let view = UIView()
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape || menuInsets != nil) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
                 make.edges.equalToSuperview()

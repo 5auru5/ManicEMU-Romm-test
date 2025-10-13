@@ -179,7 +179,6 @@ PODS:
   - SwifterSwift/WebKit (7.0.0)
   - SwipeCellKit (2.7.1)
   - Tiercel (3.2.5)
-  - TKSwitcherCollection (1.4.3)
   - UMAPM (2.0.4):
     - UMCommon
   - UMCommon (7.5.2):
@@ -229,7 +228,6 @@ DEPENDENCIES:
   - SwifterSwift (~> 7.0)
   - SwipeCellKit (from `../SwipeCellKit`)
   - Tiercel (~> 3.0)
-  - TKSwitcherCollection (from `../TKSwitcherCollection`)
   - UMAPM (~> 2.0.3)
   - UMCommon (~> 7.5.2)
   - VisualEffectView (~> 5.0)
@@ -312,8 +310,6 @@ EXTERNAL SOURCES:
     :path: "../ZipArchive"
   SwipeCellKit:
     :path: "../SwipeCellKit"
-  TKSwitcherCollection:
-    :path: "../TKSwitcherCollection"
   ZIPFoundation:
     :path: "../ZIPFoundation"
 
@@ -375,13 +371,12 @@ SPEC CHECKSUMS:
   SwifterSwift: e9caf990fc72e835432280755d1f4c43f2a483d5
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   Tiercel: c0a73f876a72800333b15f4e7e48791f4ad21e90
-  TKSwitcherCollection: 6805f52958a8b661cd583a538345618a26ff9263
   UMAPM: f038b65a3df4fe8e2df3245642d84cff7f5f63c8
   UMCommon: 72513a01ebca2dead52f2112b4d7c6196dbbe412
   UMDevice: dcdf7ec167387837559d149fbc7d793d984faf82
   VisualEffectView: 173e1fabc2eb37af663547e14dc12efef7d2da8b
   ZIPFoundation: b8c29ea7ae353b309bc810586181fd073cb3312c
 
-PODFILE CHECKSUM: 53b3345edb2065a572663467eb2b7b20c00fec17
+PODFILE CHECKSUM: 1da151c3805063ec159935f9ae72ecbd9c867818
 
 COCOAPODS: 1.16.2

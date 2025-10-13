@@ -52,7 +52,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
         init(enableButton: Bool = true, enableOptionButton: Bool = true) {
             super.init(frame: .zero)
             layerCornerRadius = Constants.Size.CornerRadiusMid
-            backgroundColor = Constants.Color.BackgroundPrimary
+            backgroundColor = Constants.Color.Background
             
             let titleContainer = UIView()
             addSubview(titleContainer)
@@ -171,7 +171,7 @@ class BIOSCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         addSubviews(itemViews)
         for (index, view) in itemViews.enumerated() {

@@ -14,12 +14,12 @@ class ImportServiceListView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.Background)
+        view.makeBlur()
         return view
     }()
     
     var addServiceButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.body(size: .m, weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.body(size: .m, weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         return view
     }()
@@ -31,22 +31,12 @@ class ImportServiceListView: BaseView {
             //how to import
             topViewController()?.present(WebViewController(url: Constants.URLs.GameImportGuide), animated: true)
         }))
-        actions.append(UIAction(title: R.string.localizable.multiDiscBuilder(), image: UIImage(symbol: .opticaldisc)) { [weak self] _ in
-            guard let self = self else { return }
-            //多碟助手
-            topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
-        })
-        actions.append(UIAction(title: "RomPatcher", image: UIImage(symbol: .memorychip)) { [weak self] _ in
-            guard let self = self else { return }
-            //RomPatcher
-            topViewController()?.present(WebViewController(url: Constants.URLs.RomPatcher), animated: true)
-        })
         let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view
     }()
     
     private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis)
+        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             self?.moreContextMenuButton.triggerTapGesture()
@@ -59,6 +49,12 @@ class ImportServiceListView: BaseView {
         view.addTapGesture { gesture in
             topViewController()?.present(DownloadViewController(), animated: true)
         }
+        return view
+    }()
+    
+    private let backgroundGradientView: UIView = {
+        let view = UIView()
+        view.masksToBounds = true
         return view
     }()
     
@@ -84,12 +80,18 @@ class ImportServiceListView: BaseView {
     private var serviceUpdateToken: NotificationToken? = nil
     private var services: [ImportService] = {
         var services: [ImportService] = []
-        //默认添加wifi、粘贴板
+        //默认添加wifi、粘贴板、多碟助手、RomPatcher
         services.append(ImportService.genService(type: .wifi, detail: WebServer.shard.isRunning ? R.string.localizable.importServiceListWiFiOnDetail(WebServer.shard.ipAddress) : R.string.localizable.importServiceListWiFiOffDetail()))
         
         services.append(ImportService.genService(type: .paste, detail: R.string.localizable.importServiceListPasteDetail()))
+        
+        services.append(ImportService.genService(type: .multiDisc))
+        
+        services.append(ImportService.genService(type: .romPatcher))
         return services
     }()
+    
+    private let gradientSize = CGSize(width: 495, height: 307)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -110,46 +112,15 @@ class ImportServiceListView: BaseView {
         }
         updateServices(objects: objects)
         
-        //渐变背景
-        let gradientSize = CGSize(width: 495, height: 307)
-        let backgroundGradientView = UIView(frame: CGRect(origin: .zero, size: gradientSize))
-        let ovalLayer = CAShapeLayer()
-        ovalLayer.path = UIBezierPath(ovalIn: backgroundGradientView.frame).cgPath
-        backgroundGradientView.layer.mask = ovalLayer
+        updateBackgroundGradientView()
         
-        let colors = Constants.Color.Gradient.reversed()
-        backgroundGradientView.addGradient(colors: Array(colors),
-                                           locations: [0, 0.27, 0.62, 1],
-                                           direction: UIView.GradientDirection(startPoint: CGPoint(x: 1, y: 0),
-                                                                               endPoint: CGPoint(x: 0, y: 1)))
-        let maskGradientView = UIView(frame: CGRect(origin: .zero, size: gradientSize))
-        maskGradientView.addGradient(colors: [Constants.Color.Background.withAlphaComponent(0.95),
-                                              Constants.Color.Background,
-                                              Constants.Color.Background],
-                                     locations: [0, 0.62, 1],
-                                     direction: UIView.GradientDirection(startPoint: CGPoint(x: 0, y: 0),
-                                                                         endPoint: CGPoint(x: 1, y: 1)))
-        
-        backgroundGradientView.addSubview(maskGradientView)
-        maskGradientView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        let maskView = UIView()
-        maskView.masksToBounds = true
-        maskView.addSubview(backgroundGradientView)
+        addSubview(backgroundGradientView)
         backgroundGradientView.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-            make.size.equalTo(gradientSize)
-        }
-        addSubview(maskView)
-        maskView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
             make.width.equalToSuperview()
             make.height.equalTo(gradientSize.height)
         }
-        
-        
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -215,6 +186,13 @@ class ImportServiceListView: BaseView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            updateBackgroundGradientView()
+        }
+    }
+    
     private func createLayout() -> UICollectionViewLayout {
         let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(sectionIndex == 0 ? 1 : 0.5),
@@ -246,9 +224,39 @@ class ImportServiceListView: BaseView {
     }
     
     private func updateServices(objects: Results<ImportService>) {
-        services.removeSubrange(2...)
+        services.removeSubrange(4...)
         services.append(contentsOf: objects.map({ $0 }))
         collectionView.reloadSections([1])
+    }
+    
+    private func updateBackgroundGradientView() {
+        backgroundGradientView.subviews.forEach({ $0.removeFromSuperview() })
+        //渐变背景
+        let gradientView = UIView(frame: CGRect(origin: .zero, size: gradientSize))
+        let ovalLayer = CAShapeLayer()
+        ovalLayer.path = UIBezierPath(ovalIn: gradientView.frame).cgPath
+        gradientView.layer.mask = ovalLayer
+        
+        gradientView.addGradient(colors: Constants.Color.Gradient,
+                                 direction: UIView.GradientDirection(startPoint: CGPoint(x: 0, y: 0.5),
+                                                                     endPoint: CGPoint(x: 1, y: 0.5)))
+        let maskGradientView = UIView(frame: CGRect(origin: .zero, size: gradientSize))
+        maskGradientView.addGradient(colors: [Constants.Color.Background.withAlphaComponent(0.92),
+                                              Constants.Color.Background,
+                                              Constants.Color.Background],
+                                     locations: [0, 0.62, 1],
+                                     direction: UIView.GradientDirection(startPoint: CGPoint(x: 0.5, y: 0),
+                                                                         endPoint: CGPoint(x: 0.5, y: 1)))
+        
+        gradientView.addSubview(maskGradientView)
+        maskGradientView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        backgroundGradientView.addSubview(gradientView)
+        gradientView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.size.equalTo(gradientSize)
+        }
     }
 }
 
@@ -355,6 +363,12 @@ extension ImportServiceListView: UICollectionViewDelegate {
             if let provider = service.lanDriveProvider {
                 topViewController()?.present(BaseNavigationController(rootViewController: CloudDriveBrowserViewController(provider: provider, directory: provider.rootItem, navigationTitle: service.title)), animated: true)
             }
+        case .multiDisc:
+            //多碟助手
+            topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
+        case .romPatcher:
+            //RomPatcher
+            topViewController()?.present(WebViewController(url: Constants.URLs.RomPatcher), animated: true)
         }
     }
     

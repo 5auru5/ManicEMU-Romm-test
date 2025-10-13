@@ -23,7 +23,7 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
             view.layer.shadowColor = Constants.Color.Shadow.cgColor
             view.layer.shadowOpacity = 0.5
             view.layer.shadowRadius = 2
-            view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary, Constants.Color.Main])
+            view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
             view.isHidden = true
             return view
         }()
@@ -55,12 +55,19 @@ class DesktopIconCollectionViewCell: UICollectionViewCell {
         required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
         }
+        
+        override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+            }
+        }
     }
     
     
     private var scrollView: UIScrollView = {
         let view = UIScrollView()
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         view.layerCornerRadius = Constants.Size.CornerRadiusMax
         view.showsVerticalScrollIndicator = false
         view.showsHorizontalScrollIndicator = false

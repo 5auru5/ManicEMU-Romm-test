@@ -30,7 +30,7 @@ class AddSkinCollectionViewCell: UICollectionViewCell {
         enableInteractive = true
         delayInteractiveTouchEnd = true
         layerCornerRadius = Constants.Size.CornerRadiusMid
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         addSubview(iconView)
         iconView.snp.makeConstraints { make in
             make.center.equalToSuperview()

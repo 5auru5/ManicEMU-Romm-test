@@ -14,7 +14,7 @@ import IceCream
 extension ImportService: CKRecordConvertible & CKRecordRecoverable { }
 
 enum ImportServiceType: Int, PersistableEnum {
-    case files, wifi, paste, googledrive, dropbox, onedrive, baiduyun, aliyun, samba, webdav
+    case files, wifi, paste, googledrive, dropbox, onedrive, baiduyun, aliyun, samba, webdav, multiDisc, romPatcher
 }
 
 class ImportService: Object, ObjectUpdatable {
@@ -98,6 +98,10 @@ class ImportService: Object, ObjectUpdatable {
             "SMB"
         case .webdav:
             "WebDav"
+        case .multiDisc:
+            R.string.localizable.multiDiscBuilder()
+        case .romPatcher:
+            "RomPatcher"
         }
     }
     
@@ -123,8 +127,41 @@ class ImportService: Object, ObjectUpdatable {
             R.image.import_smb()!
         case .webdav:
             R.image.import_webdav()!
+        case .multiDisc:
+            R.image.import_multi_disc_icon()!
+        case .romPatcher:
+            R.image.import_rom_patcher()!
         }
     }()
+    
+    var iconCornerRadius: Double {
+        switch type {
+        case .files:
+            Constants.Size.CornerRadiusMin
+        case .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
+            Constants.Size.CornerRadiusTiny
+        case .samba, .webdav:
+            0
+        }
+    }
+    
+    var iconBackgroundColor: UIColor {
+        switch type {
+        case .files, .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
+            Constants.Color.BackgroundPrimary
+        case .samba, .webdav:
+            UIColor.clear
+        }
+    }
+    
+    var iconBorderColor: UIColor {
+        switch type {
+        case .files, .wifi, .paste, .googledrive, .dropbox, .onedrive, .baiduyun, .aliyun, .multiDisc, .romPatcher:
+            Constants.Color.Border
+        case .samba, .webdav:
+            UIColor.clear
+        }
+    }
     
     var cloudDriveProvider: CloudServiceProvider? {
         guard let token = token else { return nil }

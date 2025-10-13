@@ -30,7 +30,7 @@ class DownloadItemCollectionViewCell: UICollectionViewCell {
         override init(frame: CGRect) {
             super.init(frame: frame)
             layerCornerRadius = 1
-            backgroundColor = Constants.Color.BackgroundTertiary
+            backgroundColor = Constants.Color.BackgroundSecondary
             addSubview(colorView)
         }
         
@@ -156,7 +156,13 @@ class DownloadItemCollectionViewCell: UICollectionViewCell {
                 }
             }
         }
-        progressView.progress = task.progress.fractionCompleted
+        if progressView.width == 0 {
+            DispatchQueue.main.asyncAfter(delay: 0.35) {
+                self.progressView.progress = task.progress.fractionCompleted
+            }
+        } else {
+            progressView.progress = task.progress.fractionCompleted
+        }
         removeButton.addTapGesture { [weak task] gesture in
             guard let task else { return }
             UIView.makeAlert(detail: R.string.localizable.removeDownloadTask(task.fileName), confirmTitle: R.string.localizable.confirmTitle(), confirmAction: {

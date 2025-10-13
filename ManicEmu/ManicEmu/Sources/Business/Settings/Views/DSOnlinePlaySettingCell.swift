@@ -45,15 +45,22 @@ class DSOnlinePlaySettingCell: UICollectionViewCell {
             view.image = UIImage(symbol: .checkmarkCircleFill,
                                  size: Constants.Size.IconSizeMin.height,
                                  weight: .bold,
-                                 colors: [Constants.Color.LabelPrimary, Constants.Color.Main])
+                                 colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
             view.isHidden = true
             return view
         }()
         
+        override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+            super.traitCollectionDidChange(previousTraitCollection)
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+            }
+        }
+        
         init() {
             super.init(frame: .zero)
             layerCornerRadius = Constants.Size.CornerRadiusMid
-            backgroundColor = Constants.Color.BackgroundPrimary
+            backgroundColor = Constants.Color.Background
             enableInteractive = true
             delayInteractiveTouchEnd = true
             
@@ -98,7 +105,7 @@ class DSOnlinePlaySettingCell: UICollectionViewCell {
     }
     
     private lazy var resetButton: SymbolButton = {
-        let view = SymbolButton(image: nil, title: R.string.localizable.dsWfcReset(), titleFont: Constants.Font.body(size: .l, weight: .medium), horizontalContian: true, titlePosition: .right)
+        let view = SymbolButton(image: nil, title: R.string.localizable.dsWfcReset(), titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.Main
         view.addTapGesture { [weak self] gesture in
@@ -117,7 +124,7 @@ class DSOnlinePlaySettingCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layerCornerRadius = Constants.Size.CornerRadiusMax
-        backgroundColor = Constants.Color.BackgroundSecondary
+        backgroundColor = Constants.Color.BackgroundPrimary
         
         addSubview(resetButton)
         resetButton.snp.makeConstraints { make in

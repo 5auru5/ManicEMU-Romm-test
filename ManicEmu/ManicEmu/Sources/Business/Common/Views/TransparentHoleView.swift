@@ -10,13 +10,13 @@
 class TransparentHoleView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .black
+        backgroundColor = UIColor(.dm, light: .white, dark: .black)
         isUserInteractionEnabled = false
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        backgroundColor = .black
+        backgroundColor = UIColor(.dm, light: .white, dark: .black)
         isUserInteractionEnabled = false
     }
     

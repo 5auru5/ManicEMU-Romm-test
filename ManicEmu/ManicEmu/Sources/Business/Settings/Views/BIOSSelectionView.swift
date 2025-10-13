@@ -54,7 +54,7 @@ class BIOSSelectionView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     
@@ -64,7 +64,7 @@ class BIOSSelectionView: BaseView {
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: BIOSCollectionViewCell.self)
         view.register(cellWithClass: SettingDescriptionCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: PrimaryHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BackgroundColorHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -73,7 +73,7 @@ class BIOSSelectionView: BaseView {
     }()
     
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -122,7 +122,7 @@ class BIOSSelectionView: BaseView {
         }
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
@@ -257,11 +257,11 @@ extension BIOSSelectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: PrimaryHaderReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BackgroundColorHaderReusableView.self, for: indexPath)
         let section = datas[indexPath.section]
-        let matt = NSMutableAttributedString(string: section.title, attributes: [.font: Constants.Font.title(size: .s), .foregroundColor: Constants.Color.LabelPrimary])
+        let matt = NSMutableAttributedString(string: section.title, attributes: [.font: Constants.Font.body(size: .s, weight: .semibold), .foregroundColor: Constants.Color.LabelSecondary])
         if section == .ps1 {
-            matt.append(NSAttributedString(string: " (\(R.string.localizable.chooseOne()))", attributes: [.font: Constants.Font.body(size: .m), .foregroundColor: Constants.Color.LabelSecondary]))
+            matt.append(NSAttributedString(string: " (\(R.string.localizable.chooseOne()))", attributes: [.font: Constants.Font.caption(size: .m), .foregroundColor: Constants.Color.LabelTertiary]))
         }
         header.titleLabel.attributedText = matt
         return header

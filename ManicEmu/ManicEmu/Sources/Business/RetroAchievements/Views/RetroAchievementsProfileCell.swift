@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import Kingfisher
-import TKSwitcherCollection
 import RealmSwift
 
 class RetroAchievementsProfileCell: UICollectionViewCell {
@@ -89,7 +88,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         override init(frame: CGRect) {
             super.init(frame: frame)
             
-            backgroundColor = Constants.Color.BackgroundSecondary
+            backgroundColor = Constants.Color.BackgroundPrimary
             layerCornerRadius = Constants.Size.CornerRadiusMax
             
             let hardcoreContainer = UIView()
@@ -99,7 +98,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
                 make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
                 make.top.equalToSuperview()
             }
-            let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: UIColor.white))
+            let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
             hardcoreIcon.contentMode = .center
             hardcoreContainer.addSubview(hardcoreIcon)
             hardcoreIcon.snp.makeConstraints { make in
@@ -120,7 +119,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
                 make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
                 make.top.equalTo(hardcoreContainer.snp.bottom)
             }
-            let softcoreIcon = UIImageView(image: .symbolImage(.leafFill).applySymbolConfig(size: 19, color: UIColor.white))
+            let softcoreIcon = UIImageView(image: .symbolImage(.leafFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
             softcoreIcon.contentMode = .center
             softcoreContainer.addSubview(softcoreIcon)
             softcoreIcon.snp.makeConstraints { make in
@@ -141,7 +140,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
                 make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
                 make.top.equalTo(softcoreContainer.snp.bottom)
             }
-            let rankIcon = UIImageView(image: .symbolImage(.crownFill).applySymbolConfig(size: 18, color: UIColor.white))
+            let rankIcon = UIImageView(image: .symbolImage(.crownFill).applySymbolConfig(size: 18, color: Constants.Color.LabelPrimary))
             rankContainer.addSubview(rankIcon)
             rankIcon.snp.makeConstraints { make in
                 make.size.equalTo(24)
@@ -161,7 +160,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         }
         
         func updateDatas(hardcoreScore: Int, softcoreScore: Int, rank: Int?) {
-            let matt1 = NSMutableAttributedString(string: R.string.localizable.hardcoreTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            let matt1 = NSMutableAttributedString(string: R.string.localizable.hardcoreTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
             matt1.append(NSAttributedString(string: "\(hardcoreScore)", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
             matt1.append(NSAttributedString(string: "\n" + R.string.localizable.hardcoreDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
             let style = NSMutableParagraphStyle()
@@ -169,13 +168,13 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
             hardcoreScoreLabel.attributedText = matt1.applying(attributes: [.paragraphStyle: style])
             
             
-            let matt2 = NSMutableAttributedString(string: R.string.localizable.softcoreTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            let matt2 = NSMutableAttributedString(string: R.string.localizable.softcoreTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
             matt2.append(NSAttributedString(string: "\(softcoreScore)", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
             matt2.append(NSAttributedString(string: "\n" + R.string.localizable.softcoreDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
             softcoreScoreLabel.attributedText = matt2.applying(attributes: [.paragraphStyle: style])
             
             
-            let matt3 = NSMutableAttributedString(string: R.string.localizable.rankTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            let matt3 = NSMutableAttributedString(string: R.string.localizable.rankTitle(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
             if let rank {
                 matt3.append(NSAttributedString(string: "\(rank)", attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.Yellow]))
             } else {
@@ -195,7 +194,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
     private let usernameLabel: UILabel = {
         let view = UILabel()
         view.font = Constants.Font.title(size: .l, weight: .semibold)
-        view.textColor = .white
+        view.textColor = Constants.Color.LabelPrimary
         return view
     }()
     
@@ -228,7 +227,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
     }()
     
     private lazy var logoutButton: SymbolButton = {
-        let view = SymbolButton(image: nil, title: R.string.localizable.achievementsLogoutTitle(), titleFont: Constants.Font.caption(size: .l), titleColor: Constants.Color.Red, titleAlignment: .right, edgeInsets: UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 14), horizontalContian: true, titlePosition: .right)
+        let view = SymbolButton(image: nil, title: R.string.localizable.achievementsLogoutTitle(), titleFont: Constants.Font.caption(size: .l), titleColor: Constants.Color.Red, titleAlignment: .right, edgeInsets: UIEdgeInsets(top: 0, left: 12, bottom: 0, right: 14), horizontalContian: true, titlePosition: .right, enableGlass: true)
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
             self.logoutSuccess?()
@@ -236,12 +235,10 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var enableSwitchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    private lazy var enableSwitchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         view.onChange { [weak self] value in
             guard let self else { return }
             let realm = Database.realm
@@ -254,7 +251,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
                         game.enableAchievements = true
                     }
                 }
-                self.hardcoreSwitchButton.customEnable = true
+                self.hardcoreSwitchButton.isEnabled = true
             } else {
                 //关闭全局RetroAchievements
                 for game in games {
@@ -267,8 +264,8 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
                 }
                 //硬核模式也一并关闭
                 Settings.defalut.updateExtra(key: ExtraKey.globalHardcore.rawValue, value: false)
-                self.hardcoreSwitchButton.customEnable = false
-                self.hardcoreSwitchButton.setOn(false, animate: true)
+                self.hardcoreSwitchButton.isEnabled = false
+                self.hardcoreSwitchButton.setOn(false, animated: true)
             }
         }
         view.onDisableTap {
@@ -277,12 +274,10 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         return view
     }()
     
-    private lazy var hardcoreSwitchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    private lazy var hardcoreSwitchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         view.onChange { [weak self] value in
             guard let self else { return }
             let realm = Database.realm
@@ -386,14 +381,14 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         
         let enableContainer = UIView()
         enableContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
-        enableContainer.backgroundColor = Constants.Color.BackgroundSecondary
+        enableContainer.backgroundColor = Constants.Color.BackgroundPrimary
         addSubview(enableContainer)
         enableContainer.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.ItemHeightMax)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(memberSinceLabel.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
-        let enableIcon = UIImageView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 19, color: UIColor.white))
+        let enableIcon = UIImageView(image: .symbolImage(.gamecontrollerFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
         enableIcon.contentMode = .center
         enableContainer.addSubview(enableIcon)
         enableIcon.snp.makeConstraints { make in
@@ -404,7 +399,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         let enableLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 2
-            let matt = NSMutableAttributedString(string: R.string.localizable.enableGlobalAchievements(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            let matt = NSMutableAttributedString(string: R.string.localizable.enableGlobalAchievements(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
             let style = NSMutableParagraphStyle()
             style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
             view.attributedText = matt.applying(attributes: [.paragraphStyle: style])
@@ -420,19 +415,26 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
             make.leading.equalTo(enableLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            enableSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         
         let hardcoreContainer = UIView()
         hardcoreContainer.layerCornerRadius = Constants.Size.CornerRadiusMax
-        hardcoreContainer.backgroundColor = Constants.Color.BackgroundSecondary
+        hardcoreContainer.backgroundColor = Constants.Color.BackgroundPrimary
         addSubview(hardcoreContainer)
         hardcoreContainer.snp.makeConstraints { make in
             make.height.equalTo(Constants.Size.ItemHeightMax)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
             make.top.equalTo(enableContainer.snp.bottom).offset(Constants.Size.ContentSpaceMax)
         }
-        let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: UIColor.white))
+        let hardcoreIcon = UIImageView(image: .symbolImage(.flameFill).applySymbolConfig(size: 19, color: Constants.Color.LabelPrimary))
         hardcoreIcon.contentMode = .center
         hardcoreContainer.addSubview(hardcoreIcon)
         hardcoreIcon.snp.makeConstraints { make in
@@ -443,7 +445,7 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         let hardcoreScoreLabel: UILabel = {
             let view = UILabel()
             view.numberOfLines = 2
-            let matt = NSMutableAttributedString(string: R.string.localizable.globalHardcoreMode(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: UIColor.white])
+            let matt = NSMutableAttributedString(string: R.string.localizable.globalHardcoreMode(), attributes: [.font: Constants.Font.body(size: .l, weight: .semibold), .foregroundColor: Constants.Color.LabelPrimary])
             matt.append(NSAttributedString(string: "\n" + R.string.localizable.hardcoreDesc(), attributes: [.font: Constants.Font.caption(size: .l), .foregroundColor: Constants.Color.LabelSecondary]))
             let style = NSMutableParagraphStyle()
             style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
@@ -460,7 +462,14 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
             make.leading.equalTo(hardcoreScoreLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            hardcoreSwitchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         
         addSubview(unlockedView)
@@ -510,13 +519,13 @@ class RetroAchievementsProfileCell: UICollectionViewCell {
         unlockedView.countLabel.text = "\(profile.achievementCount)"
         scoreView.updateDatas(hardcoreScore: profile.totalHardcorePoints, softcoreScore: profile.totalSoftcorePoints, rank: profile.totalRanked > 0 ? profile.totalRanked : nil)
         let globalAchievements = Settings.defalut.getExtraBool(key: ExtraKey.globalAchievements.rawValue) ?? false
-        enableSwitchButton.setOn(globalAchievements, animate: false)
+        enableSwitchButton.setOn(globalAchievements, animated: false)
         if globalAchievements {
-            hardcoreSwitchButton.setOn(Settings.defalut.getExtraBool(key: ExtraKey.globalHardcore.rawValue) ?? false, animate: false)
-            hardcoreSwitchButton.customEnable = true
+            hardcoreSwitchButton.setOn(Settings.defalut.getExtraBool(key: ExtraKey.globalHardcore.rawValue) ?? false, animated: false)
+            hardcoreSwitchButton.isEnabled = true
         } else {
-            hardcoreSwitchButton.setOn(false, animate: false)
-            hardcoreSwitchButton.customEnable = false
+            hardcoreSwitchButton.setOn(false, animated: false)
+            hardcoreSwitchButton.isEnabled = false
         }
         
     }

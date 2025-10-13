@@ -59,7 +59,7 @@ class ImportViewController: BaseViewController {
                 make.edges.equalToSuperview()
             }
         } else {
-            view.backgroundColor = .black
+            view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
             importServiceListView.backgroundColor = Constants.Color.Background
             importServiceListView.addServiceButton.isHidden = true
             view.addSubview(importServiceListView)

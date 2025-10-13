@@ -16,7 +16,7 @@ import Schedule
 
 extension UIView {
     @discardableResult
-    func makeBlur(blurRadius: CGFloat = 12.5, blurColor: UIColor = Constants.Color.BackgroundPrimary, blurAlpha: CGFloat = 0.9, cornerRadius: CGFloat? = nil) -> VisualEffectView {
+    func makeBlur(blurRadius: CGFloat = 12.5, blurColor: UIColor = Constants.Color.Background, blurAlpha: CGFloat = 0.9, cornerRadius: CGFloat? = nil) -> VisualEffectView {
         if let blurView = subviews.first(where: { $0 is VisualEffectView }) as? VisualEffectView {
             blurView.removeFromSuperview()
         }
@@ -37,6 +37,41 @@ extension UIView {
     
     func makeShadow(ofColor: UIColor = Constants.Color.Shadow, radius: CGFloat = 10) {
         self.addShadow(ofColor: ofColor, radius: radius)
+    }
+    
+    /// 为视图添加 iOS 26 的 Liquid Glass 效果
+    /// - Parameters:
+    ///   - useContainerEffect: 是否使用容器效果（UIGlassContainerEffect），默认为 false 使用普通玻璃效果（UIGlassEffect）
+    /// - Note: 此方法仅在 iOS 26.0 及以上版本可用
+    @available(iOS 26.0, *)
+    func makeGlass(useContainerEffect: Bool = false) {
+        // 移除已存在的 Liquid Glass 视图
+        subviews.filter { $0 is UIVisualEffectView && $0.accessibilityIdentifier == "LiquidGlassEffectView" }.forEach {
+            $0.removeFromSuperview()
+        }
+        
+        // 创建 Glass Effect
+        let glassEffect: UIVisualEffect
+        if useContainerEffect {
+            glassEffect = UIGlassContainerEffect()
+        } else {
+            glassEffect = UIGlassEffect()
+        }
+        
+        // 创建 UIVisualEffectView 并应用玻璃效果
+        let visualEffectView = UIVisualEffectView(effect: glassEffect)
+        visualEffectView.accessibilityIdentifier = "LiquidGlassEffectView"
+        visualEffectView.frame = bounds
+        visualEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        // 继承当前视图的圆角设置
+        if layer.cornerRadius > 0 {
+            visualEffectView.layer.cornerRadius = layer.cornerRadius
+            visualEffectView.clipsToBounds = true
+        }
+        
+        // 将 UIVisualEffectView 添加到当前视图的底层
+        insertSubview(visualEffectView, at: 0)
     }
     
     static func normalAnimate(enable: Bool = true, animations: @escaping ()->Void, completion: ((Bool)->Void)? = nil) {
@@ -173,7 +208,7 @@ extension UIView {
                 mask.backgroundColor = .black.withAlphaComponent(0.2)
             }
             let pacman = UIView()
-            let activity = NVActivityIndicatorView(frame: .zero, type: .pacman, color: .white, padding: nil)
+            let activity = NVActivityIndicatorView(frame: .zero, type: .pacman, color: Constants.Color.LabelPrimary, padding: nil)
             pacman.addSubview(activity)
             activity.snp.makeConstraints { make in
                 make.centerY.equalToSuperview()
@@ -272,7 +307,7 @@ extension UIView {
             }
             
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in
                 make.top.equalTo(grabber.snp.bottom)
@@ -303,7 +338,7 @@ extension UIView {
             }
             
             let line = UIView()
-            line.backgroundColor = Constants.Color.BackgroundSecondary
+            line.backgroundColor = Constants.Color.Border
             containerView.addSubview(line)
             line.snp.makeConstraints { make in
                 make.height.equalTo(1)
@@ -342,7 +377,7 @@ extension UIView {
                 }
             } else {
                 let verticalLine = UIView()
-                verticalLine.backgroundColor = Constants.Color.BackgroundSecondary
+                verticalLine.backgroundColor = Constants.Color.Border
                 buttonContainerView.addSubview(verticalLine)
                 verticalLine.snp.makeConstraints { make in
                     make.size.equalTo(CGSize(width: 1, height: 26))

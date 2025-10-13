@@ -8,7 +8,6 @@
 // SPDX-License-Identifier: AGPL-3.0-or-later
 
 import SwipeCellKit
-import TKSwitcherCollection
 
 class CheatCodeCollectionViewCell: SwipeTableViewCell {
     private var titleLabel: UILabel = {
@@ -18,12 +17,10 @@ class CheatCodeCollectionViewCell: SwipeTableViewCell {
         return view
     }()
     
-    var switchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+    var switchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -47,7 +44,7 @@ class CheatCodeCollectionViewCell: SwipeTableViewCell {
             make.top.bottom.equalToSuperview().inset(10)
         }
         containerView.layerCornerRadius = Constants.Size.CornerRadiusMid
-        containerView.backgroundColor = Constants.Color.BackgroundSecondary
+        containerView.backgroundColor = Constants.Color.BackgroundPrimary
         
         containerView.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
@@ -60,13 +57,14 @@ class CheatCodeCollectionViewCell: SwipeTableViewCell {
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
             make.leading.equalTo(titleLabel.snp.trailing).offset(Constants.Size.ContentSpaceTiny)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
         }
-        
-        mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            self.switchButton.onColor = Constants.Color.Main
-            self.switchButton.reload()
+        if #available(iOS 26.0, *) {} else {
+            switchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
     }
     
@@ -76,7 +74,7 @@ class CheatCodeCollectionViewCell: SwipeTableViewCell {
     
     func setData(cheatCode: GameCheat) {
         titleLabel.text = cheatCode.name
-        switchButton.setOn(cheatCode.activate, animate: false)
+        switchButton.setOn(cheatCode.activate, animated: false)
     }
     
 }

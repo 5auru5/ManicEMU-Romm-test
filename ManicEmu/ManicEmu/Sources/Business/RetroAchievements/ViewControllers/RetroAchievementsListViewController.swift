@@ -13,6 +13,7 @@ class RetroAchievementsListViewController: BaseViewController {
     
     private let backgroundImageView: UIImageView = {
         let view = UIImageView(image: R.image.retro_bg())
+        view.contentMode = .scaleAspectFill
         return view
     }()
     

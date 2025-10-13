@@ -29,7 +29,7 @@ struct ImageFetcher {
         PermissionKit.requestCamera {
             var config = CameraConfiguration()
             config.editor = defaultEditorConfiguration()
-            Photo.capture(config, type: .photo, sender: topViewController()) { result, _, _ in
+            let vc = Photo.capture(config, type: .photo, sender: topViewController()) { result, _, _ in
                 if case .image(let image) = result {
                     completion(image.scaled(toSize: preferenceSize))
                 } else {
@@ -37,6 +37,7 @@ struct ImageFetcher {
                 }
                 
             }
+            vc.sheetPresentationController?.preferredCornerRadius = Constants.Size.CornerRadiusMax
         }
     }
     
@@ -49,7 +50,7 @@ struct ImageFetcher {
             config.selectOptions = [.livePhoto, .photo]
             config.photoSelectionTapAction = .openEditor
             config.editor = defaultEditorConfiguration()
-            Photo.picker(config, sender: topViewController()) { result, _ in
+            let vc = Photo.picker(config, sender: topViewController()) { result, _ in
                 result.getImage(compressionScale: 1) { image in
                     if let image = image.first {
                         completion(image.scaled(toSize: preferenceSize))
@@ -59,6 +60,7 @@ struct ImageFetcher {
                     
                 }
             }
+            vc.sheetPresentationController?.preferredCornerRadius = Constants.Size.CornerRadiusMax
         }
     }
     
@@ -73,13 +75,14 @@ struct ImageFetcher {
     }
     
     static func edit(image: UIImage, preferenceSize: CGSize = .init(Constants.Size.GameCoverMaxSize), completion: @escaping (_ image: UIImage?)->Void) {
-        Photo.edit(asset: .init(type: .image(image)), config: defaultEditorConfiguration(), finished: { asset, _ in
+        let vc = Photo.edit(asset: .init(type: .image(image)), config: defaultEditorConfiguration(), finished: { asset, _ in
             if let newImage = asset.result?.image {
                 completion(newImage.scaled(toSize: preferenceSize))
             } else {
                 completion(image.scaled(toSize: preferenceSize))
             }
         })
+        vc.sheetPresentationController?.preferredCornerRadius = Constants.Size.CornerRadiusMax
     }
 }
 

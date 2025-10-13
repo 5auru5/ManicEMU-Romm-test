@@ -49,7 +49,7 @@ class LanServiceEditCollectionViewCell: UICollectionViewCell {
         }
         
         let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        textFieldContainer.backgroundColor = Constants.Color.Background
+        textFieldContainer.backgroundColor = Constants.Color.InputBackground
         addSubview(textFieldContainer)
         textFieldContainer.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
@@ -69,7 +69,7 @@ class LanServiceEditCollectionViewCell: UICollectionViewCell {
     
     func setData(item: LanServiceEditViewController.EditItem) {
         titleLabel.text = item.title
-        editTextField.attributedPlaceholder = NSAttributedString(string: item.placeholderString, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
+        editTextField.attributedPlaceholder = NSAttributedString(string: item.placeholderString, attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelTertiary])
         editTextField.keyboardType = item.keyboardType
         editTextField.returnKeyType = item.returnKeyType
     }

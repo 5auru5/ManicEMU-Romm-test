@@ -9,7 +9,7 @@
 
 class RetroLoginFooterReusableView: UICollectionReusableView {
     let button: SymbolButton = {
-        let view = SymbolButton(image: nil, title: "", titleFont: Constants.Font.body(size: .l, weight: .medium), horizontalContian: true, titlePosition: .right)
+        let view = SymbolButton(image: nil, title: "", titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.Red
         return view
@@ -144,7 +144,7 @@ class RetroAchievementsLoginView: BaseView {
         guard let button else { return }
         if let username = self.username, !username.trimmed.isEmpty, let password = self.password, !password.isEmpty {
             button.backgroundColor = Constants.Color.Main
-            button.titleLabel.textColor = Constants.Color.LabelPrimary
+            button.titleLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             button.isUserInteractionEnabled = true
         } else {
             button.backgroundColor = Constants.Color.BackgroundSecondary

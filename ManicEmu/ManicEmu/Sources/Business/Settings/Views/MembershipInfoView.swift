@@ -51,7 +51,7 @@ class MembershipInfoView: UIView {
                 make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMid)
             }
             
-            let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold)))
+            let titleLeftView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
             if Locale.isRTLLanguage {
                 titleLeftView.transform = CGAffineTransform(scaleX: -1, y: 1)
             }
@@ -72,14 +72,14 @@ class MembershipInfoView: UIView {
             }
             titleLabel.text = text
             titleLabel.font = Constants.Font.title(size: .s)
-            titleLabel.textColor = Constants.Color.LabelPrimary
+            titleLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             titleContainer.addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
                 make.leading.equalTo(titleLeftView.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
                 make.centerY.equalToSuperview()
             }
             
-            let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold)))
+            let titleRightView = UIImageView(image: R.image.customLaurelLeading()?.applySymbolConfig(font: UIFont.systemFont(ofSize: 16, weight: .bold), color: Constants.Color.LabelPrimary.forceStyle(.dark)))
             if !Locale.isRTLLanguage {
                 titleRightView.transform = CGAffineTransform(scaleX: -1, y: 1)
             }
@@ -99,7 +99,7 @@ class MembershipInfoView: UIView {
                 make.trailing.lessThanOrEqualToSuperview().offset(-Constants.Size.ContentSpaceMid)
             }
             let thankLabel = UILabel()
-            thankLabel.textColor = Constants.Color.LabelPrimary
+            thankLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             thankLabel.font = Constants.Font.body(size: .s, weight: .medium)
             thankLabel.text = R.string.localizable.thanksCommingDesc()
             thankLabel.adjustsFontSizeToFitWidth = true
@@ -116,7 +116,7 @@ class MembershipInfoView: UIView {
             }
             
             let playLabel = UILabel()
-            playLabel.textColor = Constants.Color.LabelPrimary
+            playLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             playLabel.font = Constants.Font.body(size: .s, weight: .medium)
             playLabel.text = R.string.localizable.playGameDesc()
             playLabel.adjustsFontSizeToFitWidth = true
@@ -129,7 +129,7 @@ class MembershipInfoView: UIView {
             
         } else {
             let becomeLabel = UILabel()
-            becomeLabel.textColor = Constants.Color.LabelPrimary
+            becomeLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             becomeLabel.font = Constants.Font.title(size: .s)
             becomeLabel.text = R.string.localizable.gameSaveGuideBecomTitle()
             becomeLabel.adjustsFontSizeToFitWidth = true
@@ -147,7 +147,7 @@ class MembershipInfoView: UIView {
             }
             
             let memberLabel = UILabel()
-            memberLabel.textColor = Constants.Color.LabelPrimary
+            memberLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             memberLabel.font = Constants.Font.title(size: .s)
             memberLabel.text = R.string.localizable.gameSaveGuideMemberTitle()
             memberLabel.adjustsFontSizeToFitWidth = true
@@ -159,7 +159,7 @@ class MembershipInfoView: UIView {
             }
             
             let detalLabel = UILabel()
-            detalLabel.textColor = Constants.Color.LabelPrimary
+            detalLabel.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
             detalLabel.font = Constants.Font.body(size: .s, weight: .medium)
             detalLabel.text = R.string.localizable.settingsNonMemberDesc()
             detalLabel.adjustsFontSizeToFitWidth = true

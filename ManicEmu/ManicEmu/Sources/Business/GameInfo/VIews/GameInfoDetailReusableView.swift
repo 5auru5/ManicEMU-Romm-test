@@ -786,7 +786,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }()
     
     private lazy var startGameButton: SymbolButton = {
-        let view = SymbolButton(symbol: .playFill)
+        let view = SymbolButton(symbol: .playFill, symbolColor: Constants.Color.LabelPrimary.forceStyle(.dark))
         view.backgroundColor = Constants.Color.Main
         view.layerCornerRadius = Constants.Size.ItemHeightMid/2
         view.addTapGesture { [weak self] gesture in
@@ -967,9 +967,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                                              normalTextColor: Constants.Color.LabelSecondary,
                                             selectedTextColor: Constants.Color.LabelPrimary)
         let options: [BetterSegmentedControl.Option] = [
-            .backgroundColor(Constants.Color.BackgroundSecondary),
+            .backgroundColor(Constants.Color.SegmentBackground),
             .indicatorViewInset(5),
-            .indicatorViewBackgroundColor(Constants.Color.BackgroundTertiary),
+            .indicatorViewBackgroundColor(Constants.Color.SegmentHighlight),
             .cornerRadius(16)
         ]
         let view = BetterSegmentedControl(frame: .zero,

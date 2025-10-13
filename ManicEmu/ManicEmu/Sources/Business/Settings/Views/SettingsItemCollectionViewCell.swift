@@ -6,7 +6,7 @@
 //  Copyright © 2025 Manic EMU. All rights reserved.
 //
 // SPDX-License-Identifier: AGPL-3.0-or-later
-import TKSwitcherCollection
+import BetterSegmentedControl
 
 class SettingsItemCollectionViewCell: UICollectionViewCell {
     private var iconView: UIImageView = {
@@ -23,19 +23,17 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
     }()
     
     var chevronIconView: UIImageView = {
-        let view = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundTertiary))
+        let view = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
         view.isHidden = true
         view.contentMode = .center
         return view
     }()
     
-    var switchButton: TKSimpleSwitch = {
-        let view = TKSimpleSwitch()
+    var switchButton: DisabledTapSwitch = {
+        let view = DisabledTapSwitch()
         view.isHidden = true
-        view.onColor = Constants.Color.Main
-        view.offColor = Constants.Color.BackgroundTertiary
-        view.lineColor = .clear
-        view.lineSize = 0
+        view.onTintColor = Constants.Color.Main
+        view.tintColor = Constants.Color.BackgroundSecondary
         return view
     }()
     
@@ -43,6 +41,32 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
         let view = UILabel()
         view.font = Constants.Font.caption()
         view.textColor = Constants.Color.LabelSecondary
+        view.isHidden = true
+        return view
+    }()
+    
+    var didSegmentChange: ((_ index: Int)->Void)?
+    private lazy var segmentView: BetterSegmentedControl = {
+        let icons = [R.image.customMoonFill()!, R.image.customSunMaxFill()!, R.image.customMoonphaseFirstQuarter()!]
+        let segments = IconSegment.segments(withIcons: icons,
+                                            iconSize: .init(16),
+                                            normalIconTintColor: Constants.Color.LabelSecondary,
+                                            selectedIconTintColor: Constants.Color.LabelPrimary)
+        let options: [BetterSegmentedControl.Option] = [
+            .backgroundColor(Constants.Color.Background),
+            .indicatorViewInset(5),
+            .indicatorViewBackgroundColor(Constants.Color.AppearanceSegmentHighlight),
+            .cornerRadius(20)
+        ]
+        let view = BetterSegmentedControl(frame: .zero,
+                                          segments: segments,
+                                          options: options)
+        
+        view.on(.valueChanged) { [weak self] sender, forEvent in
+            guard let self = self, let index = (sender as? BetterSegmentedControl)?.index else { return }
+            UIDevice.generateHaptic()
+            self.didSegmentChange?(index)
+        }
         view.isHidden = true
         return view
     }()
@@ -69,7 +93,11 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
             make.leading.equalTo(iconView.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.trailing.equalToSuperview().offset(-46-Constants.Size.ContentSpaceMid-Constants.Size.ContentSpaceMin)
+            var offset = 46.0
+            if #available(iOS 26.0, *) {
+                offset = 63
+            }
+            make.trailing.equalToSuperview().offset(-offset-Constants.Size.ContentSpaceMid-Constants.Size.ContentSpaceMin)
         }
         
         addSubview(chevronIconView)
@@ -89,13 +117,22 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
         switchButton.snp.makeConstraints { make in
             make.centerY.equalTo(iconView)
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
-            make.size.equalTo(CGSize(width: 46, height: 28))
+            if #available(iOS 26.0, *) {
+                make.size.equalTo(CGSize(width: 63, height: 28))
+            } else {
+                make.size.equalTo(CGSize(width: 51, height: 31))
+            }
+        }
+        if #available(iOS 26.0, *) {} else {
+            switchButton.transform = CGAffineTransformMakeScale(0.9, 0.9)
         }
         
-        mainColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.MainColorChange, object: nil, queue: .main) { [weak self] notification in
-            guard let self = self else { return }
-            self.switchButton.onColor = Constants.Color.Main
-            self.switchButton.reload()
+        
+        addSubview(segmentView)
+        segmentView.snp.makeConstraints { make in
+            make.centerY.equalTo(iconView)
+            make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMid)
+            make.size.equalTo(CGSize(width: 105, height: 40))
         }
     }
     
@@ -124,23 +161,31 @@ class SettingsItemCollectionViewCell: UICollectionViewCell {
             chevronIconView.isHidden = true
             enableInteractive = false
             delayInteractiveTouchEnd = false
+        case .appearance:
+            switchButton.isHidden = true
+            chevronIconView.isHidden = true
+            enableInteractive = false
+            delayInteractiveTouchEnd = false
+            segmentView.isHidden = false
+            segmentView.setIndex(Settings.appearance.rawValue, animated: false, shouldSendValueChangedEvent: false)
         default:
             switchButton.isHidden = true
             chevronIconView.isHidden = false
             enableInteractive = true
             delayInteractiveTouchEnd = true
+            segmentView.isHidden = true
         }
         if let isOn = item.isOn {
             if !PurchaseManager.isMember && (item.type == .airPlay || item.type == .iCloud) {
-                switchButton.customEnable = false
-                switchButton.setOn(false, animate: false)
+                switchButton.isEnabled = false
+                switchButton.setOn(false, animated: false)
             } else {
-                switchButton.customEnable = true
-                switchButton.setOn(isOn, animate: false)
+                switchButton.isEnabled = true
+                switchButton.setOn(isOn, animated: false)
             }
         } else {
-            switchButton.customEnable = false
-            switchButton.setOn(false, animate: false)
+            switchButton.isEnabled = false
+            switchButton.setOn(false, animated: false)
         }
         
         switch item.type {

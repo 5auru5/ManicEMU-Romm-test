@@ -16,12 +16,12 @@ class DeadZoneControl: UIView, UITextFieldDelegate {
 
     // MARK: - Private UI
     private let minusButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .minus, font: Constants.Font.body(size: .m, weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .minus, font: Constants.Font.body(size: .m, weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         return view
     }()
     private let plusButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.body(size: .m, weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.body(size: .m, weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         return view
     }()
@@ -216,7 +216,7 @@ class DeadZoneControl: UIView, UITextFieldDelegate {
             }
             
             let containerView = RoundAndBorderView(roundCorner: (UIDevice.isPad || UIDevice.isLandscape) ? .allCorners : [.topLeft, .topRight])
-            containerView.backgroundColor = Constants.Color.BackgroundPrimary
+            containerView.backgroundColor = Constants.Color.Background
             containerView.makeBlur()
             view.addSubview(containerView)
             containerView.snp.makeConstraints { make in

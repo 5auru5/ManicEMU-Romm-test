@@ -34,7 +34,7 @@ struct LimitedTextInputView {
             let textfiledWidth = UIDevice.isPhone ? 300 : 380
 
             let containerView = RoundAndBorderView(roundCorner: .allCorners)
-            containerView.backgroundColor = Constants.Color.BackgroundSecondary
+            containerView.backgroundColor = Constants.Color.Background
             
             //标题
             let titleLabel = UILabel()
@@ -50,8 +50,8 @@ struct LimitedTextInputView {
             }
             
             //输入框
-            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: .white.withAlphaComponent(0.05), borderWidth: 1)
-            textFieldContainer.backgroundColor = Constants.Color.Background
+            let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid, borderColor: Constants.Color.Border, borderWidth: 1)
+            textFieldContainer.backgroundColor = Constants.Color.InputBackground
             containerView.addSubview(textFieldContainer)
             textFieldContainer.snp.makeConstraints { make in
                 make.height.equalTo(Constants.Size.ItemHeightMid)
@@ -99,7 +99,7 @@ struct LimitedTextInputView {
             }
             
             let line = UIView()
-            line.backgroundColor = Constants.Color.BackgroundTertiary
+            line.backgroundColor = Constants.Color.Border
             containerView.addSubview(line)
             line.snp.makeConstraints { make in
                 make.height.equalTo(1)
@@ -167,7 +167,7 @@ struct LimitedTextInputView {
             containerView.addSubview(okButton)
 
             let verticalLine = UIView()
-            verticalLine.backgroundColor = Constants.Color.BackgroundTertiary
+            verticalLine.backgroundColor = Constants.Color.Border
             containerView.addSubview(verticalLine)
             verticalLine.snp.makeConstraints { make in
                 make.size.equalTo(CGSize(width: 1, height: 26))

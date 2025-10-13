@@ -66,7 +66,7 @@ class LeaderboardView: RoundAndBorderView {
     
     init() {
         super.init(roundCorner: .allCorners, radius: 12, borderColor: Constants.Color.Border, borderWidth: 1)
-        makeBlur(blurRadius: 2.5, blurColor: Constants.Color.BackgroundPrimary, blurAlpha: 0.4)
+        makeBlur(blurRadius: 2.5, blurAlpha: 0.4)
         
         enableInteractive = true
         

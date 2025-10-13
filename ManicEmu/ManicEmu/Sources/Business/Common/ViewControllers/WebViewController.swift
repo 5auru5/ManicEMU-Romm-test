@@ -15,7 +15,7 @@ class WebViewController: BaseViewController {
     
     private var navigationBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.Background)
+        view.makeBlur()
         return view
     }()
     
@@ -162,7 +162,7 @@ class WebViewController: BaseViewController {
     }()
     
     private lazy var backButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .chevronLeft, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .chevronLeft, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.BackgroundPrimary
         view.addTapGesture { [weak self] gesture in
@@ -173,7 +173,7 @@ class WebViewController: BaseViewController {
     }()
     
     private lazy var refreshButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .arrowClockwise, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .arrowClockwise, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.BackgroundPrimary
         view.addTapGesture { [weak self] gesture in
@@ -184,7 +184,7 @@ class WebViewController: BaseViewController {
     }()
     
     private lazy var searchButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .magnifyingglass, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .magnifyingglass, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.BackgroundPrimary
         view.addTapGesture { [weak self] gesture in

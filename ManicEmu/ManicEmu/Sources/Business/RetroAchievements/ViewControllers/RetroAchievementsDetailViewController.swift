@@ -32,7 +32,7 @@ class RetroAchievementsDetailViewController: BaseViewController {
             make.leading.trailing.equalToSuperview().inset(40)
         }
         
-        let shareButton = SymbolButton(image: UIImage(symbol: .squareAndArrowUp, font: Constants.Font.body(weight: .bold)))
+        let shareButton = SymbolButton(image: UIImage(symbol: .squareAndArrowUp, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         shareButton.enableRoundCorner = true
         shareButton.addTapGesture { [weak self] gesture in
             guard let self else { return }
@@ -73,7 +73,7 @@ class RetroAchievementsDetailViewController: BaseViewController {
             }
         }
         
-        let detailView = RetroAchievementsDetailView(achievement: achievement, shaereMode: true) { }
+        let detailView = RetroAchievementsDetailView(achievement: achievement, shareMode: true) { }
         shareImageView.addSubview(detailView)
         detailView.snp.makeConstraints { make in
             make.center.equalToSuperview()

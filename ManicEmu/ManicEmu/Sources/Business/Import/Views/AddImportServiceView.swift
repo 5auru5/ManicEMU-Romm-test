@@ -15,7 +15,7 @@ class AddImportServiceView: BaseView {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: .black)
+        view.makeBlur(blurColor: UIColor(.dm, light: .white, dark: .black))
         return view
     }()
     
@@ -24,7 +24,7 @@ class AddImportServiceView: BaseView {
         view.backgroundColor = .clear
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: AddImportServiceCollectionViewCell.self)
-        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: BlackHaderReusableView.self)
+        view.register(supplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withClass: LowestHaderReusableView.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -184,7 +184,7 @@ extension AddImportServiceView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: BlackHaderReusableView.self, for: indexPath)
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withClass: LowestHaderReusableView.self, for: indexPath)
         header.titleLabel.font = Constants.Font.body(size: .l, weight: .semibold)
         if indexPath.section == 0 {
             header.titleLabel.text = R.string.localizable.importAddCloudServiceTitle()

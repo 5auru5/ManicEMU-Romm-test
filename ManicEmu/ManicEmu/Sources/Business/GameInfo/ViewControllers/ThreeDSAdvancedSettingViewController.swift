@@ -65,7 +65,7 @@ class ThreeDSAdvancedSettingViewController: QuickTableViewController {
     }()
     
     private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis)
+        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             self?.moreContextMenuButton.triggerTapGesture()

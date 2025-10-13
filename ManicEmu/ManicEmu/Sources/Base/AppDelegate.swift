@@ -49,6 +49,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //日志系统初始化
         LogSetup()
         
+        //禁用UIScrollView的iOS26的边缘效果
+        UIScrollView.disableEdgeEffect()
+        
         //注册模拟器核心
         System.allCores.forEach { ManicEmu.register($0) }
         

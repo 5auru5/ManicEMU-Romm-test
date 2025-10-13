@@ -11,8 +11,10 @@ import UIKit
 
 class GradientView: UIView {
     private let gradientLayer = CAGradientLayer()
+    private var colors: [UIColor] = []
 
     func setupGradient(colors: [SFColor], locations: [CGFloat] = [0.0, 1.0], direction: GradientDirection) {
+        self.colors = colors
         gradientLayer.frame = bounds
         gradientLayer.colors = colors.map(\.cgColor)
         gradientLayer.locations = locations.map { NSNumber(value: $0) }
@@ -26,5 +28,12 @@ class GradientView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         gradientLayer.frame = bounds
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            gradientLayer.colors = colors.map(\.cgColor)
+        }
     }
 }

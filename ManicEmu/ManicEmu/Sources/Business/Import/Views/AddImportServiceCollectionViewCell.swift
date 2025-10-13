@@ -10,8 +10,8 @@
 import UIKit
 
 class AddImportServiceCollectionViewCell: UICollectionViewCell {
-    private var iconView: UIImageView = {
-        let view = UIImageView()
+    private var iconView: ServiceIconView = {
+        let view = ServiceIconView(roundCorner: .allCorners)
         return view
     }()
     
@@ -24,7 +24,7 @@ class AddImportServiceCollectionViewCell: UICollectionViewCell {
     
     var chevronIconView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundTertiary)
+        view.image = UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary)
         if Locale.isRTLLanguage {
             view.transform = CGAffineTransform(scaleX: -1, y: 1)
         }
@@ -62,7 +62,10 @@ class AddImportServiceCollectionViewCell: UICollectionViewCell {
     }
     
     func setData(service: ImportService) {
-        iconView.image = service.iconImage
+        iconView.imageView.image = service.iconImage
+        iconView.backgroundColor = service.iconBackgroundColor
+        iconView.borderColor = service.iconBorderColor
+        iconView.radius = service.iconCornerRadius
         titleLabel.text = service.title
     }
     

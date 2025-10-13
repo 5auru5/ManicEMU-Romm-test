@@ -13,10 +13,14 @@ class RadialGradientView: UIView {
     private var lastSize: CGSize? = nil
     private let imageView = UIImageView()
     private var gradientColorChangeNotification: Any? = nil
+    private var appearanceChangeNotification: Any? = nil
     
     deinit {
-        if let gradientColorChangeNotification = gradientColorChangeNotification {
+        if let gradientColorChangeNotification {
             NotificationCenter.default.removeObserver(gradientColorChangeNotification)
+        }
+        if let appearanceChangeNotification {
+            NotificationCenter.default.removeObserver(appearanceChangeNotification)
         }
     }
     
@@ -39,9 +43,7 @@ class RadialGradientView: UIView {
         
         gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in
             guard let self = self else { return }
-            UIImage.radialGradientImage(size: self.size, colors: Constants.Color.Gradient + [Constants.Color.BackgroundPrimary]) {
-                self.imageView.image = $0
-            }
+            self.updateImage()
         }
     }
     
@@ -53,9 +55,18 @@ class RadialGradientView: UIView {
         super.layoutSubviews()
         guard size != .zero else { return }
         if let lastSize, lastSize == size { return }
-        UIImage.radialGradientImage(size: size, colors: Constants.Color.Gradient + [Constants.Color.BackgroundPrimary]) {
-            self.imageView.image = $0
-        }
+        updateImage()
         lastSize = size
+    }
+    
+    private func updateImage() {
+        let size = self.size
+        UIImage.radialGradientImage(size: size, colors: Constants.Color.Gradient + [Constants.Color.BackgroundPrimary.forceStyle(.dark)]) { [weak self] darkImage in
+            UIImage.radialGradientImage(size: size, colors: Constants.Color.Gradient + [Constants.Color.BackgroundPrimary.forceStyle(.light)]) { [weak self] lightImage in
+                if let darkImage, let lightImage {
+                    self?.imageView.image = UIImage(.dm, light: lightImage, dark: darkImage)
+                }
+            }
+        }
     }
 }

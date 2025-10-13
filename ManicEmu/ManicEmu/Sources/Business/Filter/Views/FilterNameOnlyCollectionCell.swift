@@ -23,10 +23,17 @@ class FilterNameOnlyCollectionCell: UICollectionViewCell {
         view.layer.shadowColor = Constants.Color.Shadow.cgColor
         view.layer.shadowOpacity = 0.5
         view.layer.shadowRadius = 2
-        view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary, Constants.Color.Main])
+        view.image = UIImage(symbol: .checkmarkCircleFill, weight: .bold, colors: [Constants.Color.LabelPrimary.forceStyle(.dark), Constants.Color.Main])
         view.alpha = 0
         return view
     }()
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            selectImageView.layer.shadowColor = Constants.Color.Shadow.cgColor
+        }
+    }
     
     override var isSelected: Bool {
         willSet {
@@ -41,7 +48,7 @@ class FilterNameOnlyCollectionCell: UICollectionViewCell {
         enableInteractive = true
         delayInteractiveTouchEnd = true
         layerCornerRadius = Constants.Size.CornerRadiusMid
-        backgroundColor = Constants.Color.BackgroundPrimary
+        backgroundColor = Constants.Color.Background
         
         addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in

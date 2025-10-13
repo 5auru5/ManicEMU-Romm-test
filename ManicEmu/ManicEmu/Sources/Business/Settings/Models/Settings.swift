@@ -76,6 +76,29 @@ class Settings: Object, ObjectUpdatable {
     ///额外数据备用
     @Persisted var extras: Data?
     
+    enum Appearance: Int {
+        case dark, light, auto
+        var desc: String {
+            switch self {
+            case .light:
+                R.string.localizable.appearanceLight()
+            case .dark:
+                R.string.localizable.appearanceDark()
+            case .auto:
+                R.string.localizable.appearanceAuto()
+            }
+        }
+    }
+    static var appearance: Appearance {
+        get {
+            return Appearance(rawValue: UserDefaults.standard.integer(forKey: Constants.DefaultKey.Appearance)) ?? .dark
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: Constants.DefaultKey.Appearance)
+            ThemeManager.shared.updateAppearance()
+        }
+    }
+    
     func getExtra(key: String) -> Any? {
         if let extras {
             return Self.getExtra(extras: extras, key: key)

@@ -359,7 +359,10 @@ class Game: Object, ObjectUpdatable {
     }
     
     var isPicodriveCore: Bool {
-        if (gameType == .md || gameType == .mcd || gameType == ._32x || gameType == .sg1000 || gameType == .gg || gameType == .ms) && defaultCore == 1 {
+        if gameType == ._32x || gameType == .mcd {
+            return true
+        }
+        if (gameType == .md || gameType == .sg1000 || gameType == .gg || gameType == .ms) && defaultCore == 1 {
             return true
         }
         return false

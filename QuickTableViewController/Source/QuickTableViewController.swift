@@ -82,7 +82,7 @@ class QuickTableViewController: BaseViewController, UITableViewDataSource, UITab
         make.top.bottom.equalToSuperview()
         make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMin)
     }
-    tableView.backgroundColor = Constants.Color.BackgroundPrimary
+    tableView.backgroundColor = Constants.Color.Background
     tableView.rowHeight = UITableView.automaticDimension
     tableView.estimatedRowHeight = 44
     tableView.dataSource = self
@@ -145,7 +145,7 @@ class QuickTableViewController: BaseViewController, UITableViewDataSource, UITab
       (cell as? SwitchCell)?.delegate = self
     #endif
     row.customize?(cell, row)
-    cell.backgroundColor = Constants.Color.BackgroundSecondary
+    cell.backgroundColor = Constants.Color.BackgroundPrimary
 
     return cell
   }

@@ -23,18 +23,18 @@ class ColorPickerView: UIView {
         return view
     }()
     private var addButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.title()))
-        view.backgroundColor = Constants.Color.BackgroundSecondary
+        let view = SymbolButton(image: UIImage(symbol: .plus, font: Constants.Font.title()), enableGlass: true)
+        view.backgroundColor = Constants.Color.BackgroundPrimary
         view.enableRoundCorner = true
         return view
     }()
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     private lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             guard let self = self else { return }
@@ -43,7 +43,7 @@ class ColorPickerView: UIView {
         return view
     }()
     private lazy var saveButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.saveTitle()) { [weak self] in
+        let view = HowToButton(title: R.string.localizable.saveTitle(), enableGlass: true) { [weak self] in
             guard let self = self else { return }
             if var themeColor = self.themeColor {
                 //编辑
@@ -83,7 +83,7 @@ class ColorPickerView: UIView {
         
         Log.debug("\(String(describing: Self.self)) init")
         colorPicker.delegate = self
-        colorPicker.borderColor = Constants.Color.BackgroundSecondary
+        colorPicker.borderColor = Constants.Color.BackgroundPrimary
         addSubview(colorPicker)
         colorPicker.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
@@ -91,8 +91,8 @@ class ColorPickerView: UIView {
             make.size.equalTo(320)
         }
         
-        brightnessSlider.handle.borderColor = Constants.Color.BackgroundSecondary
-        brightnessSlider.borderColor = Constants.Color.BackgroundSecondary
+        brightnessSlider.handle.borderColor = Constants.Color.BackgroundPrimary
+        brightnessSlider.borderColor = Constants.Color.BackgroundPrimary
         brightnessSlider.trackColor = Constants.Color.Main
         brightnessSlider.handle.borderWidth = 2.0
         addSubview(brightnessSlider)
@@ -131,7 +131,7 @@ class ColorPickerView: UIView {
         }
         
         let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        textFieldContainer.backgroundColor = Constants.Color.BackgroundSecondary
+        textFieldContainer.backgroundColor = Constants.Color.InputBackground
         addSubview(textFieldContainer)
         textFieldContainer.snp.makeConstraints { make in
             make.centerY.equalTo(colorView)

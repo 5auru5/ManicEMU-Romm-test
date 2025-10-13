@@ -53,7 +53,7 @@ class MultiDiscBuilderViewController: BaseViewController {
     
     private var topBlurView: UIView = {
         let view = UIView()
-        view.makeBlur(blurColor: Constants.Color.BackgroundPrimary)
+        view.makeBlur()
         return view
     }()
     
@@ -94,7 +94,7 @@ class MultiDiscBuilderViewController: BaseViewController {
     }()
     
     private lazy var moreButton: SymbolButton = {
-        let view = SymbolButton(symbol: .ellipsis)
+        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
         view.enableRoundCorner = true
         view.addTapGesture { [weak self] gesture in
             self?.moreContextMenuButton.triggerTapGesture()
@@ -103,7 +103,7 @@ class MultiDiscBuilderViewController: BaseViewController {
     }()
     
     private lazy var addFileButton: SymbolButton = {
-        let view = SymbolButton(image: nil, title: R.string.localizable.multiDiscAddFile("ROM"), titleFont: Constants.Font.body(size: .l, weight: .medium), horizontalContian: true, titlePosition: .right)
+        let view = SymbolButton(image: nil, title: R.string.localizable.multiDiscAddFile("ROM"), titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.Main
         view.addTapGesture { [weak self] gesture in

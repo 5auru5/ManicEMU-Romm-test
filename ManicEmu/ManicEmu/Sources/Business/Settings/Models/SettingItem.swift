@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble
+        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance
     }
     
     var type: ItemType
@@ -27,7 +27,7 @@ struct SettingItem {
             return Constants.Color.Green
         case .airPlay, .FAQ, .about, .rumble:
             return Constants.Color.Indigo
-        case .iCloud, .userAgreement:
+        case .iCloud, .userAgreement, .appearance:
             return Constants.Color.Blue
         case .fullScreenWhenConnectController, .shareApp:
             return Constants.Color.Orange
@@ -41,23 +41,23 @@ struct SettingItem {
     var icon: UIImage {
         switch type {
         case .theme:
-            UIImage(symbol: .paintpaletteFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .paintpaletteFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .quickGame:
-            UIImage(symbol: .hareFill, font: Constants.Font.caption(size: .m, weight: .medium))
+            UIImage(symbol: .hareFill, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .airPlay:
-            UIImage(symbol: .airplayvideo, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .airplayvideo, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .iCloud:
             if #available(iOS 17.0, *) {
-                UIImage(symbol: .arrowTriangle2CirclepathIcloudFill, font: Constants.Font.body(size: .s, weight: .medium))
+                UIImage(symbol: .arrowTriangle2CirclepathIcloudFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             } else {
-                UIImage(symbol: .cloudFill, font: Constants.Font.body(size: .s, weight: .medium))
+                UIImage(symbol: .cloudFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             }
         case .FAQ:
-            UIImage(symbol: .questionmarkAppFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .questionmarkAppFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .feedback:
-            UIImage(symbol: .exclamationmarkBubbleFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .exclamationmarkBubbleFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .shareApp:
-            UIImage(symbol: .arrowshapeTurnUpForwardFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .arrowshapeTurnUpForwardFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .qq:
             R.image.settings_qq()!
         case .telegram:
@@ -65,29 +65,35 @@ struct SettingItem {
         case .discord:
             R.image.settings_discord()!
         case .clearCache:
-            UIImage(symbol: .trashFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .trashFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .language:
-            UIImage(symbol: .globeAmericasFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .globeAmericasFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .userAgreement:
-            UIImage(symbol: .docTextFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .docTextFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .privacyPolicy:
-            UIImage(symbol: .shieldLefthalfFilled, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .shieldLefthalfFilled, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .fullScreenWhenConnectController:
-            R.image.customArrowDownLeftAndArrowUpRightRectangleFill()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium))
+            R.image.customArrowDownLeftAndArrowUpRightRectangleFill()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .autoSaveState:
-            UIImage(symbol: .arrowDownDocFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .arrowDownDocFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .bios:
-            UIImage(symbol: .cpuFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .cpuFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .respectSilentMode:
-            UIImage(symbol: .bellFill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .bellFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .onlinePlay:
-            UIImage(symbol: .person2Wave2Fill, font: Constants.Font.body(size: .s, weight: .medium))
+            UIImage(symbol: .person2Wave2Fill, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .about:
-            UIImage(symbol: .person3SequenceFill, font: Constants.Font.caption(size: .m, weight: .medium))
+            UIImage(symbol: .person3SequenceFill, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .retro:
             R.image.settings_retro()!
         case .rumble:
-            UIImage(symbol: .iphoneRadiowavesLeftAndRightCircleFill, font: Constants.Font.body(size: .l, weight: .medium))
+            if #available(iOS 16.1, *) {
+                UIImage(symbol: .iphoneGen1RadiowavesLeftAndRight, font: Constants.Font.caption(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            } else {
+                UIImage(symbol: .iphoneRadiowavesLeftAndRightCircleFill, font: Constants.Font.body(size: .l, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+            }
+        case .appearance:
+            R.image.customMoonphaseFirstQuarter()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         }
     }
     
@@ -137,6 +143,8 @@ struct SettingItem {
             "RetroAchievements"
         case .rumble:
             "Rumble"
+        case .appearance:
+            R.string.localizable.appearance()
         }
     }
     
@@ -157,6 +165,8 @@ struct SettingItem {
             return R.string.localizable.respectSilentModeDesc()
         } else if type == .rumble {
             return R.string.localizable.rumbleDetail()
+        } else if type == .appearance {
+            return Settings.appearance.desc
         }
         return nil
     }

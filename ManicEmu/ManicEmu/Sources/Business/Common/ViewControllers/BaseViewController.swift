@@ -12,7 +12,7 @@ import UIKit
 class BaseViewController: UIViewController {
     
     lazy var closeButton: SymbolButton = {
-        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)))
+        let view = SymbolButton(image: UIImage(symbol: .xmark, font: Constants.Font.body(weight: .bold)), enableGlass: true)
         view.enableRoundCorner = true
         return view
     }()
@@ -58,7 +58,7 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         Log.debug("\(String(describing: Self.self)) viewDidLoad")
         super.viewDidLoad()
-        let backgroundColor = self.presentingViewController == nil ? Constants.Color.Background : Constants.Color.BackgroundPrimary
+        let backgroundColor = Constants.Color.Background
         view.backgroundColor = backgroundColor
         setPreferredContentSize()
         if let navigationBar = self.navigationController?.navigationBar {

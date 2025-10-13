@@ -34,7 +34,7 @@ class SettingsListFooterCollectionReusableView: UICollectionReusableView {
             view.contentMode = .center
             view.layerCornerRadius = 6
             view.backgroundColor = Constants.Color.Red
-            view.image = UIImage(symbol: .boltHeartFill, font: Constants.Font.body(size: .s, weight: .medium))
+            view.image = UIImage(symbol: .boltHeartFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             return view
         }()
         
@@ -54,7 +54,7 @@ class SettingsListFooterCollectionReusableView: UICollectionReusableView {
         }()
         
         let donateChevronIconView: UIImageView = {
-            let view = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundTertiary))
+            let view = UIImageView(image: UIImage(symbol: .chevronRight, font: Constants.Font.caption(size: .l, weight: .bold), color: Constants.Color.BackgroundSecondary))
             view.contentMode = .center
             return view
         }()
@@ -196,7 +196,7 @@ class SettingsListFooterCollectionReusableView: UICollectionReusableView {
             make.centerX.equalToSuperview()
         }
         
-        let starView = UIImageView(image: UIImage(symbol: .sparkle, color: Constants.Color.BackgroundPrimary))
+        let starView = UIImageView(image: UIImage(symbol: .sparkle, color: Constants.Color.BackgroundSecondary))
         addSubview(starView)
         starView.snp.makeConstraints { make in
             make.top.equalTo(versionLabel.snp.bottom).offset(40)

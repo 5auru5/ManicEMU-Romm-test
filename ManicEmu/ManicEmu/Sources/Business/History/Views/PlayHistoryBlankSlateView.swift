@@ -50,7 +50,7 @@ class PlayHistoryBlankSlateView: UIView {
         //功能按钮
         let gameCount = Database.realm.objects(Game.self).where({ !$0.isDeleted }).count
         let actionButton = HowToButton(title: gameCount > 0 ? R.string.localizable.historyEmptyStartGame() : R.string.localizable.historyEmptyImportGame()) {}
-        actionButton.label.textColor = Constants.Color.LabelPrimary
+        actionButton.label.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
         actionButton.backgroundColor = Constants.Color.Main
         containerView.addSubview(actionButton)
         actionButton.snp.makeConstraints { make in
