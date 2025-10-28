@@ -85,6 +85,9 @@ class SymbolButton: UIView {
          cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
         super.init(frame: .zero)
         
+        isAccessibilityElement = true
+        accessibilityTraits = .button
+        
         self.isGlassEnabled = enableGlass
         
         // 只有 iOS 26+ 且 enableGlass 为 true 时才使用 glass 效果
@@ -280,6 +283,9 @@ class SymbolButton: UIView {
     
     init(image: UIImage?, enableGlass: Bool = false, cornerStyle: UIButton.Configuration.CornerStyle = .capsule) {
         super.init(frame: .zero)
+        
+        isAccessibilityElement = true
+        accessibilityTraits = .button
         
         self.isGlassEnabled = enableGlass
         

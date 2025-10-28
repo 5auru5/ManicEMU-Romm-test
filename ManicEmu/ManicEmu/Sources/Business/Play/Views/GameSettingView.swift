@@ -215,12 +215,15 @@ class GameSettingView: BaseView {
         let airPlayScaling = Settings.defalut.airPlayScaling
         let airPlayLayout = Settings.defalut.airPlayLayout
         let nesPalettes: Game.NESPalette
-        if game.gameType == .nes {
+        if game.gameType == .nes || game.gameType == .fds {
             nesPalettes = game.currentNesPalette
         } else {
             nesPalettes = Game.defaultNesPalette
         }
-        
+        var triggerProId: Int? = nil
+        if let id = game.getExtraInt(key: ExtraKey.triggerProID.rawValue), id != -1 {
+            triggerProId = id
+        }
         
         gameSettings = settings.gameFunctionList.compactMap { itemTypeValue in
             if let itemType = GameSetting.ItemType(rawValue: itemTypeValue) {
@@ -239,7 +242,8 @@ class GameSettingView: BaseView {
                                        currentDiskIndex: currentDiskIndex,
                                        airPlayScaling: airPlayScaling,
                                        airPlayLayout: airPlayLayout,
-                                       nesPalette: nesPalettes)
+                                       nesPalette: nesPalettes,
+                                       triggerProID: triggerProId)
                 }
             }
             return nil
@@ -361,7 +365,7 @@ extension GameSettingView: UICollectionViewDataSource {
                 specialTitle = item.palette.paletteTitleForVB
             } else if game.gameType == .pm {
                 specialTitle = item.palette.paletteTitleForPM
-            } else if game.gameType == .nes {
+            } else if game.gameType == .nes || game.gameType == .fds {
                 specialTitle = item.nesPalette.name
             }
         } else if item.type == .resolution {
@@ -370,7 +374,7 @@ extension GameSettingView: UICollectionViewDataSource {
             } else if game.isN64ParaLLEl {
                 specialTitle = R.string.localizable.gameSettingResolution(item.resolution.resolutionTitleForN64ParaLLEl)
             }
-        } else if item.type == .swapDisk, game.gameType == .nes {
+        } else if item.type == .swapDisk, game.gameType == .fds {
             specialTitle = R.string.localizable.diskSideChange()
         }
         
@@ -519,7 +523,7 @@ extension GameSettingView: UICollectionViewDelegate {
                     item.palette = item.palette.nextForVB
                 } else if game.gameType == .pm {
                     item.palette = item.palette.nextForPM
-                } else if game.gameType == .nes {
+                } else if game.gameType == .nes || game.gameType == .fds {
                     item.nesPalette = game.nextNesPalette
                 } else {
                     item.palette = item.palette.next
@@ -530,7 +534,7 @@ extension GameSettingView: UICollectionViewDelegate {
                 item.isFullScreen = !item.isFullScreen
                 updateCellAndCallBack(item: item, indexPath: indexPath)
             case .swapDisk:
-                if game.gameType == .nes {
+                if game.gameType == .fds {
                     item.currentDiskIndex = 0
                     game.currentDiskIndex = 0
                     updateCellAndCallBack(item: item, indexPath: indexPath)
@@ -549,6 +553,8 @@ extension GameSettingView: UICollectionViewDelegate {
                 item.airPlayLayout = item.airPlayLayout.next
                 updateCellAndCallBack(item: item, indexPath: indexPath, reload: false)
                 return
+            case .triggerPro:
+                item.triggerProID = Trigger.nextTriggerID(gameType: game.gameType, currentID: item.triggerProID)
             default:
                 break
             }
@@ -665,7 +671,7 @@ extension GameSettingView: UICollectionViewDelegate {
                     }
                 }
                 return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
-            } else if game.gameType == .nes {
+            } else if game.gameType == .nes || game.gameType == .fds {
                 var actions = game.nesPalettes.map { palette in
                     UIAction(title: palette.name,
                              image: item.image) { [weak self] _ in
@@ -707,25 +713,21 @@ extension GameSettingView: UICollectionViewDelegate {
             }
             
         } else if item.type == .swapDisk {
-            if game.gameType == .nes {
-                if game.fileExtension.lowercased() == "fds" {
-                    var actions = [UIAction]()
-                    actions.append(UIAction(title: R.string.localizable.diskSideChange(),
-                                            handler: { [weak self] _ in
-                        guard let self = self else { return }
-                        item.currentDiskIndex = 0
-                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
-                    }))
-                    actions.append(UIAction(title: R.string.localizable.ejectDisk(),
-                                            handler: { [weak self] _ in
-                        guard let self = self else { return }
-                        item.currentDiskIndex = 1
-                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
-                    }))
-                    return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
-                } else {
-                    UIView.makeToast(message: R.string.localizable.fdsAlert())
-                }
+            if game.gameType == .fds {
+                var actions = [UIAction]()
+                actions.append(UIAction(title: R.string.localizable.diskSideChange(),
+                                        handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    item.currentDiskIndex = 0
+                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                }))
+                actions.append(UIAction(title: R.string.localizable.ejectDisk(),
+                                        handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    item.currentDiskIndex = 1
+                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                }))
+                return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             } else if game.supportSwapDisc {
                 var actions = [UIAction]()
                 for index in 0..<game.totalDiskCount {
@@ -761,6 +763,46 @@ extension GameSettingView: UICollectionViewDelegate {
                 }
             }
             return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(title: R.string.localizable.airPlayLayoutTips(), children: actions) })
+        } else if item.type == .triggerPro {
+            var firstGroup: [UIAction] = []
+            var sectionGroup: [UIAction] = []
+            var thirdGroup: [UIAction] = []
+            let triggers = Trigger.supportTriggers(gameType: game.gameType)
+            if triggers.count > 0 {
+                firstGroup.append(contentsOf: triggers.map({ trigger in
+                    var image: UIImage? = nil
+                    if let currentID = item.triggerProID, trigger.id == currentID {
+                        image = UIImage(symbol: .checkmarkCircleFill)
+                    }
+                    return UIAction(title: trigger.triggerProName,
+                                    image: image) { [weak self] _ in
+                        guard let self = self else { return }
+                        item.triggerProID = trigger.id
+                        self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                    }
+                }))
+                
+                sectionGroup.append(UIAction(title: R.string.localizable.disableTriggerPro(), handler: { [weak self] _ in
+                    guard let self = self else { return }
+                    item.triggerProID = nil
+                    self.updateCellAndCallBack(item: item, indexPath: indexPath)
+                }))
+                
+            }
+            //添加管理item
+            thirdGroup.append(UIAction(title: R.string.localizable.manageTriggerPro(), image: R.image.customXmarkTriangleCircleSquare(), handler: { _ in
+                topViewController()?.present(TriggerProListViewController(), animated: true)
+            }))
+            
+            var menus: [UIMenu] = []
+            if firstGroup.count > 0 {
+                menus.append(UIMenu(options: .displayInline, children: firstGroup))
+                menus.append(UIMenu(options: .displayInline, children: sectionGroup))
+            }
+            if thirdGroup.count > 0 {
+                menus.append(UIMenu(options: .displayInline, children: thirdGroup))
+            }
+            return UIContextMenuConfiguration(actionProvider: { _ in UIMenu(children: menus) } )
         }
         return nil
     }

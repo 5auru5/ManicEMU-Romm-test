@@ -844,17 +844,17 @@ extension ControllerView: ControllerReceiverProtocol
 /// UIKeyInput
 // Becoming first responder doesn't steal keyboard focus from other apps in split view unless the first responder conforms to UIKeyInput.
 // So, we conform ControllerView to UIKeyInput and provide stub method implementations.
-extension ControllerView: UIKeyInput
-{
-    public var hasText: Bool {
-        return false
-    }
-    
-    public func insertText(_ text: String)
-    {
-    }
-    
-    public func deleteBackward()
-    {
-    }
-}
+//extension ControllerView: UIKeyInput
+//{
+//    public var hasText: Bool {
+//        return false
+//    }
+//    
+//    public func insertText(_ text: String)
+//    {
+//    }
+//    
+//    public func deleteBackward()
+//    {
+//    }
+//}

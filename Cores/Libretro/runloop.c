@@ -4432,13 +4432,24 @@ void runloop_set_frame_limit(
                (av_info->timing.fps * fastforward_ratio));
 }
 
+/* 外部定义的自定义快进速率，来自 ui_cocoatouch.m */
+extern float get_custom_fastforward_ratio(void);
+
 float runloop_get_fastforward_ratio(
       settings_t *settings,
       struct retro_fastforwarding_override *fastmotion_override)
 {
+   /* 优先级1: 检查自定义快进速率（来自外部API调用） */
+   float custom_ratio = get_custom_fastforward_ratio();
+   if (custom_ratio > 0.0f)
+      return custom_ratio;
+   
+   /* 优先级2: 检查核心的 fastmotion_override */
    if (      fastmotion_override->fastforward
          && (fastmotion_override->ratio >= 0.0f))
       return fastmotion_override->ratio;
+   
+   /* 优先级3: 使用设置中的默认快进速率 */
    return settings->floats.fastforward_ratio;
 }
 

@@ -484,7 +484,7 @@ struct GameSetting: SettingCellItem {
     
     enum ItemType: Int, CaseIterable {
         //位置很重要 新增内容一定要接到最后面
-        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals
+        case saveState, quickLoadState, volume, fastForward, stateList, cheatCode, skins, filter, screenShot, haptic, airplay, controllerSetting, orientation, functionSort, reload, quit, swapScreen, resolution, consoleHome, amiibo, toggleFullscreen, simBlowing, palette, swapDisk, retro, airPlayScaling, airPlayLayout, toggleAnalog, gameplayManuals, triggerPro
     }
     
     var type: ItemType
@@ -502,6 +502,7 @@ struct GameSetting: SettingCellItem {
     var airPlayLayout: AirPlayLayout = .sideBySide
     var mappingOnlyType: MappingOnlyType? = nil
     var nesPalette = Game.defaultNesPalette
+    var triggerProID: Int? = nil
     
     var image: UIImage {
         switch type {
@@ -567,6 +568,8 @@ struct GameSetting: SettingCellItem {
             UIImage(symbol: .gamecontroller)
         case .gameplayManuals:
             UIImage(symbol: .textBookClosed)
+        case .triggerPro:
+            R.image.customXmarkTriangleCircleSquare()!.applySymbolConfig()
         }
     }
     
@@ -634,6 +637,8 @@ struct GameSetting: SettingCellItem {
             R.string.localizable.toggleAnolog()
         case .gameplayManuals:
             R.string.localizable.gameplayManuals()
+        case .triggerPro:
+            "TriggerPro"
         }
     }
     
@@ -661,12 +666,12 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             return true
-        case .gba, .gbc, .gb, .nes, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm:
-            if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes) && type == .palette {
+        case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm:
+            if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes || gameType == .fds) && type == .palette {
                 return true
             }
             
-            if (gameType == .mcd || gameType == .ss || gameType == .nes) && type == .swapDisk {
+            if (gameType == .mcd || gameType == .ss || gameType == .fds) && type == .swapDisk {
                 return true
             }
             
@@ -674,7 +679,7 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             
-            if gameType == .nes, type == .simBlowing {
+            if (gameType == .nes || gameType == .fds) && type == .simBlowing {
                 return true
             }
             
@@ -708,7 +713,7 @@ struct GameSetting: SettingCellItem {
     
     var enableLongPress: Bool {
         switch self.type {
-        case .quickLoadState, .fastForward, .haptic, .orientation, .resolution, .palette, .swapDisk, .airPlayScaling, .airPlayLayout:
+        case .quickLoadState, .fastForward, .haptic, .orientation, .resolution, .palette, .swapDisk, .airPlayScaling, .airPlayLayout, .triggerPro:
             return true
         default:
             return false
@@ -779,6 +784,8 @@ struct GameSetting: SettingCellItem {
             return "toggleAnalog"
         case .gameplayManuals:
             return "gameplayManuals"
+        case .triggerPro:
+            return "triggerPro"
         }
     }
     

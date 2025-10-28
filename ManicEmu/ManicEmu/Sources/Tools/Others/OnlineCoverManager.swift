@@ -84,11 +84,9 @@ class OnlineCoverManager {
             case .gb:
                 boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy/Named_Boxarts/")
             case .nes:
-                if coverMatch.fileExtension.lowercased() == "fds" {
-                    boxArtUrl = host.appendingPathComponent("Nintendo - Family Computer Disk System/Named_Boxarts/")
-                } else {
-                    boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo Entertainment System/Named_Boxarts/")
-                }
+                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo Entertainment System/Named_Boxarts/")
+            case .fds:
+                boxArtUrl = host.appendingPathComponent("Nintendo - Family Computer Disk System/Named_Boxarts/")
             case .snes:
                 boxArtUrl = host.appendingPathComponent("Nintendo - Super Nintendo Entertainment System/Named_Boxarts/")
             case .psp:

@@ -173,7 +173,7 @@ class PlayHistoryFavouriteCollectionCell: UICollectionViewCell {
         iconView.setGameCover(game: game, size: estimated) { [weak self] image in
             self?.infoContainerView.backgroundColor = image.dominantBackground
         }
-        if game.gameType == .nes || game.gameType == .snes || game.gameType == .psp {
+        if Constants.Size.GameCoverRatio(gameType: game.gameType) != 1.0 {
             iconView.contentMode = .scaleAspectFill
         } else {
             iconView.contentMode = .scaleToFill

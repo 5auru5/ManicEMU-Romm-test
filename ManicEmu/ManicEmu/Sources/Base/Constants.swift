@@ -337,6 +337,7 @@ struct Constants {
         static let HasShowPS1PlayAlert = "HasShowPS1PlayAlert"
         static let HasShowJumpGameInfoAlert = "HasShowJumpGameInfoAlert"
         static let Appearance = "Appearance"
+        static let HalloweenIconShowUpDate = "HalloweenIconShowUpDate"
     }
     
     struct Font {
@@ -445,6 +446,8 @@ struct Constants {
         static let RandomGameLimit = 10
         ///非会员最大金手指数量
         static let NonMemberCheatCodeCount = 3
+        ///非会员最大TriggerPro数量
+        static let NonMemberTriggerProCount = 3
         /// 动画执行时间
         static let LongAnimationDuration = 1.0
         ///主题颜色最大数量
@@ -500,7 +503,7 @@ struct Constants {
     
     struct URLs {
         #if DEBUG
-        static let ManicEMU = "http://10.10.10.20:4000/"
+        static let ManicEMU = "http://10.10.10.2:4000/"
         #else
         static let ManicEMU = "https://manicemu.site/"
         #endif
@@ -539,7 +542,7 @@ struct Constants {
         static func DeltaStyles(gameType: GameType) -> URL {
             let deltastyles = "https://deltastyles.com"
             switch gameType {
-            case .nes: return URL(string: "\(deltastyles)/systems/nes")!
+            case .nes, .fds: return URL(string: "\(deltastyles)/systems/nes")!
             case .snes: return URL(string: "\(deltastyles)/systems/snes")!
             case .gbc: return URL(string: "\(deltastyles)/systems/gbc")!
             case .gb: return URL(string: "\(deltastyles)/systems/gbc")!
@@ -627,7 +630,7 @@ struct Constants {
             BIOSItem(fileName: "gba_bios.bin", imported: false, desc: "Game Boy Advance BIOS", required: false)
         ]
             
-        static let NESBios = [
+        static let FDSBios = [
             BIOSItem(fileName: "disksys.rom", imported: false, desc: "Family Computer Disk System BIOS", required: false)
         ]
         

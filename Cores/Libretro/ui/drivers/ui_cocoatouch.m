@@ -1044,11 +1044,24 @@ static BOOL RespectSilentMode = false;
 
 - (void)resume {
     if (!LibretroInitial) { return; }
+    
+    // 保存当前的快进状态
+    float currentFastforwardRate = g_custom_fastforward_ratio;
+    BOOL isFastforwarding = (g_custom_fastforward_ratio > 0.0f);
+    
     rarch_start_draw_observer();
     
     command_event(CMD_EVENT_RESUME, NULL);
     if (needToLoadStatePath) {
         [self loadGame:self.gamePath corePath:self.corePath completion:nil];
+        
+        // 恢复快进状态（如果之前处于快进模式）
+        if (isFastforwarding) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [self fastForward:currentFastforwardRate];
+            });
+        }
+        
         if (needToLoadStateDelay > 0) {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(needToLoadStateDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [self loadState:needToLoadStatePath];
@@ -1058,6 +1071,11 @@ static BOOL RespectSilentMode = false;
             [self loadState:needToLoadStatePath];
             needToLoadStatePath = nil;
         }
+    } else if (isFastforwarding) {
+        // 如果没有需要加载的存档，但是之前处于快进状态，恢复快进
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+            [self fastForward:currentFastforwardRate];
+        });
     }
 }
 
@@ -1420,44 +1438,90 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
     return content_load_state(path.UTF8String, false, false);
 }
 
+// 存储自定义的快进速率，避免被配置重载覆盖
+static float g_custom_fastforward_ratio = 0.0f;
+
 - (void)fastForward:(float)rate {
     settings_t *settings = config_get_ptr();
     if (!settings) {
         return;
     }
+    
     runloop_state_t *runloop_st = runloop_state_get_ptr();
     input_driver_state_t *input_st = input_state_get_ptr();
     audio_driver_state_t *audio_st = audio_state_get_ptr();
-    if (rate <= 1) {
-        //恢复速度
-        settings->floats.fastforward_ratio = 1.0f;
-        // 1. 清除快进标志
+    video_driver_state_t *video_st = video_state_get_ptr();
+    
+    if (!runloop_st || !input_st || !audio_st || !video_st) {
+        return;
+    }
+    
+    bool audio_fastforward_mute = settings->bools.audio_fastforward_mute;
+    bool frame_time_counter_reset_after_ffwd = settings->bools.frame_time_counter_reset_after_fastforwarding;
+    
+    if (rate <= 1.0f) {
+        // ===== 恢复正常速度 =====
+        
+        // 1. 恢复 fastforward ratio 到用户配置或 1.0
+        g_custom_fastforward_ratio = 0.0f;
+        
+        // 2. 清除快进标志
         runloop_st->flags &= ~RUNLOOP_FLAG_FASTMOTION;
-        // 2. 清除非阻塞输入
+        
+        // 3. 清除非阻塞输入标志
         input_st->flags &= ~INP_FLAG_NONBLOCKING;
-        // 3. 更新帧率限制
+        
+        // 4. 设置 fastforward_after_frames，用于平滑过渡
+        runloop_st->fastforward_after_frames = 1;
+        
+        // 5. 恢复音频状态（取消静音）
+        if (audio_fastforward_mute) {
+            audio_st->flags &= ~AUDIO_FLAG_MUTED;
+        }
+        
+        // 6. 使用 driver_set_nonblock_state() 统一设置驱动非阻塞状态
+        // 这个函数会自动处理音频和视频驱动的非阻塞状态，以及 chunk_size
+        driver_set_nonblock_state();
+        
+        // 7. 重置视频帧时间计数器（如果需要）
+        if (frame_time_counter_reset_after_ffwd && video_st) {
+            video_st->frame_time_count = 0;
+        }
+        
+        // 8. 更新帧率限制为正常速度
         command_event(CMD_EVENT_SET_FRAME_LIMIT, NULL);
-        // 4. 恢复音频缓冲区大小
-        audio_st->chunk_size = AUDIO_CHUNK_SIZE_BLOCKING;
-        // 5. 恢复音频阻塞模式
-        if (audio_st->current_audio && audio_st->context_audio_data)
-            audio_st->current_audio->set_nonblock_state(audio_st->context_audio_data, false);
+        
     } else {
-        //快进
-        // 1. 设置快进比例
-        settings->floats.fastforward_ratio = rate;
+        // ===== 启用快进 =====
+        
+        // 1. 保存自定义快进速率
+        g_custom_fastforward_ratio = rate;
+        
         // 2. 设置快进标志
         runloop_st->flags |= RUNLOOP_FLAG_FASTMOTION;
-        // 3. 设置非阻塞输入
+        
+        // 3. 设置非阻塞输入标志
         input_st->flags |= INP_FLAG_NONBLOCKING;
-        // 4. 更新帧率限制
+        
+        // 4. 根据设置决定是否静音音频
+        if (audio_fastforward_mute) {
+            audio_st->flags |= AUDIO_FLAG_MUTED;
+        } else {
+            audio_st->flags &= ~AUDIO_FLAG_MUTED;
+        }
+        
+        // 5. 使用 driver_set_nonblock_state() 统一设置驱动非阻塞状态
+        driver_set_nonblock_state();
+        
+        // 6. 更新帧率限制为快进速率
         command_event(CMD_EVENT_SET_FRAME_LIMIT, NULL);
-        // 5. 设置音频缓冲区大小
-        audio_st->chunk_size = AUDIO_CHUNK_SIZE_NONBLOCKING;
-        // 6. 设置音频非阻塞模式
-        if (audio_st->current_audio && audio_st->context_audio_data)
-            audio_st->current_audio->set_nonblock_state(audio_st->context_audio_data, true);
     }
+}
+
+// 获取当前应该使用的快进速率
+// 这个函数会在 runloop 中被调用，用于获取实际的快进倍率
+float get_custom_fastforward_ratio(void) {
+    return g_custom_fastforward_ratio;
 }
 
 - (void)reload {
@@ -1466,11 +1530,23 @@ extern void manic_input_analog_event(unsigned port, unsigned stick_id, float x_v
 
 static NSString *_Nullable needToLoadStatePath = nil;
 - (void)reloadByKeepState:(BOOL)keepState {
+    // 保存当前的快进状态
+    float currentFastforwardRate = g_custom_fastforward_ratio;
+    BOOL isFastforwarding = (g_custom_fastforward_ratio > 0.0f);
+    
     if (keepState) {
         [self saveState:^(NSString * _Nullable path) {
             if (iterate_observer) {
                 //游戏运行状态 直接加载存档
                 [self loadGame:self.gamePath corePath:self.corePath completion:nil];
+                
+                // 恢复快进状态（如果之前处于快进模式）
+                if (isFastforwarding) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                        [self fastForward:currentFastforwardRate];
+                    });
+                }
+                
                 if (needToLoadStateDelay > 0) {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(needToLoadStateDelay * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                         [self loadState:path];
@@ -1485,6 +1561,13 @@ static NSString *_Nullable needToLoadStatePath = nil;
         }];
     } else {
         [self loadGame:self.gamePath corePath:self.corePath completion:nil];
+        
+        // 恢复快进状态（如果之前处于快进模式）
+        if (isFastforwarding) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+                [self fastForward:currentFastforwardRate];
+            });
+        }
     }
 }
 

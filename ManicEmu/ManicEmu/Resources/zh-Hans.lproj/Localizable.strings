@@ -548,12 +548,12 @@
 
 "ImportMissingFile" = "导入%@失败，缺失文件：%@";
 "MultiDiscBuilder" = "多碟助手";
-"MultiDiscBuilderDesc" = "多碟助手可以帮你将多碟游戏格式 .cue .bin 或 .chd 生成支持换碟的m3u文件, 如果你已经拥有m3u文件则无需使用此助手，直接使用游戏导入功能导入m3u";
+"MultiDiscBuilderDesc" = "多碟助手可以帮你将多碟游戏格式 .cue(.bin) .cdi 或 .chd 生成支持换碟的m3u文件, 如果你已经拥有m3u文件则无需使用此助手，直接使用游戏导入功能导入m3u";
 "M3uFileShare" = "分享m3u文件";
 "M3uFileImport" = "导入游戏库";
 "MultiDiscAddFile" = "添加%@文件";
-"MultiDiscImportErrorConflict" = "cue和chd只能任选其一导入";
-"MultiDiscImportErrorMissing" = "没有发现cue或chd文件";
+"MultiDiscImportErrorConflict" = "cue cdi和chd只能任选其一导入";
+"MultiDiscImportErrorMissing" = "没有发现cue cdi或chd文件";
 "GenerateM3uFailed" = "无法生成m3u文件";
 "MultiDiscCloseAlert" = "m3u文件已经生成，如果你还没有导入到游戏库中，可以选择导入后关闭页面。";
 "MultiDiscContinueClose" = "继续关闭";
@@ -738,3 +738,40 @@
 "FDSAlert" = "此选项仅适用于FDS游戏。";
 "DiskSideChange" = "翻转软盘";
 "EjectDisk" = "弹出软盘";
+
+"TriggerProDesc" = "创建并管理高级自定义按键。";
+"AddButton" = "添加按键";
+"ButtonStyle" = "按键样式";
+"Mapping" = "按键映射";
+"Action" = "动作";
+"Classic" = "仿真";
+"Flat" = "扁平";
+"Custom" = "自定义";
+"Size" = "大小";
+"Opacity" = "透明度";
+"CornerRadius" = "圆角";
+"Simple" = "单击";
+"Hold" = "长按";
+"Combo" = "连招";
+"RepeatTrigger" = "重复触发";
+"RepeatInterval" = "触发间隔";
+"AutoStop" = "自动停止";
+"HoldDuration" = "长按时长";
+"PressDurationPerKey" = "按键按压时长";
+"IntervalPerKey" = "按键间隔";
+"AddTriggerPro" = "添加TriggerPro";
+"SwitchPreviewSkin" = "切换预览皮肤";
+"SimpleActionDesc" = "点击TriggerPro按钮可立即触发所有已映射按键。";
+"HoldActionDesc" = "点击TriggerPro按钮可长按已映射按键，再次点击即可释放。";
+"ComboActionDesc" = "点击TriggerPro按钮将按顺序触发已映射按键，非常适合街机类连击操作。";
+"NoMappingAlert" = "该按键当前没有任何映射，无法执行操作。确定要关闭吗？";
+"TriggerProName" = "TriggerPro名称";
+"Position" = "位置";
+"ButtonInfo" = "按键信息";
+"NoTriggerPro" = "未找到TriggerPro配置。您可以前往设置，或在游戏菜单中长按TriggerPro选项以创建新的配置。";
+"ManageTriggerPro" = "管理TriggerPro";
+"EnableTriggerPro" = "启用TriggerPro";
+"DisableTriggerPro" = "停用TriggerPro";
+"ActivateHold" = "启动长按：%@";
+"DeactivateHold" = "取消长按：%@";
+

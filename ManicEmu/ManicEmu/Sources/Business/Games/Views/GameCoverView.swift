@@ -172,6 +172,8 @@ class GameCoverView: UIView {
                 image = style == .style2 ? R.image.gb_cover_v() : R.image.gb_cover_h()
             } else if gameType == .nes {
                 image = style == .style2 ? R.image.nes_cover_v() : R.image.nes_cover_h()
+            } else if gameType == .fds {
+                image = style == .style2 ? R.image.fds_cover_v() : R.image.fds_cover_h()
             } else if gameType == .snes {
                 image = style == .style2 ? R.image.snes_cover_v() : R.image.snes_cover_h()
             } else if gameType == .psp {

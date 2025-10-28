@@ -95,7 +95,7 @@ class PlayHistoryItemCollectionCell: UICollectionViewCell {
     func setData(game: Game, didTapRetro: (()->Void)? = nil) {
         let estimated = iconView.size == .zero ? .init(40) : iconView.size
         iconView.setGameCover(game: game, size: estimated)
-        if game.gameType == .nes || game.gameType == .snes || game.gameType == .psp {
+        if Constants.Size.GameCoverRatio(gameType: game.gameType) != 1.0 {
             iconView.contentMode = .scaleAspectFill
         } else {
             iconView.contentMode = .scaleToFill

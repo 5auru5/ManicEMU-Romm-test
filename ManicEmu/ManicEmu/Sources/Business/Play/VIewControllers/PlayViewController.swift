@@ -101,6 +101,8 @@ class PlayViewController: GameViewController {
     private var progressAchievements: [CheevosAchievement] = []
     //挑战中的成就
     private var challengeAchievements: [CheevosAchievement] = []
+    ///TriggerProView
+    private var triggerProView: TriggerProView?
     
     deinit {
         Log.debug("\(String(describing: Self.self)) deinit")
@@ -170,6 +172,7 @@ class PlayViewController: GameViewController {
     private var gameUpdateToken: Any? = nil
     private var cheatCodeUpdateToken: Any? = nil
     private var settingsUpdateToken: Any? = nil
+    private var triggerProUpdateToken: Any? = nil
     
     private var lastSaveDate: Date? = nil
     private var lastLoadDate: Date? = nil
@@ -686,6 +689,8 @@ class PlayViewController: GameViewController {
         loadConfig()
         //更新皮肤
         updateSkin()
+        //更新TriggerPro
+        updateTriggerPro()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -960,13 +965,13 @@ class PlayViewController: GameViewController {
         } else if input.stringValue == "blowing" {
             handleMenuGameSetting(GameSetting(type: .simBlowing), nil)
         } else if input.stringValue == "palette" {
-            if manicGame.gameType == .nes {
+            if manicGame.gameType == .nes || manicGame.gameType == .fds {
                 handleMenuGameSetting(GameSetting(type: .palette, nesPalette: manicGame.nextNesPalette), nil)
             } else {
                 handleMenuGameSetting(GameSetting(type: .palette, palette: manicGame.pallete.next), nil)
             }
         } else if input.stringValue == "swapDisk" {
-            if manicGame.gameType == .nes {
+            if manicGame.gameType == .fds {
                 handleMenuGameSetting(GameSetting(type: .swapDisk, currentDiskIndex: 0), nil)
             } else {
                 let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
@@ -984,6 +989,14 @@ class PlayViewController: GameViewController {
             handleMenuGameSetting(GameSetting(type: .retro, airPlayLayout: Settings.defalut.airPlayLayout.next), nil)
         } else if input.stringValue == "gameplayManuals" {
             handleMenuGameSetting(GameSetting(type: .gameplayManuals), nil)
+        } else if input.stringValue == "triggerPro" {
+            var id: Int?
+            if let currentID = manicGame.getExtraInt(key: ExtraKey.triggerProID.rawValue), currentID != -1 {
+                id = Trigger.nextTriggerID(gameType: manicGame.gameType, currentID: currentID)
+            } else {
+                id = Trigger.nextTriggerID(gameType: manicGame.gameType, currentID: nil)
+            }
+            handleMenuGameSetting(GameSetting(type: .triggerPro, triggerProID: id), nil)
         }
     }
     
@@ -1606,6 +1619,7 @@ extension PlayViewController {
         case .toggleFullscreen:
             //MARK: handleMenuGameSetting.toggleFullscreen
             manicGame.forceFullSkin = item.isFullScreen
+            manicGame.updateExtra(key: ExtraKey.forceFullSkin.rawValue, value: item.isFullScreen)
             updateSkin()
             
         case .simBlowing:
@@ -1624,7 +1638,7 @@ extension PlayViewController {
                     }
                     LibretroCore.sharedInstance().updateRunningCoreConfigs(["melonds_mic_input": restoreInput], flush: false)
                 }
-            } else if manicGame.gameType == .nes {
+            } else if manicGame.gameType == .nes || manicGame.gameType == .fds {
                 DispatchQueue.main.asyncAfter(delay: 1) {
                     LibretroCore.sharedInstance().press(.L3, playerIndex: 0)
                     DispatchQueue.main.asyncAfter(delay: 0.1) {
@@ -1635,7 +1649,7 @@ extension PlayViewController {
             
         case .palette:
             //MARK: handleMenuGameSetting.palette
-            if manicGame.gameType == .nes {
+            if manicGame.gameType == .nes || manicGame.gameType == .fds {
                 updateNESPalette(item.nesPalette)
                 return true
             }
@@ -1670,29 +1684,25 @@ extension PlayViewController {
             }
         case .swapDisk:
             //MARK: handleMenuGameSetting.swapDisk
-            if manicGame.gameType == .nes {
-                if manicGame.fileExtension.lowercased() == "fds" {
-                    if item.currentDiskIndex == 0 {
-                        //(FDS) Disk Side Change
-                        UIView.makeToast(message: R.string.localizable.diskSideChange())
-                        DispatchQueue.main.asyncAfter(delay: 1) {
-                            LibretroCore.sharedInstance().press(.L1, playerIndex: 0)
-                            DispatchQueue.main.asyncAfter(delay: 0.1) {
-                                LibretroCore.sharedInstance().release(.L1, playerIndex: 0)
-                            }
-                        }
-                    } else {
-                        //(FDS) Eject Disk
-                        UIView.makeToast(message: R.string.localizable.ejectDisk())
-                        DispatchQueue.main.asyncAfter(delay: 1) {
-                            LibretroCore.sharedInstance().press(.R1, playerIndex: 0)
-                            DispatchQueue.main.asyncAfter(delay: 0.1) {
-                                LibretroCore.sharedInstance().release(.R1, playerIndex: 0)
-                            }
+            if manicGame.gameType == .fds {
+                if item.currentDiskIndex == 0 {
+                    //(FDS) Disk Side Change
+                    UIView.makeToast(message: R.string.localizable.diskSideChange())
+                    DispatchQueue.main.asyncAfter(delay: 1) {
+                        LibretroCore.sharedInstance().press(.L1, playerIndex: 0)
+                        DispatchQueue.main.asyncAfter(delay: 0.1) {
+                            LibretroCore.sharedInstance().release(.L1, playerIndex: 0)
                         }
                     }
                 } else {
-                    UIView.makeToast(message: R.string.localizable.fdsAlert())
+                    //(FDS) Eject Disk
+                    UIView.makeToast(message: R.string.localizable.ejectDisk())
+                    DispatchQueue.main.asyncAfter(delay: 1) {
+                        LibretroCore.sharedInstance().press(.R1, playerIndex: 0)
+                        DispatchQueue.main.asyncAfter(delay: 0.1) {
+                            LibretroCore.sharedInstance().release(.R1, playerIndex: 0)
+                        }
+                    }
                 }
                 return true
             }
@@ -1795,6 +1805,26 @@ extension PlayViewController {
                 })
             }
             return false
+        case .triggerPro:
+            //MARK: handleMenuGameSetting.triggerPro
+            guard !isHardcoreMode else {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+                return false
+            }
+            let triggers = Trigger.supportTriggers(gameType: manicGame.gameType)
+            if triggers.count == 0 {
+                UIView.makeToast(message: R.string.localizable.noTriggerPro())
+                return false
+            }
+
+            if let fromID = item.triggerProID {
+                manicGame.updateExtra(key: ExtraKey.triggerProID.rawValue, value: fromID)
+            } else {
+                //关闭TriggerPro
+                manicGame.updateExtra(key: ExtraKey.triggerProID.rawValue, value: -1)
+            }
+            self.updateTriggerPro(showToast: true)
+            return true
         }
         //默认关闭菜单
         return true
@@ -1938,6 +1968,11 @@ extension PlayViewController {
     
     //加载默认配置
     private func loadConfig() {
+        //设置按钮隐藏
+        if let forceFullSkin = manicGame.getExtraBool(key: ExtraKey.forceFullSkin.rawValue), forceFullSkin {
+            manicGame.forceFullSkin = forceFullSkin
+        }
+        
         //加载存档
         if let saveState = loadSaveState {
             DispatchQueue.main.asyncAfter(delay: 1) { [weak self] in
@@ -1977,7 +2012,7 @@ extension PlayViewController {
                 "ppsspp_texture_replacement": (manicGame.getExtraBool(key: ExtraKey.pspTexture.rawValue) ?? false) ? "enabled" : "disabled"
             ], reload: false)
             updatePSPResolution(manicGame.resolution, reload: false)
-        } else if manicGame.gameType == .nes {
+        } else if manicGame.gameType == .nes || manicGame.gameType == .fds {
             updateNESPalette(manicGame.currentNesPalette, firstInit: true)
             LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.Nestopia.name, key: "nestopia_aspect", value: "uncorrected", reload: false)
         } else if manicGame.gameType == .snes {
@@ -2196,7 +2231,7 @@ extension PlayViewController {
     //更新皮肤
     private func updateSkin() {
         
-        func setPrefferedSkin() {
+        func setPreferredSkin() {
             showSkinButtons()
             isFullScreen = false
             var initGameType: GameType?
@@ -2212,7 +2247,7 @@ extension PlayViewController {
                         controllerSkin.isSwapScreen = manicGame.swapScreen
                     }
                     controllerView.controllerSkin = controllerSkin
-                } else if let skin = SkinConfig.prefferedLandscapeSkin(gameType: manicGame.gameType), var controllerSkin = ControllerSkin(fileURL: skin.fileURL, initGameType: initGameType, supportGameTypes: supportGameTypes) {
+                } else if let skin = SkinConfig.preferredLandscapeSkin(gameType: manicGame.gameType), var controllerSkin = ControllerSkin(fileURL: skin.fileURL, initGameType: initGameType, supportGameTypes: supportGameTypes) {
                     if enableSwapScreen() {
                         controllerSkin.isSwapScreen = manicGame.swapScreen
                     }
@@ -2225,7 +2260,7 @@ extension PlayViewController {
                         controllerSkin.isSwapScreen = manicGame.swapScreen
                     }
                     controllerView.controllerSkin = controllerSkin
-                } else if let skin = SkinConfig.prefferedPortraitSkin(gameType: manicGame.gameType), var controllerSkin = ControllerSkin(fileURL: skin.fileURL, initGameType: initGameType, supportGameTypes: supportGameTypes) {
+                } else if let skin = SkinConfig.preferredPortraitSkin(gameType: manicGame.gameType), var controllerSkin = ControllerSkin(fileURL: skin.fileURL, initGameType: initGameType, supportGameTypes: supportGameTypes) {
                     if enableSwapScreen() {
                         controllerSkin.isSwapScreen = manicGame.swapScreen
                     }
@@ -2249,13 +2284,13 @@ extension PlayViewController {
                 controllerView.controllerSkin = controllerSkin
                 hideSkinButtons()
             } else {
-                setPrefferedSkin()
+                setPreferredSkin()
             }
         } else {
-            setPrefferedSkin()
+            setPreferredSkin()
         }
 #else
-        setPrefferedSkin()
+        setPreferredSkin()
 #endif
         
         //设置皮肤控制器的玩家角色
@@ -2362,6 +2397,8 @@ extension PlayViewController {
         default:
             break
         }
+        
+        triggerProView?.hapticType = manicGame.haptic
     }
     
     /// 更新AirPlay
@@ -2476,7 +2513,7 @@ extension PlayViewController {
                                 case .resolution:
                                     newGameSetting.resolution = self.manicGame.resolution.next
                                 case .palette:
-                                    if self.manicGame.gameType == .nes {
+                                    if self.manicGame.gameType == .nes || self.manicGame.gameType == .fds {
                                         newGameSetting.nesPalette = self.manicGame.nextNesPalette
                                     } else {
                                         newGameSetting.palette = self.manicGame.pallete.next
@@ -2484,7 +2521,7 @@ extension PlayViewController {
                                 case .toggleFullscreen:
                                     newGameSetting.isFullScreen = !self.manicGame.forceFullSkin
                                 case .swapDisk:
-                                    if self.manicGame.gameType == .nes {
+                                    if self.manicGame.gameType == .fds {
                                         newGameSetting.currentDiskIndex = 0
                                     } else {
                                         let currentIndex = LibretroCore.sharedInstance().getCurrentDiskIndex()
@@ -2920,7 +2957,7 @@ extension PlayViewController {
             let label = UILabel()
             label.numberOfLines = message == nil ? 2 : 3
             let titleFont = scale == 1.0 ? Constants.Font.title(size: .s, weight: .regular) : UIFont.systemFont(ofSize: 30)
-            let matt = NSMutableAttributedString(string: title, attributes: [.font: titleFont, .foregroundColor: UIColor.white])
+            let matt = NSMutableAttributedString(string: title, attributes: [.font: titleFont, .foregroundColor: Constants.Color.LabelPrimary])
             if let message {
                 let messageFont = scale == 1.0 ? Constants.Font.body(size: .s) : UIFont.systemFont(ofSize: 20)
                 matt.append(NSAttributedString(string: "\n\(message)", attributes: [.font: messageFont, .foregroundColor: Constants.Color.LabelSecondary]))
@@ -3105,6 +3142,63 @@ extension PlayViewController {
             }
         }
     }
+    
+    private func updateTriggerPro(showToast: Bool = false) {
+        guard !isHardcoreMode else {
+            if showToast {
+                UIView.makeToast(message: R.string.localizable.notAllowHardcore())
+            }
+            return
+        }
+        
+        triggerProView?.removeFromSuperview()
+        triggerProView = nil
+        triggerProUpdateToken = nil
+        
+        if let id = manicGame.getExtraInt(key: ExtraKey.triggerProID.rawValue), id != -1 {
+            let realm = Database.realm
+            if let trigger = realm.objects(Trigger.self).where({ $0.id == id }).first {
+                triggerProUpdateToken = trigger.observe(keyPaths: [\Trigger.items]) { [weak self] change in
+                    guard let self = self else { return }
+                    switch change {
+                    case .change(_, _):
+                        Log.debug("TriggerPro更新")
+                        self.triggerProView?.reloadButtons()
+                    default:
+                        break
+                    }
+                }
+                
+                let aView = TriggerProView(trigger: trigger)
+                aView.hapticType = manicGame.haptic
+                aView.activateHandler = { [weak self] inputs in
+                    guard let self else { return }
+                    for input in inputs {
+                        self.controllerView.activate(input)
+                    }
+                }
+                aView.deactivateHandler = { [weak self] inputs in
+                    guard let self else { return }
+                    for input in inputs {
+                        self.controllerView.deactivate(input)
+                    }
+                }
+                view.addSubview(aView)
+                aView.snp.makeConstraints { make in
+                    make.edges.equalTo(controllerView)
+                }
+                triggerProView = aView
+                if showToast {
+                    UIView.makeToast(message: R.string.localizable.enableTriggerPro() + ": \(trigger.triggerProName)")
+                }
+                return
+            }
+        }
+        //禁用TriggerPro
+        if showToast {
+            UIView.makeToast(message: R.string.localizable.disableTriggerPro())
+        }
+    }
 }
 
 //MARK: GameViewControllerDelegate代理
@@ -3136,5 +3230,23 @@ extension PlayViewController {
             return currentPlayViewController.manicGame.gameType
         }
         return .unknown
+    }
+    
+    static var currentSkinID: String? {
+        if let currentPlayViewController {
+            if UIDevice.isLandscape {
+                return currentPlayViewController.manicGame.landscapeSkin?.id
+            } else {
+                return currentPlayViewController.manicGame.portraitSkin?.id
+            }
+        }
+        return nil
+    }
+    
+    static var isHideControls: Bool {
+        if let currentPlayViewController {
+            return currentPlayViewController.manicGame.forceFullSkin
+        }
+        return false
     }
 }

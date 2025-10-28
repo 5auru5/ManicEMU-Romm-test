@@ -60,6 +60,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>FDS Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.fds</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>SNES Game</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -587,9 +599,29 @@
 				<array>
 					<string>nes</string>
 					<string>fc</string>
-					<string>fds</string>
 					<string>unf</string>
 					<string>unif</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>FDS Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.fds</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>fds</string>
 				</array>
 			</dict>
 		</dict>

@@ -299,6 +299,29 @@ struct Database {
                     }
 #endif
                 }
+                
+                //1.7.3之后将nes和fds区分开
+                if systemCoreVersionNumber <= 173 {
+                    var needsUpdate: Bool = systemCoreVersionNumber < 173
+                    if !needsUpdate {
+                        let systemCoreBuildVersion = UserDefaults.standard.integer(forKey: Constants.DefaultKey.SystemCoreBuildVersion)
+                        let appBuildVersion = Int(Constants.Config.AppBuildVersion)!
+                        if appBuildVersion > systemCoreBuildVersion {
+                            needsUpdate = true
+                        }
+                    }
+                    
+                    if needsUpdate {
+                        let nesGames = realm.objects(Game.self).where({ $0.gameType == .nes })
+                        for nes in nesGames {
+                            if nes.fileExtension.lowercased() == "fds" {
+                                try? realm.write({
+                                    nes.gameType = .fds
+                                })
+                            }
+                        }
+                    }
+                }
             }
         } catch {
             Log.error("初始化数据错误 \(error)")

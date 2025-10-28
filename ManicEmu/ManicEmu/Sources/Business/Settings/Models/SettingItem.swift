@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance
+        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro
     }
     
     var type: ItemType
@@ -29,7 +29,7 @@ struct SettingItem {
             return Constants.Color.Indigo
         case .iCloud, .userAgreement, .appearance:
             return Constants.Color.Blue
-        case .fullScreenWhenConnectController, .shareApp:
+        case .fullScreenWhenConnectController, .shareApp, .triggerPro:
             return Constants.Color.Orange
         case .bios, .language:
             return Constants.Color.Pink
@@ -94,6 +94,8 @@ struct SettingItem {
             }
         case .appearance:
             R.image.customMoonphaseFirstQuarter()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        case .triggerPro:
+            R.image.customXmarkTriangleCircleSquare()!.applySymbolConfig(font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         }
     }
     
@@ -145,6 +147,8 @@ struct SettingItem {
             "Rumble"
         case .appearance:
             R.string.localizable.appearance()
+        case .triggerPro:
+            "TriggerPro"
         }
     }
     
@@ -167,6 +171,8 @@ struct SettingItem {
             return R.string.localizable.rumbleDetail()
         } else if type == .appearance {
             return Settings.appearance.desc
+        } else if type == .triggerPro {
+            return R.string.localizable.triggerProDesc()
         }
         return nil
     }

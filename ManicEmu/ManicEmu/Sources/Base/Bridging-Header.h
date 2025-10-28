@@ -19,3 +19,4 @@
 #import <UMAPM/UMAPMConfig.h>
 #import <UMAPM/UMCrashConfigure.h>
 #endif
+#import "ShadowLabel.h"

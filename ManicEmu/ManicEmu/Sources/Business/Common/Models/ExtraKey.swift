@@ -35,4 +35,7 @@ enum ExtraKey: String {
     case manualPage
     case manualFileName
     case nesPalette
+    case triggerProID
+    case forceFullSkin
+    case recoverIcon
 }

@@ -423,7 +423,7 @@ class SkinSettingsView: BaseView {
         
         //去总设置中去寻找有没有配置过皮肤 如果都没有配置过皮肤则默认选中自带默认的皮肤
         if portraitInitialSelectedIndex == nil {
-            if let storedSkin = SkinConfig.prefferedPortraitSkin(gameType: gameType) {
+            if let storedSkin = SkinConfig.preferredPortraitSkin(gameType: gameType) {
                 portraitInitialSelectedIndex = getIndex(for: storedSkin, in: portraitSkins) ?? 0
             } else {
                 portraitInitialSelectedIndex = 0
@@ -431,7 +431,7 @@ class SkinSettingsView: BaseView {
         }
         
         if landscapeInitialSelectedIndex == nil {
-            if let storedSkin = SkinConfig.prefferedLandscapeSkin(gameType: gameType) {
+            if let storedSkin = SkinConfig.preferredLandscapeSkin(gameType: gameType) {
                 landscapeInitialSelectedIndex = getIndex(for: storedSkin, in: landscapeSkins) ?? 0
             } else {
                 landscapeInitialSelectedIndex = 0

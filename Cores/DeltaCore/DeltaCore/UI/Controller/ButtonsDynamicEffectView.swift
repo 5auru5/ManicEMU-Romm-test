@@ -197,6 +197,17 @@ public class DynamicEffectView: UIView {
     init(item: ControllerSkin.Item) {
         self.item = item
         super.init(frame: CGRect.zero)
+        
+        isAccessibilityElement = true
+        switch item.kind {
+        case .button:
+            accessibilityLabel = "button" + item.inputs.allInputs.reduce("", { $0 + " " + $1.stringValue })
+        case .dPad:
+            accessibilityLabel = "dPad" + item.inputs.allInputs.reduce("", { $0 + " " + $1.stringValue })
+        default:
+            break
+        }
+        accessibilityTraits = .button
     }
     
     required init?(coder aDecoder: NSCoder) {

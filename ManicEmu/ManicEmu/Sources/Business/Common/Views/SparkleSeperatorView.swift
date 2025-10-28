@@ -24,8 +24,13 @@ class SparkleSeperatorView: UIView {
         setupViews(isGradient: isGradient)
     }
     
-    private func setupViews(color: UIColor = Constants.Color.Border, lineColor: UIColor? = nil, isGradient: Bool = false) {
-        let starView = isGradient ? GradientImageView(image: UIImage(symbol: .sparkle, size: 24)) : UIImageView(image: UIImage(symbol: .sparkle, color: color))
+    init(starSize: CGFloat) {
+        super.init(frame: .zero)
+        setupViews(starSize: starSize)
+    }
+    
+    private func setupViews(color: UIColor = Constants.Color.Border, lineColor: UIColor? = nil, isGradient: Bool = false, starSize: CGFloat = 24) {
+        let starView = isGradient ? GradientImageView(image: UIImage(symbol: .sparkle, size: starSize)) : UIImageView(image: UIImage(symbol: .sparkle, color: color))
         addSubview(starView)
         starView.snp.makeConstraints { make in
             make.center.equalToSuperview()

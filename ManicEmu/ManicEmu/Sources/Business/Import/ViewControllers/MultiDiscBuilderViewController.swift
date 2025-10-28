@@ -27,6 +27,11 @@ class MultiDiscBuilderViewController: BaseViewController {
         var files: [URL]
     }
     
+    struct CDI: M3uItem {
+        var url: URL
+        var files: [URL]
+    }
+    
     private var datas: [M3uItem] = [] {
         didSet {
             collectionView.reloadData()
@@ -34,7 +39,7 @@ class MultiDiscBuilderViewController: BaseViewController {
     }
     
     private enum FileType {
-        case undetermined, cue, chd
+        case undetermined, cue, chd, cdi
     }
     
     private var fileType: FileType {
@@ -42,10 +47,12 @@ class MultiDiscBuilderViewController: BaseViewController {
             if self.datas.count == 0 {
                 return .undetermined
             } else {
-                if self.datas.first!.url.pathExtension == "cue" {
+                if self.datas.first!.url.pathExtension.lowercased() == "cue" {
                     return .cue
-                } else {
+                } else if self.datas.first!.url.pathExtension.lowercased() == "chd" {
                     return .chd
+                } else  {
+                    return .cdi
                 }
             }
         }
@@ -109,20 +116,23 @@ class MultiDiscBuilderViewController: BaseViewController {
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
             let supportedType: [UTType]
-            if let cue = UTType(filenameExtension: "cue"), let bin = UTType(filenameExtension: "bin"), let chd = UTType(filenameExtension: "chd") {
+            if let cue = UTType(filenameExtension: "cue"), let bin = UTType(filenameExtension: "bin"), let chd = UTType(filenameExtension: "chd"), let cdi = UTType(filenameExtension: "cdi") {
                 switch self.fileType {
                 case .undetermined:
-                    supportedType = [cue, bin, chd]
+                    supportedType = [cue, bin, chd, cdi]
                 case .cue:
                     supportedType = [cue, bin]
                 case .chd:
                     supportedType = [chd]
+                case .cdi:
+                    supportedType = [cdi]
                 }
                 FilesImporter.shared.presentImportController(supportedTypes: supportedType) { [weak self] urls in
                     guard let self else { return }
                     let isCue = urls.contains(where: { $0.url?.pathExtension.lowercased() == "cue" })
                     let isChd = urls.contains(where: { $0.url?.pathExtension.lowercased() == "chd" })
-                    if (isCue || urls.contains(where: { $0.url?.pathExtension.lowercased() == "bin" })),  isChd {
+                    let isCdi = urls.contains(where: { $0.url?.pathExtension.lowercased() == "cdi" })
+                    if (isCue || urls.contains(where: { $0.url?.pathExtension.lowercased() == "bin" })) && (isChd || isCdi) {
                         UIView.makeToast(message: R.string.localizable.multiDiscImportErrorConflict())
                         return
                     }
@@ -159,6 +169,16 @@ class MultiDiscBuilderViewController: BaseViewController {
                         self.datas.append(contentsOf: chds)
                         self.collectionView.reloadData()
                         self.addFileButton.titleLabel.text = R.string.localizable.multiDiscAddFile(".chd")
+                    } else if isCdi {
+                        var cdis = [CDI]()
+                        for url in urls {
+                            let tempChdUrl = URL(fileURLWithPath: Constants.Path.Temp.appendingPathComponent(url.lastPathComponent))
+                            try? FileManager.safeCopyItem(at: url, to: tempChdUrl, shouldReplace: true)
+                            cdis.append(CDI(url: tempChdUrl, files: []))
+                        }
+                        self.datas.append(contentsOf: cdis)
+                        self.collectionView.reloadData()
+                        self.addFileButton.titleLabel.text = R.string.localizable.multiDiscAddFile(".cdi")
                     } else {
                         UIView.makeToast(message: R.string.localizable.multiDiscImportErrorMissing())
                     }

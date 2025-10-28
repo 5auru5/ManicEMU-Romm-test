@@ -14,7 +14,7 @@ import IceCream
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, mcd, ss, ds, ps1, dc, gb, gbc, gba, nes, pm, _3ds
+        case desc, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .desc: ""
@@ -26,7 +26,7 @@ class BIOSSelectionView: BaseView {
             case .gb: GameType.gb.localizedName
             case .gbc: GameType.gbc.localizedName
             case .gba: GameType.gba.localizedName
-            case .nes: GameType.nes.localizedName
+            case .fds: GameType.fds.localizedName
             case .pm: GameType.pm.localizedName
             case ._3ds: GameType._3ds.localizedName
             }
@@ -43,7 +43,7 @@ class BIOSSelectionView: BaseView {
             case .gb: return .gb
             case .gbc: return .gbc
             case .gba: return .gba
-            case .nes: return .nes
+            case .fds: return .fds
             case .pm: return .pm
             case ._3ds: return ._3ds
             }
@@ -106,18 +106,18 @@ class BIOSSelectionView: BaseView {
            self.datas = [.desc, .gbc]
         } else if let gameType, gameType == .gba {
            self.datas = [.desc, .gba]
-        } else if let gameType, gameType == .nes {
-           self.datas = [.desc, .nes]
+        } else if let gameType, gameType == .fds {
+           self.datas = [.desc, .fds]
         } else if let gameType, gameType == .pm {
             self.datas = [.desc, .pm]
         } else if let gameType, gameType == ._3ds {
             self.datas = [.desc, ._3ds]
         }  else {
 #if SIDE_LOAD
-            self.datas = [.desc, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .nes, .pm]
+            self.datas = [.desc, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
 #else
             //AppStore版本禁用MCD
-            self.datas = [.desc, ._3ds, .dc, .ps1, .ss, .ds, .gb, .gbc, .gba, .nes, .pm]
+            self.datas = [.desc, ._3ds, .dc, .ps1, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
 #endif
         }
         super.init(frame: .zero)

@@ -143,7 +143,7 @@ class Game: Object, ObjectUpdatable {
                     return URL(fileURLWithPath: Constants.Path.PSPSave.appendingPathComponent(path))
                 }
             }
-        } else if gameType == .nes {
+        } else if gameType == .nes || gameType == .fds {
             return URL(fileURLWithPath: Constants.Path.Nestopia.appendingPathComponent("\(name).srm"))
         } else if gameType == .snes {
             return URL(fileURLWithPath: Constants.Path.bsnes.appendingPathComponent("\(name).srm"))
@@ -259,8 +259,8 @@ class Game: Object, ObjectUpdatable {
                 }
             }
             return isPS1BIOSMissing
-        } else if gameType == .nes, fileExtension.lowercased() == "fds" {
-            requireBIOS = Constants.BIOS.NESBios
+        } else if gameType == .fds {
+            requireBIOS = Constants.BIOS.FDSBios
         } else {
             return false
         }
@@ -302,7 +302,7 @@ class Game: Object, ObjectUpdatable {
     var libretroCorePath: String? {
         if gameType == .psp {
             return Bundle.main.path(forResource: "ppsspp.libretro", ofType: "framework", inDirectory: "Frameworks")
-        } else if gameType == .nes {
+        } else if gameType == .nes || gameType == .fds  {
             return Bundle.main.path(forResource: "nestopia.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .snes {
             if getExtraBool(key: ExtraKey.snesVRAM.rawValue) ?? false {
@@ -554,7 +554,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     lazy var nesPalettes: [NESPalette] = {
-        guard gameType == .nes else { return [] }
+        guard gameType == .nes || gameType == .fds else { return [] }
         
         let nestopias = ["cxa2025as", "cxa2025as_jp", "royaltea", "consumer", "canonical", "alternative", "rgb", "pal", "composite-direct-fbx", "pvm-style-d93-fbx", "ntsc-hardware-fbx", "nes-classic-fbx-fs", "restored-wii-vc", "wii-vc", "raw"]
         var results: [NESPalette] = []
@@ -588,7 +588,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var nextNesPalette: NESPalette {
-        guard gameType == .nes else { return Self.defaultNesPalette }
+        guard gameType == .nes || gameType == .fds else { return Self.defaultNesPalette }
         
         if let nesPalette = getExtraString(key: ExtraKey.nesPalette.rawValue) {
             if let index = nesPalettes.firstIndex(where: { $0.name == nesPalette }) {
@@ -603,7 +603,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var currentNesPalette: NESPalette {
-        guard gameType == .nes else { return Self.defaultNesPalette }
+        guard gameType == .nes || gameType == .fds else { return Self.defaultNesPalette }
         if let nesPalette = getExtraString(key: ExtraKey.nesPalette.rawValue) {
             return nesPalettes.first(where: { $0.name == nesPalette }) ?? Self.defaultNesPalette
         }

@@ -112,7 +112,8 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
                                   SettingItem(type: .onlinePlay),
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
-                                  SettingItem(type: .retro)
+                                  SettingItem(type: .retro),
+                                  SettingItem(type: .triggerPro)
                 ]
 #else
                 datas[section] = [SettingItem(type: .airPlay, isOn: Settings.defalut.airPlay),
@@ -122,7 +123,8 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .respectSilentMode, isOn: Settings.defalut.respectSilentMode),
                                   SettingItem(type: .onlinePlay),
                                   SettingItem(type: .rumble, isOn: Settings.defalut.getExtraBool(key: ExtraKey.rumble.rawValue) ?? false),
-                                  SettingItem(type: .retro)
+                                  SettingItem(type: .retro),
+                                  SettingItem(type: .triggerPro)
                 ]
 #endif
             } else if section == .support {
@@ -216,7 +218,7 @@ class SettingsListView: BaseView {
                                                             trailing: Constants.Size.ContentSpaceMid)
             //section布局
             let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? Constants.Size.ContentSpaceMin : 0, leading: 0, bottom: Constants.Size.ContentSpaceTiny, trailing: 0)
+            section.contentInsets = NSDirectionalEdgeInsets(top: sectionIndex == 0 ? Constants.Size.ContentSpaceMin : 0, leading: 0, bottom: Constants.Size.ContentSpaceMid, trailing: 0)
             
             if sectionIndex > 0 {
                 //header布局
@@ -522,6 +524,13 @@ extension SettingsListView: UICollectionViewDelegate {
                 }
             case .about:
                 let vc = WebViewController(url: Constants.URLs.AboutUS, showClose: UIDevice.isPhone)
+                if UIDevice.isPad {
+                    didTapDetail?(vc)
+                } else {
+                    topViewController()?.present(vc, animated: true)
+                }
+            case .triggerPro:
+                let vc = TriggerProListViewController(showClose: UIDevice.isPhone)
                 if UIDevice.isPad {
                     didTapDetail?(vc)
                 } else {

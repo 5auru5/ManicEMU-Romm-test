@@ -106,6 +106,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 topViewController()?.present(vc, animated: true)
             }
         }
+        
+        // 无障碍配置
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.retroAchievements2()
+        view.accessibilityTraits = .button
+        
         return view
     }()
 
@@ -117,6 +123,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 topViewController()?.present(SkinSettingsViewController(game: game), animated: true)
             }
         }
+        
+        // 无障碍配置
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.gamesSpecifySkin()
+        view.accessibilityTraits = .button
+        
         return view
     }()
     
@@ -128,6 +140,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 topViewController()?.present(CheatCodeViewController(game: game), animated: true)
             }
         }
+        
+        // 无障碍配置
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.gamesCheatCode()
+        view.accessibilityTraits = .button
+        
         return view
     }()
     
@@ -160,6 +178,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 }
             }
         }
+        
+        // 无障碍配置
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.gameplayManuals()
+        view.accessibilityTraits = .button
+        
         return view
     }()
     
@@ -222,6 +246,11 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.threeDSModecontextMenuButton.triggerTapGesture()
         }
+        
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
+        
         return view
     }()
     
@@ -272,6 +301,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 UIView.makeToast(message: R.string.localizable.jitNoSupportDesc())
             }
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -312,6 +344,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.shaderContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -371,6 +406,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.languageContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -414,6 +452,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.rightEyeRenderMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -423,6 +464,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         view.addTapGesture { gesture in
             topViewController()?.present(ThreeDSAdvancedSettingViewController(), animated: true)
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.threeDSAdvanceSettingTitle()
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -525,6 +569,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.transferPakContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = "Transfer Pak\(state)"
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -562,6 +609,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.rdpPluginContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -593,6 +643,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.ndsSystemTypeContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.ndsSystemTypeTitle() + type
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -715,6 +768,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 }
             }
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = "GBA Slot\(state)"
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -751,6 +807,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.microphoneContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -778,6 +837,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.psxModeContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -790,6 +852,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 topViewController()?.present(PSXSBIImportViewController(game: game), animated: true)
             }
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.sbiImport()
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -817,6 +882,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.psxRendererContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -828,6 +896,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self, let game = self.game else { return }
             PlayViewController.startGame(game: game)
         }
+        
+        // 无障碍配置
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.startGameTitle()
+        view.accessibilityTraits = .button
+        
         return view
     }()
     
@@ -863,6 +937,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.dcCoreContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = "JITLess Ver: \(ver)"
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -894,6 +971,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.tvStandardMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = standard
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -925,6 +1005,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.snesVRAMMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -964,6 +1047,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.pspRendererContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -991,6 +1077,9 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self = self else { return }
             self.pspTextureContextMenuButton.triggerTapGesture()
         }
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = title
+        view.accessibilityTraits = .button
         return view
     }()
     
@@ -1016,7 +1105,6 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             UIDevice.generateHaptic()
             self.didSegmentChange?(index)
         }
-        
         return view
     }()
     
@@ -1029,6 +1117,12 @@ class GameInfoDetailReusableView: UICollectionReusableView {
             guard let self else { return }
             self.didDeleteSaveState?()
         }
+        
+        // 无障碍配置
+        view.isAccessibilityElement = true
+        view.accessibilityLabel = R.string.localizable.deleteGameGameStateAlertTitle()
+        view.accessibilityTraits = .button
+        
         return view
     }()
     

@@ -114,8 +114,13 @@ extension UIView {
             toast.config.customTextLabel { label in
                 label.textColor = Constants.Color.LabelPrimary
                 label.font = font
+                label.textAlignment = .natural
+                label.lineBreakMode = .byWordWrapping
             }
-            let textSize = NSAttributedString(string: message, attributes: [.font: font]).size()
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .natural
+            paragraphStyle.lineBreakMode = .byWordWrapping
+            let textSize = NSAttributedString(string: message, attributes: [.font: font, .paragraphStyle: paragraphStyle]).size()
             let textMaxWidth = textSize.width.ceil
             let cornerRadius = (insets.top + textSize.height + insets.bottom)/2
             toast.config.cardCornerRadius = cornerRadius > 24 ? Constants.Size.CornerRadiusMax : cornerRadius

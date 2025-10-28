@@ -88,7 +88,9 @@ class SyncManager: NSObject {
             SyncObject(realmConfiguration: configuration, type: ImportService.self),
             SyncObject(realmConfiguration: configuration, type: Settings.self),
             SyncObject(realmConfiguration: configuration, type: ControllerMapping.self),
-            SyncObject(realmConfiguration: configuration, type: Theme.self)
+            SyncObject(realmConfiguration: configuration, type: Theme.self),
+            SyncObject(realmConfiguration: configuration, type: Trigger.self, uListElementType: TriggerItem.self),
+            SyncObject(realmConfiguration: configuration, type: TriggerItem.self)
         ])
         realmSyncEngine?.setupCompletion = { error in
             //同步设定完成之后 尝试将本地所有数据推到云端

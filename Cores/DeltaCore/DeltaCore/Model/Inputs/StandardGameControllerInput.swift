@@ -43,8 +43,15 @@ public enum StandardGameControllerInput: String, Codable
     case blowing
     case palette
     case swapDisk
-    case toggleAnalog
     case retroAchievements
+    case airPlayScaling
+    case airPlayLayout
+    case toggleAnalog
+    case gameplayManuals
+    case triggerPro
+    case fastForward2x
+    case fastForward3x
+    case fastForward4x
 
     case up
     case down

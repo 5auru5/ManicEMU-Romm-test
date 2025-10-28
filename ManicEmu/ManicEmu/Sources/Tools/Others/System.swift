@@ -30,6 +30,7 @@ enum System: CaseIterable
     case gbc
     case gb
     case nes
+    case fds
     case snes
 
     static var registeredSystems: [System] {
@@ -38,7 +39,7 @@ enum System: CaseIterable
     }
     
     static var allCores: [ManicEmuCoreProtocol] {
-        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core, DS.core]
+        return [NES.core, SNES.core, ThreeDS.core, GBC.core, GBA.core, PSP.core, MD.core, MCD.core, S2X.core, SG1000.core, GG.core, MS.core, SS.core, N64.core, GB.core, VB.core, PM.core, PS1.core, DC.core, DS.core, FDS.core]
     }
 }
 
@@ -67,6 +68,7 @@ extension System {
         case .pm: return .pm
         case .ps1: return .ps1
         case .dc: return .dc
+        case .fds: return .fds
         }
     }
 }

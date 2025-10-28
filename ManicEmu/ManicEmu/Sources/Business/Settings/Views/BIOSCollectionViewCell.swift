@@ -127,8 +127,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = Constants.BIOS.GBCBios
             }  else if gameType == .gba {
                 biosItems = Constants.BIOS.GBABios
-            }  else if gameType == .nes {
-                biosItems = Constants.BIOS.NESBios
+            }  else if gameType == .fds {
+                biosItems = Constants.BIOS.FDSBios
             }  else if gameType == .pm {
                 biosItems = Constants.BIOS.PMBios
             } else if gameType == ._3ds {
@@ -355,8 +355,8 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = Constants.BIOS.GBCBios.count
         }  else if gameType == .gba {
             itemCount = Constants.BIOS.GBABios.count
-        }  else if gameType == .nes {
-            itemCount = Constants.BIOS.NESBios.count
+        }  else if gameType == .fds {
+            itemCount = Constants.BIOS.FDSBios.count
         }  else if gameType == .pm {
             itemCount = Constants.BIOS.PMBios.count
         } else if gameType == ._3ds {

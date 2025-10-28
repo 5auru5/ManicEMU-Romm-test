@@ -138,8 +138,10 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.gbc_group_brand(compatibleWith: traitCollection)
             } else if gameType == .gb {
                 image = R.image.gb_group_brand(compatibleWith: traitCollection)
-            }  else if gameType == .nes {
+            } else if gameType == .nes {
                 image = R.image.nes_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .fds {
+                image = R.image.fds_group_brand(compatibleWith: traitCollection)
             } else if gameType == .snes {
                 image = R.image.snes_group_brand(compatibleWith: traitCollection)
             } else if gameType == .psp {

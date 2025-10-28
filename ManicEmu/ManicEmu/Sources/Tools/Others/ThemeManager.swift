@@ -44,14 +44,56 @@ class ThemeManager {
         }
         
         updateAppearance()
-        updateIcon()
+        updateIcon(isSetup: true)
         updateThemeColor()
         updateCoverStyle()
         updatePlatformOrder()
         updateGamelist()
     }
     
-    private func updateIcon() {
+    private func updateIcon(isSetup: Bool = false) {
+        //每年的10月31日都尝试展示Halloween图标
+        var showHalloweenIcon = false
+        if isSetup && Date.now.month == 10 && Date.now.day == 31 {
+            //检查上一次自动展示Halloween图标的时间
+            if let halloweenIconShowUpDate = UserDefaults.standard.object(forKey: Constants.DefaultKey.HalloweenIconShowUpDate) as? Date {
+                if halloweenIconShowUpDate.isInToday {
+                    //已经展示过了 不再展示
+                } else {
+                    //今天还没展示过 展示
+                    showHalloweenIcon = true
+                }
+            } else {
+                //从没展示过 展示
+                showHalloweenIcon = true
+            }
+        }
+        if showHalloweenIcon {
+            Log.debug("开始更新图标 今天是万圣节 直接使用万圣节图标")
+            UserDefaults.standard.set(Date.now, forKey: Constants.DefaultKey.HalloweenIconShowUpDate)
+            UserDefaults.standard.synchronize()
+            let theme = Theme.defalut
+            theme.updateExtra(key: ExtraKey.recoverIcon.rawValue, value: theme.icon)
+            Theme.change { realm in
+                theme.icon = "AppIcon_Halloween"
+            }
+            return
+        }
+        
+        if Date.now.string(withFormat: "MMdd") != "1031" {
+            //万圣节已经过了 需要恢复图标
+            let theme = Theme.defalut
+            if let icon = theme.getExtraString(key: ExtraKey.recoverIcon.rawValue), !icon.isEmpty {
+                //有待恢复的图标
+                let theme = Theme.defalut
+                theme.updateExtra(key: ExtraKey.recoverIcon.rawValue, value: "")
+                Theme.change { realm in
+                    theme.icon = icon
+                }
+                return
+            }
+        }
+        
         Log.debug("开始更新图标")
         let theme = Theme.defalut
         Log.debug("主题图标:\(theme.icon)")

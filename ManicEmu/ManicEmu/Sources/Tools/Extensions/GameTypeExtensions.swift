@@ -50,9 +50,11 @@ extension GameType {
             self = .gb
         }  else if ["ds", "nds"].contains(ext) {
             self = .ds
-        } else if ["nes", "fc", "fds", "unf", "unif"].contains(ext)  {
+        } else if ["nes", "fc", "unf", "unif"].contains(ext)  {
             self = .nes
-        } else if ["smc", "sfc", "fig", "snes"].contains(ext) {
+        } else if ["fds"].contains(ext)  {
+            self = .fds
+        }else if ["smc", "sfc", "fig", "snes"].contains(ext) {
             self = .snes
         } else if ["3ds", "cia", "app", "cci", "cxi", "3dsx"].contains(ext) {
             self = ._3ds
@@ -108,8 +110,10 @@ extension GameType {
             self = .gbc
         } else if shortName.uppercased() == "GB" {
             self = .gb
-        }  else if shortName.uppercased() == "NES" {
+        } else if shortName.uppercased() == "NES" {
             self = .nes
+        } else if shortName.uppercased() == "FDS" {
+            self = .fds
         } else if shortName.uppercased() == "SNES" {
             self = .snes
         } else if shortName.uppercased() == "PSP" {
@@ -154,6 +158,7 @@ extension GameType {
         switch self
         {
         case .nes: return "Nintendo"
+        case .fds: return "Famicom Disk System"
         case .snes: return "Super Nintendo"
         case ._3ds: return "Nintendo 3DS"
         case .gbc: return "Game Boy Color"
@@ -181,6 +186,7 @@ extension GameType {
         switch self
         {
         case .nes: return NSLocalizedString("NES", comment: "")
+        case .fds: return NSLocalizedString("FDS", comment: "")
         case .snes: return NSLocalizedString("SNES", comment: "")
         case ._3ds: return NSLocalizedString("3DS", comment: "")
         case .gbc: return NSLocalizedString("GBC", comment: "")
@@ -209,6 +215,7 @@ extension GameType {
         switch self
         {
         case .nes: return 1985
+        case .fds: return 1986
         case .snes: return 1990
         case ._3ds: return 2011
         case .gb: return 1989
@@ -236,6 +243,7 @@ extension GameType {
         switch self
         {
         case .nes: return NES.core
+        case .fds: return FDS.core
         case .snes: return SNES.core
         case ._3ds: return ThreeDS.core
         case .gbc: return GBC.core
@@ -262,8 +270,8 @@ extension GameType {
     func reuseGameType() -> GameType {
         if self == .mcd || self == ._32x {
             return .md
-        } else if self == .sg1000 {
-            return .ms
+        } else if self == .fds {
+            return .nes
         }
         return self
     }
@@ -290,6 +298,8 @@ extension GameType {
             return [.md, .mcd, ._32x]
         } else if self == .ms || self == .gg || self == .sg1000 {
             return [.ms, .gg, .sg1000]
+        } else if self == .nes || self == .fds {
+            return [.nes, .fds]
         }
         return [self]
     }

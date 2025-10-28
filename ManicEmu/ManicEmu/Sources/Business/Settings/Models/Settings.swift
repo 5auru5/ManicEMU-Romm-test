@@ -131,15 +131,15 @@ struct SkinConfig: SmartCodable {
     var portraitSkins = [String: String]()
     var landscapeSkins = [String: String]()
     
-    static func prefferedPortraitSkin(gameType: GameType) -> Skin? {
-        prefferedSkin(gameType: gameType, isLandscape: false)
+    static func preferredPortraitSkin(gameType: GameType) -> Skin? {
+        preferredSkin(gameType: gameType, isLandscape: false)
     }
     
-    static func prefferedLandscapeSkin(gameType: GameType) -> Skin? {
-        prefferedSkin(gameType: gameType, isLandscape: true)
+    static func preferredLandscapeSkin(gameType: GameType) -> Skin? {
+        preferredSkin(gameType: gameType, isLandscape: true)
     }
     
-    static func prefferedSkin(gameType: GameType, isLandscape: Bool) -> Skin? {
+    static func preferredSkin(gameType: GameType, isLandscape: Bool) -> Skin? {
         if let config = SkinConfig.deserialize(from: Settings.defalut.skinConfig),
            let skinId = isLandscape ? config.landscapeSkins[gameType.rawValue] : config.portraitSkins[gameType.rawValue],
             let skin = Database.realm.object(ofType: Skin.self, forPrimaryKey: skinId) {
