@@ -33,7 +33,7 @@ Your support keeps this app going
 #### Nintendo
 - Nintendo 3DS (3DS)
 - Nintendo 64 (N64)
-- Nintendo DS (NDS)
+- Nintendo DS (NDS) *supports online play via WFC
 - Game Boy Advance (GBA)
 - Game Boy Color (GBC)
 - Game Boy (GB)
@@ -48,7 +48,7 @@ Your support keeps this app going
 - PlayStation Portable (PSP)
 
 #### SEGA
-- Sega Dreamcast (DC)
+- Sega Dreamcast (DC) *supports online play
 - Sega Saturn (SS)
 - Sega Master System (MS)
 - Sega Game Gear (GG)
