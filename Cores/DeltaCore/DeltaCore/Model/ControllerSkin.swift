@@ -99,9 +99,9 @@ public struct ControllerSkin: ControllerSkinBase
                 let representationsDictionary = info["representations"] as? RepresentationDictionary
             else { return nil }
             
-            #if FRAMEWORK || SWIFT_PACKAGE
+#if FRAMEWORK || SWIFT_PACKAGE
             guard let gameType = info["gameTypeIdentifier"] as? GameType else { return nil }
-            #else
+#else
             guard var gameTypeString = info["gameTypeIdentifier"] as? String else { return nil }
             var gameType: GameType
             if gameTypeString == "com.rileytestut.delta.game.genesis" {
@@ -118,7 +118,7 @@ public struct ControllerSkin: ControllerSkinBase
                 }
             }
             
-            #endif
+#endif
             
             self.name = name
             self.identifier = identifier
@@ -297,14 +297,14 @@ public extension ControllerSkin
         case .medium:
             // First, attempt to load a medium image
             if let image = self.image(for: representation, assetSize: AssetSize(size: .medium)) { returnedImage = image }
-                
-                // If a medium image doesn't exist, fallback to trying to load a medium resizable image
+            
+            // If a medium image doesn't exist, fallback to trying to load a medium resizable image
             else if let image = self.image(for: representation, assetSize: AssetSize(size: .medium, resizable: true)) { returnedImage = image }
-                
-                // If neither medium nor resizable exists, check for a large image (because downscaling large is better than upscaling small)
+            
+            // If neither medium nor resizable exists, check for a large image (because downscaling large is better than upscaling small)
             else if let image = self.image(for: representation, assetSize: AssetSize(size: .large)) { returnedImage = image }
-                
-                // If still no images exist, finally check the small image size
+            
+            // If still no images exist, finally check the small image size
             else if let image = self.image(for: representation, assetSize: AssetSize(size: .small)) { returnedImage = image }
             
         case .large:
@@ -390,6 +390,44 @@ public extension ControllerSkin
         guard let representation = self.representation(for: traits) else { return nil }
         return representation.menuInsets
     }
+    
+    public func switchView(for item: Item, traits: Traits, onImageSize: CGSize, offImageSize: CGSize) -> (UIImage?, UIImage?)? {
+        guard let representation = self.representation(for: traits) else { return nil }
+        var onImage: UIImage? = nil
+        var offImage: UIImage? = nil
+        var animation: ControllerSkin.Item.Animation? = nil
+        
+        if case let .switch(onImageStr, offImageStr) = item.asset {
+            if let onImageStr, let entry = self.archive[onImageStr], let data = try? self.archive.extract(entry) {
+                switch (onImageStr as NSString).pathExtension.lowercased() {
+                case "pdf":
+                    onImage = UIImage.image(withPDFData: data, targetSize: onImageSize)
+                    
+                default:
+                    onImage = UIImage(data: data, scale: 1.0)
+                }
+            }
+            
+            if let offImageStr, let entry = self.archive[offImageStr], let data = try? self.archive.extract(entry) {
+                switch (offImageStr as NSString).pathExtension.lowercased() {
+                case "pdf":
+                    offImage = UIImage.image(withPDFData: data, targetSize: offImageSize)
+                    
+                default:
+                    offImage = UIImage(data: data, scale: 1.0)
+                }
+            }
+        }
+        if onImage == nil, offImage == nil {
+            return nil
+        } else if onImage == nil {
+            return (offImage, offImage)
+        } else if offImage == nil {
+            return (onImage, onImage)
+        } else {
+            return (onImage, offImage)
+        }
+    }
 }
 
 private extension ControllerSkin
@@ -456,6 +494,7 @@ extension ControllerSkin
             case dPad
             case thumbstick
             case touchScreen
+            case switchButton
         }
         
         public enum Inputs
@@ -463,6 +502,7 @@ extension ControllerSkin
             case standard([Input])
             case directional(up: Input, down: Input, left: Input, right: Input)
             case touch(x: Input, y: Input)
+            case `switch`(Input)
             
             public var allInputs: [Input] {
                 switch self
@@ -470,6 +510,7 @@ extension ControllerSkin
                 case .standard(let inputs): return inputs
                 case let .directional(up, down, left, right): return [up, down, left, right]
                 case let .touch(x, y): return [x, y]
+                case .switch(let input): return [input]
                 }
             }
         }
@@ -477,7 +518,18 @@ extension ControllerSkin
         public enum Asset {
             case button(normal: String?, selected: String?)
             case dpad(normal: String?)
+            case `switch`(on: String?, off: String?)
         }
+        
+        public struct Animation {
+            var type: String
+            var begin: CGRect
+            var end: CGRect
+        }
+        public var animation: Animation?
+        
+        //switch
+        public var selfRetracting: Bool = true
         
         public var asset: Asset?
         
@@ -505,7 +557,7 @@ extension ControllerSkin
             if let inputs = dictionary["inputs"] as? [String]
             {
                 self.kind = .button
-                self.inputs = .standard(inputs.map { SomeInput(stringValue: $0, intValue: nil, type: .controller(.controllerSkin)) })
+                self.inputs = .standard(inputs.map { SomeInput(stringValue: $0, intValue: nil, type: .controller(.controllerSkin), itemID: id) })
             }
             else if let inputs = dictionary["inputs"] as? [String: String]
             {
@@ -531,25 +583,41 @@ extension ControllerSkin
                         isContinuous = false
                     }
                     
-                    self.inputs = .directional(up: SomeInput(stringValue: up, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous),
-                                               down: SomeInput(stringValue: down, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous),
-                                               left: SomeInput(stringValue: left, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous),
-                                               right: SomeInput(stringValue: right, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous))
+                    self.inputs = .directional(up: SomeInput(stringValue: up, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous, itemID: id),
+                                               down: SomeInput(stringValue: down, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous, itemID: id),
+                                               left: SomeInput(stringValue: left, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous, itemID: id),
+                                               right: SomeInput(stringValue: right, intValue: nil, type: .controller(.controllerSkin), isContinuous: isContinuous, itemID: id))
                 }
                 else if let x = inputs["x"], let y = inputs["y"]
                 {
                     self.kind = .touchScreen
-                    self.inputs = .touch(x: SomeInput(stringValue: x, intValue: nil, type: .controller(.controllerSkin), isContinuous: true),
-                                         y: SomeInput(stringValue: y, intValue: nil, type: .controller(.controllerSkin), isContinuous: true))
+                    self.inputs = .touch(x: SomeInput(stringValue: x, intValue: nil, type: .controller(.controllerSkin), isContinuous: true, itemID: id),
+                                         y: SomeInput(stringValue: y, intValue: nil, type: .controller(.controllerSkin), isContinuous: true, itemID: id))
                 }
                 else
                 {
                     return nil
                 }
             }
+            else if let input = dictionary["inputs"] as? String {
+                self.kind = .switchButton
+                self.inputs = .switch(SomeInput(stringValue: input, intValue: nil, type: .controller(.controllerSkin), itemID: id))
+                self.selfRetracting = (dictionary["selfRetracting"] as? Bool) ?? true
+            }
             else
             {
                 return nil
+            }
+            
+            //获取动画配置
+            var tempAnimation: Animation? = nil
+            if let animation = dictionary["animation"] as? [String: Any],
+               let type = animation["type"] as? String,
+               let begin = animation["begin"] as? [String: CGFloat],
+               let beginRect = CGRect(dictionary: begin),
+               let end = animation["end"] as? [String: CGFloat],
+               let endRect = CGRect(dictionary: end) {
+                tempAnimation = Animation(type: type, begin: beginRect, end: endRect)
             }
             
             let overrideExtendedEdges = ExtendedEdges(dictionary: dictionary["extendedEdges"] as? [String: CGFloat])
@@ -583,11 +651,17 @@ extension ControllerSkin
                 let scaleTransform = CGAffineTransform(scaleX: 1.0 / mappingSize.width, y: 1.0 / mappingSize.height)
                 self.frame = frame.applying(scaleTransform)
                 self.extendedFrame = extendedFrame.applying(scaleTransform)
+                if var tempAnimation {
+                    tempAnimation.begin = tempAnimation.begin.applying(scaleTransform)
+                    tempAnimation.end = tempAnimation.end.applying(scaleTransform)
+                    self.animation = tempAnimation
+                }
                 
             case .app:
                 // `app` placement already uses relative values.
                 self.frame = frame
                 self.extendedFrame = extendedFrame
+                self.animation = tempAnimation
             }
         }
     }
@@ -617,6 +691,7 @@ extension ControllerSkin.Item: Hashable
         case .dPad: hasher.combine(1)
         case .thumbstick: hasher.combine(2)
         case .touchScreen: hasher.combine(3)
+        case .switchButton: hasher.combine(4)
         }
         
         hasher.combine(self.thumbstickImageName)
@@ -853,12 +928,14 @@ private extension ControllerSkin
                 let itemID = ControllerSkin.itemID(forSkinID: skinID, traits: traits, index: index)
                 if var item = Item(id: itemID, dictionary: dictionary, extendedEdges: extendedEdges, mappingSize: mappingSize)
                 {
-                    //添加按压效果的素材
                     if let assetDic = dictionary["asset"] as? [String: String] {
+                        //添加按压效果的素材
                         if item.kind == .button {
                             item.asset = .button(normal: assetDic["normal"] ?? nil, selected: assetDic["selected"] ?? nil)
                         } else if item.kind == .dPad {
                             item.asset = .dpad(normal: assetDic["normal"] ?? nil)
+                        } else if item.kind == .switchButton {
+                            item.asset = .switch(on: assetDic["selected"], off: assetDic["normal"])
                         }
                     }
                     items.append(item)
@@ -994,7 +1071,7 @@ private extension ControllerSkin
                                     
                                     let value = NSValue(cgAffineTransform: transform)
                                     mappedValue = value
-                                                                        
+                                    
                                 default: continue
                                 }
                                 

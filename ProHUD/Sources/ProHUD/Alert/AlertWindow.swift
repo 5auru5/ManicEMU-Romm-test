@@ -24,6 +24,7 @@ class AlertWindow: Window {
         } else {
             w = .init(frame: AppContext.appBounds)
         }
+        w.tintColor = UIColor(red: 1, green: 36/255, blue: 66/255, alpha: 1)
         if let windowScene = windowScene {
             AppContext.alertWindow[windowScene] = w
         }

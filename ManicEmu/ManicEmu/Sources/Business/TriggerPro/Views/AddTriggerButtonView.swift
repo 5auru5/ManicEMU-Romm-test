@@ -26,8 +26,8 @@ class AddTriggerButtonView: BaseView {
         }
     }
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -92,14 +92,15 @@ class AddTriggerButtonView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
         let icon = UIImageView(image: R.image.customXmarkTriangleCircleSquare()?.applySymbolConfig(color: Constants.Color.LabelPrimary))
-        topBlurView.addSubview(icon)
+        navigationBlurView.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.size.equalTo(Constants.Size.IconSizeMin)
@@ -109,13 +110,13 @@ class AddTriggerButtonView: BaseView {
         headerTitleLabel.text = "TriggerPro"
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
             make.centerY.equalTo(icon)
         }
         
-        topBlurView.addSubview(closeButton)
+        navigationBlurView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
             make.centerY.equalToSuperview()

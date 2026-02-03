@@ -11,8 +11,8 @@ import RealmSwift
 
 class ControllerMappingView: UIView {
     /// 充当导航条
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         return view
     }()
     
@@ -309,7 +309,7 @@ class ControllerMappingView: UIView {
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(Constants.Size.SafeAera.top)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(44)
         }
         

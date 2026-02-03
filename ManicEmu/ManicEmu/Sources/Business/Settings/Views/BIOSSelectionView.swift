@@ -14,7 +14,7 @@ import IceCream
 class BIOSSelectionView: BaseView {
     
     private enum SectionIndex: Int, CaseIterable {
-        case desc, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
+        case desc, lynx, a7800, a5200, arcade, mcd, ss, ds, ps1, dc, gb, gbc, gba, fds, pm, _3ds
         var title: String {
             switch self {
             case .desc: ""
@@ -30,6 +30,9 @@ class BIOSSelectionView: BaseView {
             case .fds: GameType.fds.localizedName
             case .pm: GameType.pm.localizedName
             case ._3ds: GameType._3ds.localizedName
+            case .lynx: GameType.lynx.localizedName
+            case .a7800: GameType.a7800.localizedName
+            case .a5200: GameType.a5200.localizedName
             }
         }
         
@@ -48,14 +51,17 @@ class BIOSSelectionView: BaseView {
             case .fds: return .fds
             case .pm: return .pm
             case ._3ds: return ._3ds
+            case .a5200: return .a5200
+            case .a7800: return .a7800
+            case .lynx: return .lynx
             }
         }
     }
     
     private let datas: [SectionIndex]
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -116,13 +122,14 @@ class BIOSSelectionView: BaseView {
             self.datas = [.desc, ._3ds]
         } else if let gameType, gameType == .arcade {
             self.datas = [.desc, .arcade]
+        } else if let gameType, gameType == .a5200 {
+            self.datas = [.desc, .a5200]
+        } else if let gameType, gameType == .a7800 {
+            self.datas = [.desc, .a7800]
+        } else if let gameType, gameType == .lynx {
+            self.datas = [.desc, .lynx]
         } else {
-#if SIDE_LOAD
-            self.datas = [.desc, .arcade, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
-#else
-            //AppStore版本禁用MCD
-            self.datas = [.desc, .arcade, ._3ds, .dc, .ps1, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
-#endif
+            self.datas = [.desc, .lynx, .a7800, .a5200, .arcade, ._3ds, .dc, .ps1, .mcd, .ss, .ds, .gb, .gbc, .gba, .fds, .pm]
         }
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
@@ -133,14 +140,15 @@ class BIOSSelectionView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
         let icon = UIImageView(image: UIImage(symbol: .cpu))
-        topBlurView.addSubview(icon)
+        navigationBlurView.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.size.equalTo(Constants.Size.IconSizeMin)
@@ -150,14 +158,14 @@ class BIOSSelectionView: BaseView {
         headerTitleLabel.text = "BIOS"
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
             make.centerY.equalTo(icon)
         }
         
         if showClose {
-            topBlurView.addSubview(closeButton)
+            navigationBlurView.addSubview(closeButton)
             closeButton.snp.makeConstraints { make in
                 make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
                 make.centerY.equalToSuperview()

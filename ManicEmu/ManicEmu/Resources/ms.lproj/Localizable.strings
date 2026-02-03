@@ -802,3 +802,25 @@ Jika anda ingin meningkatkan persediaan anda, PlayCase adalah padanan sempurna u
 "NotInstallMeloNX" = "MeloNX Tidak Dipasang";
 "FetchGamesFromMeloNX" = "Import Permainan daripada MeloNX";
 "ChangeAlert" = "Kandungan telah berubah. Menutup sekarang akan menghilangkan semua perubahan. Teruskan menutup?";
+
+"JGenesisAlert" = "Maaf, teras JGenesis hanya menyokong fail ROM .chd.";
+"RedeemOfferCode" = "Tebus Tawaran";
+"CheatImportFailed" = "Import gagal. Fail tidak dapat dihuraikan atau tiada kod curi yang sepadan ditemui.";
+"RemoveAllCheats" = "Buang Semua Curi";
+"RemoveAllCheatsAlert" = "Adakah anda pasti mahu membuang semua kod curi? Tindakan ini tidak dapat dibatalkan.";
+"CheatCodeStatus" = "Dihidupkan";
+"Background" = "Latar Belakang";
+"AddBackgroundForLandscape" = "Tambah Latar Belakang Landskap";
+"AddBackgroundForPortrait" = "Tambah Latar Belakang Potret";
+"UpdateBackground" = "Set Latar Belakang";
+"UpdateBackgroundForGame" = "Set untuk Permainan Ini";
+"UpdateBackgroundForConsole" = "Set untuk Platform %@";
+"UpdateBackgroundForGlobal" = "Set Secara Global";
+"RemoveBackgroundForGame" = "Buang Latar Belakang Permainan";
+"RemoveBackgroundForConsole" = "Buang Latar Belakang Platform %@";
+"RemoveBackgroundForGlobal" = "Buang Latar Belakang Global";
+"ShaderConfigAlert" = "Ditentukan untuk %@.";
+"Global" = "Global";
+"RemoveShaderForGlobal" = "Buang Shader Global";
+"FeaturedItems" = "Item Terpilih";
+"ReUpload" = "Muat Naik Semula";

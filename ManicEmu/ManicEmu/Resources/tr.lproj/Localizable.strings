@@ -828,3 +828,25 @@ Kurulumunuzu bir üst seviyeye taşımak istiyorsanız, PlayCase bu kaplama içi
 "NotInstallMeloNX" = "MeloNX Yüklü Değil";
 "FetchGamesFromMeloNX" = "MeloNX'ten Oyunları İçe Aktar";
 "ChangeAlert" = "İçerik değiştirildi. Şimdi kapatmak tüm değişiklikleri kaybedecektir. Kapatmaya devam edilsin mi?";
+
+"JGenesisAlert" = "Üzgünüz, JGenesis çekirdeği yalnızca .chd ROM dosyalarını destekler.";
+"RedeemOfferCode" = "Teklifi Kullan";
+"CheatImportFailed" = "İçe aktarma başarısız. Dosya ayrıştırılamadı veya eşleşen hile kodu bulunamadı.";
+"RemoveAllCheats" = "Tüm Hileleri Kaldır";
+"RemoveAllCheatsAlert" = "Tüm hile kodlarını kaldırmak istediğinizden emin misiniz? Bu işlem geri alınamaz.";
+"CheatCodeStatus" = "Etkin";
+"Background" = "Arka Plan";
+"AddBackgroundForLandscape" = "Yatay Arka Plan Ekle";
+"AddBackgroundForPortrait" = "Dikey Arka Plan Ekle";
+"UpdateBackground" = "Arka Planı Ayarla";
+"UpdateBackgroundForGame" = "Bu Oyun İçin Ayarla";
+"UpdateBackgroundForConsole" = "%@ Platformu İçin Ayarla";
+"UpdateBackgroundForGlobal" = "Genel Olarak Ayarla";
+"RemoveBackgroundForGame" = "Oyun Arka Planını Kaldır";
+"RemoveBackgroundForConsole" = "%@ Platform Arka Planını Kaldır";
+"RemoveBackgroundForGlobal" = "Genel Arka Planı Kaldır";
+"ShaderConfigAlert" = "%@ için ayarlandı.";
+"Global" = "Genel";
+"RemoveShaderForGlobal" = "Genel Shader'ı Kaldır";
+"FeaturedItems" = "Öne Çıkan Öğeler";
+"ReUpload" = "Yeniden Yükle";

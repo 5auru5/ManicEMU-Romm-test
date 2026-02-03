@@ -91,6 +91,92 @@ struct PSP: ManicEmuCoreProtocol {
     var emulatorConnector: EmulatorBase { PSPEmulatorBridge.shared }
     
     private init() {}
+    
+    struct GameCheat {
+        struct Cheat {
+            let name: String
+            let code: String
+        }
+
+        let gameCode: String
+        let gameTitle: String
+        let cheats: [Cheat]
+    }
+
+    static func parseCheatFiles(content: String) -> [GameCheat] {
+        let lines = content
+            .components(separatedBy: .newlines)
+            .map { $0.trimmingCharacters(in: .whitespaces) }
+
+        var results: [GameCheat] = []
+
+        var currentGameCode: String?
+        var currentGameTitle: String?
+        var cheats: [GameCheat.Cheat] = []
+
+        var currentCheatName: String?
+        var currentCheatLines: [String] = []
+
+        func flushCheat() {
+            guard
+                let name = currentCheatName,
+                !currentCheatLines.isEmpty
+            else {
+                currentCheatName = nil
+                currentCheatLines.removeAll()
+                return
+            }
+
+            cheats.append(
+                .init(
+                    name: name,
+                    code: currentCheatLines.joined(separator: "\n")
+                )
+            )
+
+            currentCheatName = nil
+            currentCheatLines.removeAll()
+        }
+
+        func flushGame() {
+            flushCheat()
+            guard
+                let code = currentGameCode,
+                let title = currentGameTitle,
+                !cheats.isEmpty
+            else {
+                cheats.removeAll()
+                return
+            }
+
+            results.append(
+                .init(
+                    gameCode: code,
+                    gameTitle: title,
+                    cheats: cheats
+                )
+            )
+            cheats.removeAll()
+        }
+
+        for line in lines {
+            if line.hasPrefix("_S ") {
+                flushGame()
+                currentGameCode = String(line.dropFirst(3))
+                currentGameTitle = nil
+            } else if line.hasPrefix("_G "), currentGameTitle == nil {
+                currentGameTitle = String(line.dropFirst(3))
+            } else if line.hasPrefix("_C0 ") || line.hasPrefix("_C1 ") {
+                flushCheat()
+                currentCheatName = String(line.dropFirst(4))
+            } else if line.hasPrefix("_L ") {
+                currentCheatLines.append(line)
+            }
+        }
+
+        flushGame()
+        return results
+    }
 }
 
 

@@ -830,3 +830,25 @@ Si vous souhaitez améliorer votre configuration, PlayCase est le complément id
 "NotInstallMeloNX" = "MeloNX n’est pas installé";
 "FetchGamesFromMeloNX" = "Importer des jeux depuis MeloNX";
 "ChangeAlert" = "Le contenu a été modifié. Fermer maintenant entraînera la perte des modifications. Continuer la fermeture ?";
+
+"JGenesisAlert" = "Désolé, le cœur JGenesis ne prend en charge que les fichiers ROM .chd.";
+"RedeemOfferCode" = "Échanger l'Offre";
+"CheatImportFailed" = "Échec de l'importation. Le fichier n'a pas pu être analysé ou aucun code de triche correspondant n'a été trouvé.";
+"RemoveAllCheats" = "Supprimer Toutes les Triches";
+"RemoveAllCheatsAlert" = "Êtes-vous sûr de vouloir supprimer tous les codes de triche ? Cette action ne peut pas être annulée.";
+"CheatCodeStatus" = "Activé";
+"Background" = "Arrière-plan";
+"AddBackgroundForLandscape" = "Ajouter un Arrière-plan Paysage";
+"AddBackgroundForPortrait" = "Ajouter un Arrière-plan Portrait";
+"UpdateBackground" = "Définir l'Arrière-plan";
+"UpdateBackgroundForGame" = "Définir pour Ce Jeu";
+"UpdateBackgroundForConsole" = "Définir pour la Plateforme %@";
+"UpdateBackgroundForGlobal" = "Définir Globalement";
+"RemoveBackgroundForGame" = "Supprimer l'Arrière-plan du Jeu";
+"RemoveBackgroundForConsole" = "Supprimer l'Arrière-plan de la Plateforme %@";
+"RemoveBackgroundForGlobal" = "Supprimer l'Arrière-plan Global";
+"ShaderConfigAlert" = "Défini pour %@.";
+"Global" = "Global";
+"RemoveShaderForGlobal" = "Supprimer le Shader Global";
+"FeaturedItems" = "Articles en Vedette";
+"ReUpload" = "Téléverser à Nouveau";

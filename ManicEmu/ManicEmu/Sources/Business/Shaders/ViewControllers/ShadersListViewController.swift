@@ -9,7 +9,7 @@
 class ShadersListViewController: BaseViewController {
     
     private lazy var shadersListView: ShadersListView = {
-        let view = ShadersListView(showClose: showClose, initType: initType, usingShaderPath: usingShaderPath)
+        let view = ShadersListView(showClose: showClose, initType: initType, ignoreShaderConfig: true, usingShaderPath: usingShaderPath)
         view.didTapClose = {[weak self] in
             self?.dismiss(animated: true)
         }

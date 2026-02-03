@@ -89,6 +89,22 @@
 		57399B192E42EDEA00AB73DD /* DeadZoneControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57399B182E42EDE800AB73DD /* DeadZoneControl.swift */; };
 		5739D1BE2DA79D2A0090409D /* DataExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5739D1BD2DA79D220090409D /* DataExtension.swift */; };
 		573BECBD2D1D3F6B008AD18D /* HomeTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573BECBC2D1D3F6B008AD18D /* HomeTabBar.swift */; };
+		573CED7E2F1CE2D900EA24F1 /* desmume.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CED7C2F1CE2C100EA24F1 /* desmume.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573CEE0E2F20D05800EA24F1 /* RomPatcherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */; };
+		573CEE122F20D46D00EA24F1 /* LocalWebServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */; };
+		573CEE2B2F21036800EA24F1 /* MultiDiscAddCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE292F21035800EA24F1 /* MultiDiscAddCollectionCell.swift */; };
+		573CEE3D2F21431300EA24F1 /* FlexBackground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE392F21430D00EA24F1 /* FlexBackground.swift */; };
+		573CEE6D2F224FB300EA24F1 /* ShaderConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE6B2F224FAE00EA24F1 /* ShaderConfig.swift */; };
+		573CEE812F2338BC00EA24F1 /* A2600.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE7F2F2338B700EA24F1 /* A2600.swift */; };
+		573CEE872F2338D100EA24F1 /* A5200.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE822F2338C000EA24F1 /* A5200.swift */; };
+		573CEE8C2F2338D800EA24F1 /* A7800.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE882F2338D500EA24F1 /* A7800.swift */; };
+		573CEE912F23396400EA24F1 /* Jaguar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE902F23396200EA24F1 /* Jaguar.swift */; };
+		573CEE962F23396D00EA24F1 /* Lynx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573CEE952F23396C00EA24F1 /* Lynx.swift */; };
+		573CEE9F2F23404B00EA24F1 /* stella.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9C2F23403100EA24F1 /* stella.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573CEEA22F23405800EA24F1 /* atari800.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE992F23403100EA24F1 /* atari800.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573CEEA52F23405F00EA24F1 /* prosystem.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9B2F23403100EA24F1 /* prosystem.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573CEEA82F23407500EA24F1 /* holani.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9A2F23403100EA24F1 /* holani.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		573CEEAB2F23408400EA24F1 /* virtualjaguar.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 573CEE9D2F23403100EA24F1 /* virtualjaguar.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		5744C6622E34D6E20088081A /* KeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 5744C6612E34D6E20088081A /* KeyboardKit */; };
 		5744C6CF2E360AF00088081A /* UIControllerKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C6CE2E360AD50088081A /* UIControllerKit.swift */; };
 		5744C6FF2E368BB40088081A /* NoControllCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */; };
@@ -106,6 +122,7 @@
 		574ABEBC2E609FE60045F76E /* GBA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574ABEBB2E609FE30045F76E /* GBA.swift */; };
 		574ABEC42E60A3C30045F76E /* vbam.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 574ABE952E6020880045F76E /* vbam.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		574ABEC52E60A3C90045F76E /* mgba.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 574ABE942E6020880045F76E /* mgba.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		574BCC742F324C92009BD74E /* Cipher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574BCC732F324C8E009BD74E /* Cipher.swift */; };
 		57526B7E2EADEED0003F91BD /* FDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57526B7D2EADEECD003F91BD /* FDS.swift */; };
 		5754D8882E274AA5001EA5ED /* OnlinePlaySettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */; };
 		5754D88B2E274AC7001EA5ED /* OnlinePlaySettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */; };
@@ -119,6 +136,8 @@
 		575A39D02DCD2B3E00B28FC2 /* UIImageViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575A39CF2DCD2B3500B28FC2 /* UIImageViewExtensions.swift */; };
 		575A39D22DCD2F9C00B28FC2 /* GameCoverSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575A39D12DCD2F9000B28FC2 /* GameCoverSearchViewController.swift */; };
 		575A39D42DCD9C7100B28FC2 /* GameCoverSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575A39D32DCD9C7000B28FC2 /* GameCoverSearchView.swift */; };
+		575AD5832F24902F00C2B7E4 /* LibretroKeyboardCode.h in Headers */ = {isa = PBXBuildFile; fileRef = 575AD5812F24902F00C2B7E4 /* LibretroKeyboardCode.h */; };
+		575AD5842F24902F00C2B7E4 /* LibretroKeyboardCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 575AD5822F24902F00C2B7E4 /* LibretroKeyboardCode.m */; };
 		575DD2C72DDB809600EB1DBB /* Libretro.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57BFBE172DD32F7700AABF98 /* Libretro.framework */; };
 		575FF8E82D34A6DF0043B2F3 /* System.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FF8E72D34A6DF0043B2F3 /* System.swift */; };
 		575FF91D2D350F210043B2F3 /* PlayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 575FF91C2D350F170043B2F3 /* PlayViewController.swift */; };
@@ -150,7 +169,7 @@
 		5768FCC32DAE00B4009974D1 /* seed_db.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5768F88E2DAE00B4009974D1 /* seed_db.cpp */; };
 		5768FCC42DAE00B4009974D1 /* CameraInterface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5768FC1A2DAE00B4009974D1 /* CameraInterface.mm */; };
 		5768FCC52DAE00B4009974D1 /* arm_dyncom_thumb.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5768F8652DAE00B4009974D1 /* arm_dyncom_thumb.cpp */; };
-		5768FCC62DAE00B4009974D1 /* openal_input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5768F83C2DAE00B4009974D1 /* openal_input.cpp */; };
+		5768FCC62DAE00B4009974D1 /* openal_input.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5768F83C2DAE00B4009974D1 /* openal_input.mm */; };
 		5768FCC72DAE00B4009974D1 /* am.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5768F8CB2DAE00B4009974D1 /* am.cpp */; };
 		5768FCC82DAE00B4009974D1 /* perf_stats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5768F97E2DAE00B4009974D1 /* perf_stats.cpp */; };
 		5768FCC92DAE00B4009974D1 /* nim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 5768F92F2DAE00B4009974D1 /* nim.cpp */; };
@@ -600,7 +619,8 @@
 		5781F4992EEE71B500916D8B /* ShaderOrderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4972EEE71A800916D8B /* ShaderOrderView.swift */; };
 		5781F49E2EEE957200916D8B /* ShaderOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */; };
 		5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */; };
-		5781F5462EF1384500916D8B /* MelonNXKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* MelonNXKit.swift */; };
+		5781F5462EF1384500916D8B /* MeloNXKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5442EF1383F00916D8B /* MeloNXKit.swift */; };
+		5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5781F5AB2EF45C6900916D8B /* JGenesisView.swift */; };
 		579076E32D8A990700ED90FB /* FunctionButtonContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */; };
 		579076F02D8AAC2900ED90FB /* TransparentHoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */; };
 		57913AF52D5D89CF004D51AA /* TouchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57913AF42D5D89CC004D51AA /* TouchController.swift */; };
@@ -623,6 +643,7 @@
 		57A4816A2E7F05D2001D4598 /* NDS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A481692E7F05CD001D4598 /* NDS.swift */; };
 		57AD35EA2D7DEB9D0092FD03 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35E92D7DEB900092FD03 /* WebViewController.swift */; };
 		57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */; };
+		57AEB9DC2F2614C6005CB496 /* NavigationBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */; };
 		57B5E3142ECC625E00DE17E9 /* Arcade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5E3122ECC625600DE17E9 /* Arcade.swift */; };
 		57B5E31B2ECC738500DE17E9 /* mame.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57B5E3192ECC735D00DE17E9 /* mame.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57B5E3242ECCCD0800DE17E9 /* MAMEKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */; };
@@ -860,6 +881,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				573CEEAB2F23408400EA24F1 /* virtualjaguar.libretro.framework in Embed Frameworks */,
+				573CEEA82F23407500EA24F1 /* holani.libretro.framework in Embed Frameworks */,
+				573CEEA52F23405F00EA24F1 /* prosystem.libretro.framework in Embed Frameworks */,
+				573CEEA22F23405800EA24F1 /* atari800.libretro.framework in Embed Frameworks */,
+				573CEE9F2F23404B00EA24F1 /* stella.libretro.framework in Embed Frameworks */,
+				573CED7E2F1CE2D900EA24F1 /* desmume.libretro.framework in Embed Frameworks */,
 				571F835A2ECF485500D52663 /* azahar.libretro.framework in Embed Frameworks */,
 				57B5E34A2ECE0A2800DE17E9 /* fbneo.libretro.framework in Embed Frameworks */,
 				57B5E31B2ECC738500DE17E9 /* mame.libretro.framework in Embed Frameworks */,
@@ -998,6 +1025,22 @@
 		57399B182E42EDE800AB73DD /* DeadZoneControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeadZoneControl.swift; sourceTree = "<group>"; };
 		5739D1BD2DA79D220090409D /* DataExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtension.swift; sourceTree = "<group>"; };
 		573BECBC2D1D3F6B008AD18D /* HomeTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBar.swift; sourceTree = "<group>"; };
+		573CED7C2F1CE2C100EA24F1 /* desmume.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = desmume.libretro.framework; path = ../Cores/desmume.libretro.framework; sourceTree = SOURCE_ROOT; };
+		573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomPatcherView.swift; sourceTree = "<group>"; };
+		573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalWebServer.swift; sourceTree = "<group>"; };
+		573CEE292F21035800EA24F1 /* MultiDiscAddCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiDiscAddCollectionCell.swift; sourceTree = "<group>"; };
+		573CEE392F21430D00EA24F1 /* FlexBackground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexBackground.swift; sourceTree = "<group>"; };
+		573CEE6B2F224FAE00EA24F1 /* ShaderConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderConfig.swift; sourceTree = "<group>"; };
+		573CEE7F2F2338B700EA24F1 /* A2600.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A2600.swift; sourceTree = "<group>"; };
+		573CEE822F2338C000EA24F1 /* A5200.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A5200.swift; sourceTree = "<group>"; };
+		573CEE882F2338D500EA24F1 /* A7800.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = A7800.swift; sourceTree = "<group>"; };
+		573CEE902F23396200EA24F1 /* Jaguar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Jaguar.swift; sourceTree = "<group>"; };
+		573CEE952F23396C00EA24F1 /* Lynx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lynx.swift; sourceTree = "<group>"; };
+		573CEE992F23403100EA24F1 /* atari800.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = atari800.libretro.framework; path = ../Cores/atari800.libretro.framework; sourceTree = SOURCE_ROOT; };
+		573CEE9A2F23403100EA24F1 /* holani.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = holani.libretro.framework; path = ../Cores/holani.libretro.framework; sourceTree = SOURCE_ROOT; };
+		573CEE9B2F23403100EA24F1 /* prosystem.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = prosystem.libretro.framework; path = ../Cores/prosystem.libretro.framework; sourceTree = SOURCE_ROOT; };
+		573CEE9C2F23403100EA24F1 /* stella.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = stella.libretro.framework; path = ../Cores/stella.libretro.framework; sourceTree = SOURCE_ROOT; };
+		573CEE9D2F23403100EA24F1 /* virtualjaguar.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = virtualjaguar.libretro.framework; path = ../Cores/virtualjaguar.libretro.framework; sourceTree = SOURCE_ROOT; };
 		5744C6CE2E360AD50088081A /* UIControllerKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIControllerKit.swift; sourceTree = "<group>"; };
 		5744C6FE2E368BA50088081A /* NoControllCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoControllCollectionView.swift; sourceTree = "<group>"; };
 		5744C7172E375BF00088081A /* PM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PM.swift; sourceTree = "<group>"; };
@@ -1014,6 +1057,7 @@
 		574ABE952E6020880045F76E /* vbam.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = vbam.libretro.framework; path = ../Cores/vbam.libretro.framework; sourceTree = SOURCE_ROOT; };
 		574ABE982E6021520045F76E /* GBC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GBC.swift; sourceTree = "<group>"; };
 		574ABEBB2E609FE30045F76E /* GBA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GBA.swift; sourceTree = "<group>"; };
+		574BCC732F324C8E009BD74E /* Cipher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cipher.swift; sourceTree = "<group>"; };
 		57526B7D2EADEECD003F91BD /* FDS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FDS.swift; sourceTree = "<group>"; };
 		5754D8872E274A9D001EA5ED /* OnlinePlaySettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlaySettingViewController.swift; sourceTree = "<group>"; };
 		5754D88A2E274AB9001EA5ED /* OnlinePlaySettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlinePlaySettingView.swift; sourceTree = "<group>"; };
@@ -1027,6 +1071,8 @@
 		575A39D12DCD2F9000B28FC2 /* GameCoverSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoverSearchViewController.swift; sourceTree = "<group>"; };
 		575A39D32DCD9C7000B28FC2 /* GameCoverSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameCoverSearchView.swift; sourceTree = "<group>"; };
 		575A3A422DCEE9F300B28FC2 /* Config-SideloadRelease.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "Config-SideloadRelease.xcconfig"; sourceTree = "<group>"; };
+		575AD5812F24902F00C2B7E4 /* LibretroKeyboardCode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LibretroKeyboardCode.h; sourceTree = "<group>"; };
+		575AD5822F24902F00C2B7E4 /* LibretroKeyboardCode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LibretroKeyboardCode.m; sourceTree = "<group>"; };
 		575F03A62DD59AED00950399 /* manic_joypad.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = manic_joypad.m; path = ../Cores/Libretro/input/drivers_joypad/manic_joypad.m; sourceTree = SOURCE_ROOT; };
 		575F03BA2DD5E46B00950399 /* platform_darwin.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = platform_darwin.m; path = ../Cores/Libretro/frontend/drivers/platform_darwin.m; sourceTree = SOURCE_ROOT; };
 		575FF8E72D34A6DF0043B2F3 /* System.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = System.swift; sourceTree = "<group>"; };
@@ -1056,7 +1102,7 @@
 		5768F8392DAE00B4009974D1 /* dsp_interface.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = dsp_interface.cpp; sourceTree = "<group>"; };
 		5768F83A2DAE00B4009974D1 /* input_details.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = input_details.cpp; sourceTree = "<group>"; };
 		5768F83B2DAE00B4009974D1 /* interpolate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = interpolate.cpp; sourceTree = "<group>"; };
-		5768F83C2DAE00B4009974D1 /* openal_input.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openal_input.cpp; sourceTree = "<group>"; };
+		5768F83C2DAE00B4009974D1 /* openal_input.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = openal_input.mm; sourceTree = "<group>"; };
 		5768F83D2DAE00B4009974D1 /* openal_sink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = openal_sink.cpp; sourceTree = "<group>"; };
 		5768F83E2DAE00B4009974D1 /* sdl3_sink.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sdl3_sink.cpp; sourceTree = "<group>"; };
 		5768F83F2DAE00B4009974D1 /* sink_details.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sink_details.cpp; sourceTree = "<group>"; };
@@ -1676,7 +1722,8 @@
 		5781F4972EEE71A800916D8B /* ShaderOrderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderOrderView.swift; sourceTree = "<group>"; };
 		5781F49C2EEE956900916D8B /* ShaderOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShaderOrderCell.swift; sourceTree = "<group>"; };
 		5781F4E92EEFE44800916D8B /* NumbersExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersExtensions.swift; sourceTree = "<group>"; };
-		5781F5442EF1383F00916D8B /* MelonNXKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MelonNXKit.swift; sourceTree = "<group>"; };
+		5781F5442EF1383F00916D8B /* MeloNXKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeloNXKit.swift; sourceTree = "<group>"; };
+		5781F5AB2EF45C6900916D8B /* JGenesisView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JGenesisView.swift; sourceTree = "<group>"; };
 		579076E22D8A98FC00ED90FB /* FunctionButtonContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionButtonContainerView.swift; sourceTree = "<group>"; };
 		579076EF2D8AAC2800ED90FB /* TransparentHoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransparentHoleView.swift; sourceTree = "<group>"; };
 		57913AF42D5D89CC004D51AA /* TouchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TouchController.swift; sourceTree = "<group>"; };
@@ -1702,6 +1749,7 @@
 		57AD35EB2D7DEF2E0092FD03 /* SheerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheerExtensions.swift; sourceTree = "<group>"; };
 		57ADFED92D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/InfoPlist.strings"; sourceTree = "<group>"; };
 		57ADFEDA2D94F52500502E5C /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBlurView.swift; sourceTree = "<group>"; };
 		57B5E3122ECC625600DE17E9 /* Arcade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Arcade.swift; sourceTree = "<group>"; };
 		57B5E3192ECC735D00DE17E9 /* mame.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = mame.libretro.framework; path = ../Cores/mame.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAMEKit.swift; sourceTree = "<group>"; };
@@ -2140,6 +2188,14 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		573CEE362F2142CF00EA24F1 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				573CEE392F21430D00EA24F1 /* FlexBackground.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		574789B82D4F8760006F0D99 /* SectionIndexView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2287,7 +2343,7 @@
 				5768F8392DAE00B4009974D1 /* dsp_interface.cpp */,
 				5768F83A2DAE00B4009974D1 /* input_details.cpp */,
 				5768F83B2DAE00B4009974D1 /* interpolate.cpp */,
-				5768F83C2DAE00B4009974D1 /* openal_input.cpp */,
+				5768F83C2DAE00B4009974D1 /* openal_input.mm */,
 				5768F83D2DAE00B4009974D1 /* openal_sink.cpp */,
 				5768F83E2DAE00B4009974D1 /* sdl3_sink.cpp */,
 				5768F83F2DAE00B4009974D1 /* sink_details.cpp */,
@@ -3712,6 +3768,7 @@
 				577006562D410D7F00762E8F /* BrowserItemCollectionViewCell.swift */,
 				576C46302E16D8F20008D087 /* MultiDiscDescCollectionCell.swift */,
 				576C46342E16DA0D0008D087 /* MultiDiscItemCollectionCell.swift */,
+				573CEE292F21035800EA24F1 /* MultiDiscAddCollectionCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -3719,6 +3776,7 @@
 		5770069F2D44CB6900762E8F /* Skin */ = {
 			isa = PBXGroup;
 			children = (
+				573CEE362F2142CF00EA24F1 /* Models */,
 				57CCB3A72D66CE4D0036476B /* Views */,
 				577006A02D44CB7400762E8F /* ViewControllers */,
 			);
@@ -3738,6 +3796,7 @@
 		5781F46B2EED6DB600916D8B /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				573CEE6B2F224FAE00EA24F1 /* ShaderConfig.swift */,
 				5781F46D2EED6DBC00916D8B /* Shader.swift */,
 			);
 			path = Models;
@@ -3871,6 +3930,8 @@
 				570CF8332EEA58DE00696C1B /* AzaharKeyboardConfig.m */,
 				5781F4542EECF7CF00916D8B /* LibretroShaders.h */,
 				5781F4552EECF7CF00916D8B /* LibretroShaders.m */,
+				575AD5812F24902F00C2B7E4 /* LibretroKeyboardCode.h */,
+				575AD5822F24902F00C2B7E4 /* LibretroKeyboardCode.m */,
 				57BFBE642DD3330900AABF98 /* keyboard_event_apple.h */,
 				57BFBE622DD332FF00AABF98 /* input_keymaps.h */,
 				575F03A62DD59AED00950399 /* manic_joypad.m */,
@@ -3896,6 +3957,12 @@
 		57BFBE702DD335FD00AABF98 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				573CEE992F23403100EA24F1 /* atari800.libretro.framework */,
+				573CEE9A2F23403100EA24F1 /* holani.libretro.framework */,
+				573CEE9B2F23403100EA24F1 /* prosystem.libretro.framework */,
+				573CEE9C2F23403100EA24F1 /* stella.libretro.framework */,
+				573CEE9D2F23403100EA24F1 /* virtualjaguar.libretro.framework */,
+				573CED7C2F1CE2C100EA24F1 /* desmume.libretro.framework */,
 				571F83582ECF484700D52663 /* azahar.libretro.framework */,
 				57B5E3482ECE0A1A00DE17E9 /* fbneo.libretro.framework */,
 				57B5E3192ECC735D00DE17E9 /* mame.libretro.framework */,
@@ -4129,6 +4196,11 @@
 		57F0D8402DE2CD7500760F57 /* Cores */ = {
 			isa = PBXGroup;
 			children = (
+				573CEE952F23396C00EA24F1 /* Lynx.swift */,
+				573CEE902F23396200EA24F1 /* Jaguar.swift */,
+				573CEE882F2338D500EA24F1 /* A7800.swift */,
+				573CEE822F2338C000EA24F1 /* A5200.swift */,
+				573CEE7F2F2338B700EA24F1 /* A2600.swift */,
 				57B5E3122ECC625600DE17E9 /* Arcade.swift */,
 				57526B7D2EADEECD003F91BD /* FDS.swift */,
 				57A481692E7F05CD001D4598 /* NDS.swift */,
@@ -4233,6 +4305,9 @@
 		A561F94D257DCB5200E800A8 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				57AEB9DA2F2614BF005CB496 /* NavigationBlurView.swift */,
+				573CEE0C2F20D05100EA24F1 /* RomPatcherView.swift */,
+				5781F5AB2EF45C6900916D8B /* JGenesisView.swift */,
 				57EED0752ECB8172003971BD /* IconView.swift */,
 				A392D5B22E9796B800F920E7 /* ServiceIconView.swift */,
 				A392D5632E96682600F920E7 /* DisabledTapSwitch.swift */,
@@ -4296,6 +4371,7 @@
 				579C114A2D1D0B1900CFD1F5 /* ApplicationSceneDelegate.swift */,
 				57F1A9332D7D6D7C00D0CC93 /* ExternalSceneDelegate.swift */,
 				A58C3F4A248E3DB50099E068 /* Constants.swift */,
+				574BCC732F324C8E009BD74E /* Cipher.swift */,
 				A58C3F4C248E43B30099E068 /* Bridging-Header.h */,
 			);
 			path = Base;
@@ -4367,7 +4443,8 @@
 		A5A69BA9256E56FF00D51C09 /* Others */ = {
 			isa = PBXGroup;
 			children = (
-				5781F5442EF1383F00916D8B /* MelonNXKit.swift */,
+				573CEE112F20D46B00EA24F1 /* LocalWebServer.swift */,
+				5781F5442EF1383F00916D8B /* MeloNXKit.swift */,
 				57B5E3222ECCCD0100DE17E9 /* MAMEKit.swift */,
 				5771C1A72E6207650062EDE0 /* MobyGamesKit.swift */,
 				5744C6CE2E360AD50088081A /* UIControllerKit.swift */,
@@ -4517,6 +4594,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57BFBE5B2DD332A100AABF98 /* LibretroCore.h in Headers */,
+				575AD5832F24902F00C2B7E4 /* LibretroKeyboardCode.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4775,7 +4853,7 @@
 				5768FCC32DAE00B4009974D1 /* seed_db.cpp in Sources */,
 				5768FCC42DAE00B4009974D1 /* CameraInterface.mm in Sources */,
 				5768FCC52DAE00B4009974D1 /* arm_dyncom_thumb.cpp in Sources */,
-				5768FCC62DAE00B4009974D1 /* openal_input.cpp in Sources */,
+				5768FCC62DAE00B4009974D1 /* openal_input.mm in Sources */,
 				5768FCC72DAE00B4009974D1 /* am.cpp in Sources */,
 				5768FCC82DAE00B4009974D1 /* perf_stats.cpp in Sources */,
 				5768FCC92DAE00B4009974D1 /* nim.cpp in Sources */,
@@ -5146,6 +5224,7 @@
 			files = (
 				57BFBE6B2DD3331A00AABF98 /* griffin_glslang.cpp in Sources */,
 				5781F4572EECF7CF00916D8B /* LibretroShaders.m in Sources */,
+				575AD5842F24902F00C2B7E4 /* LibretroKeyboardCode.m in Sources */,
 				57BFBE6C2DD3331A00AABF98 /* griffin_cpp.cpp in Sources */,
 				57BFBE6E2DD3331A00AABF98 /* griffin_objc.m in Sources */,
 				57BFBE5F2DD332DA00AABF98 /* LibretroCore.m in Sources */,
@@ -5244,6 +5323,7 @@
 				574ABEBC2E609FE60045F76E /* GBA.swift in Sources */,
 				5754D8932E2751CA001EA5ED /* WFC.swift in Sources */,
 				5770055F2D3CC40400762E8F /* Skin.swift in Sources */,
+				573CEE8C2F2338D800EA24F1 /* A7800.swift in Sources */,
 				57913B492D5ED7D7004D51AA /* SaveItemCollectionViewCell.swift in Sources */,
 				577005D42D3F2F8E00762E8F /* WebServer.swift in Sources */,
 				B2F4B7B02A138C74003B0E07 /* PhotoSaver.swift in Sources */,
@@ -5251,6 +5331,7 @@
 				B278BA812A32DA9000D0458D /* PurchaseManager.swift in Sources */,
 				57DF840C2D61B3D500AA0AAB /* BlankSlateCollectionView.swift in Sources */,
 				575FF8E82D34A6DF0043B2F3 /* System.swift in Sources */,
+				573CEE962F23396D00EA24F1 /* Lynx.swift in Sources */,
 				57DE104E2D6088BE00CDD82A /* BlankPlaceholderView.swift in Sources */,
 				57E962F82D6AB4540022914C /* PlayHistoryItemCollectionCell.swift in Sources */,
 				57CCB33B2D6584BC0036476B /* ObjectUpdatable.swift in Sources */,
@@ -5264,6 +5345,7 @@
 				5770061B2D4089ED00762E8F /* CloudDriveConnetor.swift in Sources */,
 				57AD35EC2D7DEF360092FD03 /* SheerExtensions.swift in Sources */,
 				57B6EBDB2D758819002E619C /* GameSaveMatchGameView.swift in Sources */,
+				573CEE3D2F21431300EA24F1 /* FlexBackground.swift in Sources */,
 				574789BC2D4F8769006F0D99 /* SectionIndexView.swift in Sources */,
 				57D7CF9D2EA9D23500F41540 /* TriggerProListBlankSlateView.swift in Sources */,
 				57913B402D5ED4C1004D51AA /* GameInfoViewController.swift in Sources */,
@@ -5282,6 +5364,7 @@
 				57A480E72E74030E001D4598 /* CheevosChallengeView.swift in Sources */,
 				57B5E3142ECC625E00DE17E9 /* Arcade.swift in Sources */,
 				5720E7AA2E541F2000EC0DA5 /* RadialGradientView.swift in Sources */,
+				573CEE0E2F20D05800EA24F1 /* RomPatcherView.swift in Sources */,
 				57B6ECC22D796B97002E619C /* CheatCodeCollectionViewCell.swift in Sources */,
 				A52C1D89257F96C90029B15B /* UIViewControllerExtensions.swift in Sources */,
 				57DE0FF82D5F456700CDD82A /* CheatCodeViewController.swift in Sources */,
@@ -5304,6 +5387,7 @@
 				577005612D3CD3AC00762E8F /* UTTypeExtensions.swift in Sources */,
 				57D7CF952EA8E7EE00F41540 /* TriggerProView.swift in Sources */,
 				5706B0372DFBEC1E0066122E /* SG1000.swift in Sources */,
+				573CEE2B2F21036800EA24F1 /* MultiDiscAddCollectionCell.swift in Sources */,
 				57EED02C2EC8D7C8003971BD /* iCloudSettingView.swift in Sources */,
 				57CCB3CD2D6775080036476B /* Database.swift in Sources */,
 				5726FED82D71B63E00041AD5 /* CacheManager.swift in Sources */,
@@ -5330,6 +5414,7 @@
 				57E8B18D2E2553CE00F93E60 /* HomeMenuImage.swift in Sources */,
 				57DCE7FF2E0D9F300079E3AA /* NavigationRow.swift in Sources */,
 				57DCE8002E0D9F300079E3AA /* TapActionRow.swift in Sources */,
+				573CEE872F2338D100EA24F1 /* A5200.swift in Sources */,
 				57D7CF4B2EA736C900F41540 /* TriggerProListCell.swift in Sources */,
 				57DCE8012E0D9F300079E3AA /* DetailText.swift in Sources */,
 				5720E7ED2E547FE100EC0DA5 /* AchievementsProfile.swift in Sources */,
@@ -5346,6 +5431,7 @@
 				57DCE8072E0D9F300079E3AA /* Icon.swift in Sources */,
 				57DCE8082E0D9F300079E3AA /* Configurable.swift in Sources */,
 				57DCE8092E0D9F300079E3AA /* SwitchCell.swift in Sources */,
+				574BCC742F324C92009BD74E /* Cipher.swift in Sources */,
 				57DCE80A2E0D9F300079E3AA /* Section.swift in Sources */,
 				57DCE80B2E0D9F300079E3AA /* Subtitle.swift in Sources */,
 				57DCE80C2E0D9F300079E3AA /* Row.swift in Sources */,
@@ -5354,6 +5440,7 @@
 				57DCE80E2E0D9F300079E3AA /* RadioSection.swift in Sources */,
 				57DCE80F2E0D9F300079E3AA /* TapActionCell.swift in Sources */,
 				57F0D81A2DE1C2D700760F57 /* GameListStyleCollectionViewCell.swift in Sources */,
+				573CEE122F20D46D00EA24F1 /* LocalWebServer.swift in Sources */,
 				5706AFBD2DF7D8AF0066122E /* BIOSSelectionViewController.swift in Sources */,
 				570CF8872EEB0AD200696C1B /* ShadersListViewController.swift in Sources */,
 				5770064F2D40E45F00762E8F /* CloudDriveBrowserViewController.swift in Sources */,
@@ -5375,6 +5462,7 @@
 				5706B0FD2DFFED170066122E /* menu_pipeline.metal in Sources */,
 				570F59BE2DC91FD9007BFD92 /* ColorPickerViewController.swift in Sources */,
 				57478A712D52037F006F0D99 /* RandomGameCollectionReusableView.swift in Sources */,
+				573CEE6D2F224FB300EA24F1 /* ShaderConfig.swift in Sources */,
 				5720E8112E559EE600EC0DA5 /* RetroAchievementCountView.swift in Sources */,
 				577005B92D3E71BC00762E8F /* ImportService.swift in Sources */,
 				570622EC2D7BD2FE004F09E7 /* ShaderManager.swift in Sources */,
@@ -5404,6 +5492,7 @@
 				577006092D3F980400762E8F /* LowestHaderReusableView.swift in Sources */,
 				570F592E2DC885EF007BFD92 /* ThemeViewController.swift in Sources */,
 				57B5E3242ECCCD0800DE17E9 /* MAMEKit.swift in Sources */,
+				573CEE912F23396400EA24F1 /* Jaguar.swift in Sources */,
 				57DA89322D8328510074052A /* CKAccountStatusExtensions.swift in Sources */,
 				5720E7652E540F7200EC0DA5 /* RetroAchievementsLoginView.swift in Sources */,
 				5781F4EB2EEFE44F00916D8B /* NumbersExtensions.swift in Sources */,
@@ -5426,6 +5515,7 @@
 				57047A142D856DBD00C62FF6 /* PriceView.swift in Sources */,
 				A392D5B32E9796B900F920E7 /* ServiceIconView.swift in Sources */,
 				5706AFCF2DF7FC730066122E /* SettingDescriptionCollectionViewCell.swift in Sources */,
+				573CEE812F2338BC00EA24F1 /* A2600.swift in Sources */,
 				575FF91D2D350F210043B2F3 /* PlayViewController.swift in Sources */,
 				5781F4842EEE586000916D8B /* ShaderInfoInputCell.swift in Sources */,
 				5706B0452DFBF7DF0066122E /* MCD.swift in Sources */,
@@ -5445,7 +5535,7 @@
 				A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */,
 				57F632852D6EB485007270E8 /* UIScreenExtensions.swift in Sources */,
 				57B6ECC92D797CA3002E619C /* AddCheatCodeTitleCell.swift in Sources */,
-				5781F5462EF1384500916D8B /* MelonNXKit.swift in Sources */,
+				5781F5462EF1384500916D8B /* MeloNXKit.swift in Sources */,
 				5706B0402DFBEC300066122E /* MS.swift in Sources */,
 				A5A001F324555A5F006E0F0E /* AppDelegate.swift in Sources */,
 				575A39CE2DCD011500B28FC2 /* OnlineCoverManager.swift in Sources */,
@@ -5464,6 +5554,7 @@
 				57D029192E6C9C5200BF1F9D /* CheevosProgressView.swift in Sources */,
 				57047A0A2D85217C00C62FF6 /* PurchaseView.swift in Sources */,
 				57EC6AB82D803810002920F0 /* PlayHistoryBlankSlateView.swift in Sources */,
+				5781F5AE2EF45C8200916D8B /* JGenesisView.swift in Sources */,
 				B23E3DF22A0C9D9B0068EADA /* GradientView.swift in Sources */,
 				57EC6AC82D8119D9002920F0 /* SyncManager.swift in Sources */,
 				57655C1B2DF6AD04003E4A6E /* MD.swift in Sources */,
@@ -5475,6 +5566,7 @@
 				57E0CC532D8EACC70027FB8C /* ResourcesKit.swift in Sources */,
 				570CF88C2EEB0AE000696C1B /* ShadersListView.swift in Sources */,
 				571F837B2ECFFE4900D52663 /* AzaharAdvancedSettingViewController.swift in Sources */,
+				57AEB9DC2F2614C6005CB496 /* NavigationBlurView.swift in Sources */,
 				5770069A2D44B9B500762E8F /* GamesNavigationView.swift in Sources */,
 				577006A22D44CB9C00762E8F /* SkinSettingsViewController.swift in Sources */,
 				5770069E2D44C01800762E8F /* GamesCollectionReusableView.swift in Sources */,
@@ -5805,7 +5897,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 575A3A422DCEE9F300B28FC2 /* Config-SideloadRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -6022,7 +6114,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "STATIC_LIBRARY SIDE_LOAD";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";
@@ -6163,7 +6255,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 579AB9D52E6C1118000868CB /* Config-SideloadDebug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -6291,7 +6383,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "STATIC_LIBRARY SIDE_LOAD CRASH_COLLECT";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";
@@ -6693,7 +6785,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57E0363F2DBBE17100B222E1 /* Config-DebugSimulator.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7028,7 +7120,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "STATIC_LIBRARY DEBUG";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";
@@ -7171,7 +7263,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 57F456CF2DA98BB8007203AF /* Config-DevRelease.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7403,7 +7495,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "STATIC_LIBRARY DEBUG";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";
@@ -7610,7 +7702,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B562A0A420E00053A4C /* Config-Debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -7842,7 +7934,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "STATIC_LIBRARY DEBUG";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";
@@ -7855,7 +7947,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B2C97B572A0A423B00053A4C /* Config-Release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32";
+				ASSETCATALOG_COMPILER_ALTERNATE_APPICON_NAMES = "AppIcon_Dark AppIcon_Retro AppIcon_Color AppIcon_Halloween AppIcon_Xmas AppIcon_Pixel32 AppIcon_ChineseNewYear";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -8072,7 +8164,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = STATIC_LIBRARY;
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/ManicEmu/Sources/Base/Bridging-Header.h";

@@ -14,8 +14,8 @@ import Kingfisher
 class GameCoverSearchView: BaseView {
     static var GameCoverHeight: CGFloat = 0
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -74,13 +74,14 @@ class GameCoverSearchView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid + Constants.Size.ItemHeightMin + Constants.Size.ContentSpaceMin )
         }
         
-        topBlurView.addSubview(closeButton)
+        navigationBlurView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
             make.top.equalToSuperview().offset(Constants.Size.ContentSpaceMid)
@@ -88,8 +89,8 @@ class GameCoverSearchView: BaseView {
         }
         
         let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
-        textFieldContainer.backgroundColor = Constants.Color.BackgroundSecondary
-        topBlurView.addSubview(textFieldContainer)
+        textFieldContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        navigationBlurView.addSubview(textFieldContainer)
         textFieldContainer.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(Constants.Size.ItemHeightMid)
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)

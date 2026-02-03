@@ -843,3 +843,25 @@ Press the controller button to complete mapping...";
 "FetchGamesFromMeloNX" = "Import Games from MeloNX";
 
 "ChangeAlert" = "The content has been changed. Closing now will lose all changes. Continue closing?";
+
+"JGenesisAlert" = "Sorry, the JGenesis core only supports .chd ROM files.";
+"RedeemOfferCode" = "Redeem Offer";
+"CheatImportFailed" = "Import failed. The file could not be parsed or no matching cheat codes were found.";
+"RemoveAllCheats" = "Remove All Cheats";
+"RemoveAllCheatsAlert" = "Are you sure you want to remove all cheat codes? This action cannot be undone.";
+"CheatCodeStatus" = "Enabled";
+"Background" = "Background";
+"AddBackgroundForLandscape" = "Add Landscape Background";
+"AddBackgroundForPortrait" = "Add Portrait Background";
+"UpdateBackground" = "Set Background";
+"UpdateBackgroundForGame" = "Set for This Game";
+"UpdateBackgroundForConsole" = "Set for %@ Platform";
+"UpdateBackgroundForGlobal" = "Set Globally";
+"RemoveBackgroundForGame" = "Remove Game Background";
+"RemoveBackgroundForConsole" = "Remove %@ Platform Background";
+"RemoveBackgroundForGlobal" = "Remove Global Background";
+"ShaderConfigAlert" = "Set for %@.";
+"Global" = "Global";
+"RemoveShaderForGlobal" = "Remove Global Shader";
+"FeaturedItems" = "Featured Items";
+"ReUpload" = "Re-upload";

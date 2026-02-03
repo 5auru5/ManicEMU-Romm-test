@@ -359,6 +359,6 @@ class INIFile {
         }
         lines += thisNote.trimmingCharacters(in: .newlines)
         
-        try lines.write(to: URL(fileURLWithPath: fileName), atomically: true, encoding: encoding)
+        try lines.writeWithCompletePath(to: URL(fileURLWithPath: fileName))
     }
 }

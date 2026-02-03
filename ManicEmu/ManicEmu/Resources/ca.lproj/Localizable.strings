@@ -828,3 +828,25 @@ Si voleu millorar la vostra configuració, PlayCase és el complement perfecte p
 "NotInstallMeloNX" = "MeloNX no està instal·lat";
 "FetchGamesFromMeloNX" = "Importa jocs des de MeloNX";
 "ChangeAlert" = "El contingut s'ha canviat. Tancar ara suposarà perdre tots els canvis. Continuar tancant?";
+
+"JGenesisAlert" = "Ho sentim, el nucli JGenesis només admet fitxers ROM .chd.";
+"RedeemOfferCode" = "Canviat Oferta";
+"CheatImportFailed" = "Importació fallida. No s'ha pogut analitzar el fitxer o no s'han trobat codis de truc coincidents.";
+"RemoveAllCheats" = "Eliminar Tots els Trucs";
+"RemoveAllCheatsAlert" = "Esteu segur que voleu eliminar tots els codis de truc? Aquesta acció no es pot desfer.";
+"CheatCodeStatus" = "Habilitat";
+"Background" = "Fons";
+"AddBackgroundForLandscape" = "Afegir Fons Horizontal";
+"AddBackgroundForPortrait" = "Afegir Fons Vertical";
+"UpdateBackground" = "Establir Fons";
+"UpdateBackgroundForGame" = "Establir per a Aquest Joc";
+"UpdateBackgroundForConsole" = "Establir per a la Plataforma %@";
+"UpdateBackgroundForGlobal" = "Establir Globalment";
+"RemoveBackgroundForGame" = "Eliminar Fons del Joc";
+"RemoveBackgroundForConsole" = "Eliminar Fons de la Plataforma %@";
+"RemoveBackgroundForGlobal" = "Eliminar Fons Global";
+"ShaderConfigAlert" = "Establert per a %@.";
+"Global" = "Global";
+"RemoveShaderForGlobal" = "Eliminar Shader Global";
+"FeaturedItems" = "Articles Destacats";
+"ReUpload" = "Pujar de Nou";

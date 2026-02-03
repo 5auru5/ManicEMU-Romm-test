@@ -11,6 +11,7 @@ import RealmSwift
 import ManicEmuCore
 import ProHUD
 import BetterSegmentedControl
+import Fuse
 
 typealias ShadersListData = [ShadersListView.ShaderSource: [(sectionTitle: String, shaders: [Shader])]]
 
@@ -61,8 +62,8 @@ class ShadersListView: BaseView {
     private var didSelectIndexSearch: Bool = false
     
     /// 充当导航条
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         return view
     }()
     
@@ -114,7 +115,7 @@ class ShadersListView: BaseView {
         let segments = LabelSegment.segments(withTitles: ShaderSource.allCases.map({ $0.title }),
                                              normalFont: Constants.Font.body(),
                                              normalTextColor: Constants.Color.LabelSecondary,
-                                            selectedTextColor: Constants.Color.LabelPrimary)
+                                             selectedTextColor: Constants.Color.LabelPrimary)
         let options: [BetterSegmentedControl.Option] = [
             .backgroundColor(Constants.Color.SegmentBackground),
             .indicatorViewInset(5),
@@ -156,6 +157,16 @@ class ShadersListView: BaseView {
             self.tableView.reloadData()
             self.reloadIndexView()
         }
+        return view
+    }()
+    
+    private var searchTextField: UITextField = {
+        let view = UITextField()
+        view.textColor = Constants.Color.LabelPrimary
+        view.font = Constants.Font.body(size: .l)
+        view.clearButtonMode = .whileEditing
+        view.returnKeyType = .search
+        view.attributedPlaceholder = NSAttributedString(string: R.string.localizable.readyEditCoverSearch() + R.string.localizable.shaders(), attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelSecondary])
         return view
     }()
     
@@ -212,11 +223,25 @@ class ShadersListView: BaseView {
         return view
     }()
     
-    private var shaders = ShadersListData()
+    private var isSearch: Bool = false
+    
+    private var normalShaders = ShadersListData()
+    private var searchShaders = ShadersListData()
+    private var shaders: ShadersListData {
+        return isSearch ? searchShaders : normalShaders
+    }
+    
+    private var shaderConfig: ShaderConfig? = nil
+    
+    private var ignoreShaderConfig: Bool
+    
+    private var currentCoreName: String?
     
     var didTapClose: (()->Void)? = nil
     
     var didSelectShader: ((Shader)->Void)? = nil
+    
+    var didUpdateShaderConfig: ((ShaderConfig.SettingType)->Void)? = nil
     
     private var retroArchShadersDownloadSuccess: Any? = nil
     
@@ -227,14 +252,19 @@ class ShadersListView: BaseView {
         }
     }
     
-    init(showClose: Bool = true, initType: InitType, isGlsl: Bool = false, usingShaderPath: String? = nil) {
+    init(showClose: Bool = true, initType: InitType, isGlsl: Bool = false, ignoreShaderConfig: Bool, usingShaderPath: String? = nil, currentCoreName: String? = nil) {
         self.initType = initType
         self.isGlsl = isGlsl
+        self.ignoreShaderConfig = ignoreShaderConfig
         super.init(frame: .zero)
+        self.currentCoreName = currentCoreName
         Log.debug("\(String(describing: Self.self)) init")
         
+        shaderConfig = ShaderConfig.getConfig()
+        
         if let usingShaderPath {
-            let shader = ShaderManager.genShader(usingShaderPath, isSelected: true)
+            var shader = ShaderManager.genShader(usingShaderPath, selectedShader: nil, shaderConfig: shaderConfig, ignoreShaderConfig: ignoreShaderConfig, currentCoreName: currentCoreName)
+            shader.isSelected = true
             if FileManager.default.fileExists(atPath: shader.filePath) {
                 self.selectedShader = shader
             }
@@ -244,21 +274,54 @@ class ShadersListView: BaseView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
+        }
+        
+        let textFieldContainer = RoundAndBorderView(roundCorner: .allCorners, radius: Constants.Size.CornerRadiusMid)
+        textFieldContainer.backgroundColor = Constants.Color.BackgroundPrimary
+        addSubview(textFieldContainer)
+        textFieldContainer.snp.makeConstraints { make in
+            make.top.equalTo(navigationBlurView.snp.bottom)
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+            make.height.equalTo(Constants.Size.ItemHeightMin)
+        }
+        
+        textFieldContainer.addSubview(searchTextField)
+        searchTextField.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
+        }
+        searchTextField.shouldClear { [weak self] in
+            guard let self = self else { return true }
+            self.stopSearchShaders()
+            return true
+        }
+        searchTextField.onEditingEnded { [weak self] in
+            guard let self = self else { return }
+            if let text = self.searchTextField.text?.trimmed, !text.isEmpty {
+                self.startSearchShaders()
+            } else {
+                self.stopSearchShaders()
+            }
+        }
+        searchTextField.onReturnKeyPress { [weak self] in
+            guard let self = self else { return }
+            self.searchTextField.resignFirstResponder()
         }
         
         let segmentViewContainer = UIView()
         addSubview(segmentViewContainer)
         segmentViewContainer.snp.makeConstraints { make in
-            make.top.equalTo(navigationBlurView.snp.bottom)
+            make.top.equalTo(textFieldContainer.snp.bottom).offset(Constants.Size.ContentSpaceTiny)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(Constants.Size.ItemHeightMid + 20)
         }
         segmentViewContainer.addSubview(segmentView)
         segmentView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMid)
-            make.top.equalTo(navigationBlurView.snp.bottom).offset(10)
+            make.top.equalToSuperview().offset(10)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -347,12 +410,12 @@ class ShadersListView: BaseView {
             break
         case .retroarch:
             blankSlateView.detailLabel.text = R.string.localizable.downloadRetroArchSahders()
-            blankSlateView.button.imageView.image = UIImage(symbol: .arrowDownToLineCircleFill, font: Constants.Font.title(size: .s, weight: .medium))
+            blankSlateView.button.imageView.image = UIImage(symbol: .arrowDownToLineCircleFill, font: Constants.Font.title(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             blankSlateView.button.titleLabel.text = R.string.localizable.cloudDriveBrowserDownload()
             blankSlateView.button.isHidden = false
         case .imported:
             blankSlateView.detailLabel.text = R.string.localizable.importShaders()
-            blankSlateView.button.imageView.image = UIImage(symbol: .folderFillBadgePlus, font: Constants.Font.title(size: .s, weight: .medium))
+            blankSlateView.button.imageView.image = UIImage(symbol: .folderFillBadgePlus, font: Constants.Font.title(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
             blankSlateView.button.titleLabel.text = R.string.localizable.tabbarTitleImport()
             blankSlateView.button.isHidden = false
         case .custom:
@@ -367,7 +430,10 @@ class ShadersListView: BaseView {
         }
         DispatchQueue.global().async { [weak self] in
             guard let self else { return }
-            self.shaders = ShaderManager.fetchShaders(isGlsl: self.isGlsl, selectedShader: self.selectedShader, includeOriginal: initType == .gamePlay)
+            self.normalShaders = ShaderManager.fetchShaders(isGlsl: self.isGlsl, selectedShader: self.selectedShader, includeOriginal: initType == .gamePlay, shaderConfig: self.shaderConfig, ignoreShaderConfig: self.ignoreShaderConfig, currentCoreName: currentCoreName)
+            if self.isSearch {
+                startSearchShaders()
+            }
             DispatchQueue.main.async {
                 if showLoading {
                     UIView.hideLoading()
@@ -407,12 +473,15 @@ class ShadersListView: BaseView {
     
     private func updateShaders(source: ShaderSource? = nil) {
         if let source {
-            let sourceShaders = ShaderManager.fetchShaders(source: source, isGlsl: self.isGlsl, selectedShader: self.selectedShader, includeOriginal: false)
-            shaders[source] = sourceShaders[source]
+            let sourceShaders = ShaderManager.fetchShaders(source: source, isGlsl: self.isGlsl, selectedShader: self.selectedShader, includeOriginal: false, shaderConfig: shaderConfig, ignoreShaderConfig: ignoreShaderConfig, currentCoreName: currentCoreName)
+            normalShaders[source] = sourceShaders[source]
+            if isSearch {
+                startSearchShaders()
+            }
             if initType == .gamePlay {
                 //更新全部的选择状态
                 refreshSelection()
-            } else {
+            } else if !isSearch {
                 self.tableView.reloadData()
                 self.reloadIndexView()
             }
@@ -438,7 +507,10 @@ class ShadersListView: BaseView {
             }
             newShaders[source] = newSections
         }
-        shaders = newShaders
+        normalShaders = newShaders
+        if isSearch {
+            startSearchShaders()
+        }
         self.tableView.reloadData()
         self.reloadIndexView()
     }
@@ -479,9 +551,55 @@ class ShadersListView: BaseView {
                 self.segmentView.setIndex(ShaderSource.custom.rawValue)
             }
             self.updateShaders(source: .custom)
-            self.didSelectShader?(self.selectedShader ?? ShaderManager.genOriginalShader(isSelected: true))
+            self.didSelectShader?(self.selectedShader ?? ShaderManager.genOriginalShader())
         })
     }
+    
+    private func startSearchShaders() {
+        isSearch = true
+        if let searchWord = searchTextField.text?.trimmed, !searchWord.isEmpty {
+            UIView.makeLoading()
+            DispatchQueue.global().async {
+                let fuse = Fuse()
+                let pattern = fuse.createPattern(from: searchWord)
+                
+                var result = ShadersListData()
+                self.normalShaders.forEach { source, list in
+                    var listResult = [(String, [Shader])]()
+                    list.forEach { item in
+                        var shadersResult = [Shader]()
+                        item.shaders.forEach { shader in
+                            if let score = fuse.search(pattern, in: shader.title)?.score, score < 0.2 {
+                                shadersResult.append(shader)
+                            }
+                        }
+                        if shadersResult.count > 0 {
+                            listResult.append((item.sectionTitle, shadersResult))
+                        }
+                    }
+                    if listResult.count > 0 {
+                        result[source] = listResult
+                    }
+                }
+                self.searchShaders = result
+                DispatchQueue.main.async {
+                    UIView.hideLoading()
+                    self.tableView.reloadData()
+                    self.reloadIndexView()
+                }
+            }
+        } else {
+            isSearch = false
+        }
+    }
+    
+    private func stopSearchShaders() {
+        isSearch = false
+        searchShaders = ShadersListData()
+        tableView.reloadData()
+        reloadIndexView()
+    }
+    
 }
 
 extension ShadersListView: SwipeTableViewCellDelegate {
@@ -502,7 +620,7 @@ extension ShadersListView: SwipeTableViewCellDelegate {
                     guard let self else { return }
                     UIDevice.generateHaptic()
                     action.fulfill(with: .reset)
-                    self.removeShader(shader, indexPath: indexPath)
+                    self.removeShader(shader)
                 }
                 delete.backgroundColor = .clear
                 delete.image = self.deleteImage
@@ -575,12 +693,14 @@ extension ShadersListView: UITableViewDataSource, UITableViewDelegate {
         return nil
     }
     
-    private func removeShader(_ shader: Shader, indexPath: IndexPath) {
+    private func removeShader(_ shader: Shader) {
         try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: shader.filePath))
-        if let shadersInSource = shaders[currentSource] {
-            var datas = shadersInSource[indexPath.section].shaders
-            datas.remove(at: indexPath.row)
-            shaders[currentSource]?[indexPath.section].shaders = datas
+        if var sources = normalShaders[currentSource] {
+            sources.removeAll(where: { $0.shaders.contains(where: { $0 == shader})})
+            normalShaders[currentSource] = sources
+            if isSearch {
+                startSearchShaders()
+            }
         }
         tableView.reloadData()
     }
@@ -654,6 +774,9 @@ extension ShadersListView: UITableViewDataSource, UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if searchTextField.isFirstResponder {
+            searchTextField.resignFirstResponder()
+        }
         // indexView变更
         guard !didSelectIndexSearch,
               !indexView.isTouching,
@@ -667,6 +790,70 @@ extension ShadersListView: UITableViewDataSource, UITableViewDelegate {
         self.indexView.deselectCurrentItem()
         self.indexView.selectItem(at: currentSection)
     }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        
+        var actions = [UIMenuElement]()
+        if let shader = getShader(at: indexPath) {
+            if shader.isOriginal {
+                return nil
+            }
+            //添加为平台设定
+            actions.append(UIMenu(title: R.string.localizable.updateBackgroundForConsole(""),
+                                  options: .singleSelection,
+                                  children: System.allCores.map({
+                let coreName = $0.gameType.localizedShortName
+                let isSelected = shader.coreConfigs.contains(where: { $0 == coreName })
+                
+                let action = UIAction(title: coreName,
+                                      image: isSelected ? .symbolImage(.checkmark) : nil,
+                                      state: .off,
+                                      handler: { [weak self] _ in
+                    guard let self else { return }
+                    if isSelected {
+                        //移除Core
+                        self.ignoreShaderConfig = false
+                        ShaderConfig.setCoreShader(nil, core: coreName)
+                        self.didUpdateShaderConfig?(.setCore(coreName))
+                    } else {
+                        //添加Core
+                        self.ignoreShaderConfig = false
+                        ShaderConfig.setCoreShader(shader.relativePath, core: coreName)
+                        self.didUpdateShaderConfig?(.removeCore(coreName))
+                    }
+                    self.shaderConfig = ShaderConfig.getConfig()
+                    self.updateShaders()
+                    
+                })
+                return action
+            })))
+            
+            if shader.isGlobalConfig {
+                //取消全局设定
+                actions.append(UIAction(title: R.string.localizable.removeShaderForGlobal(), handler: { [weak self] _ in
+                    guard let self else { return }
+                    self.ignoreShaderConfig = false
+                    ShaderConfig.setGlobalShader(nil)
+                    self.shaderConfig = ShaderConfig.getConfig()
+                    self.updateShaders()
+                    self.didUpdateShaderConfig?(.removeGlobal)
+                }))
+            } else {
+                //为全局设定
+                actions.append(UIAction(title: R.string.localizable.updateBackgroundForGlobal(), handler: { [weak self] _ in
+                    guard let self else { return }
+                    self.ignoreShaderConfig = false
+                    ShaderConfig.setGlobalShader(shader.relativePath)
+                    self.shaderConfig = ShaderConfig.getConfig()
+                    self.updateShaders()
+                    self.didUpdateShaderConfig?(.setGlobal)
+                }))
+            }
+        }
+        return UIContextMenuConfiguration(actionProvider: { _ in
+            UIMenu(children: actions)
+        })
+    }
 }
 
 extension ShadersListView {
@@ -674,7 +861,14 @@ extension ShadersListView {
         Sheet.find(identifier: String(describing: ShadersListView.self)).count > 0 ? true : false
     }
     
-    static func show(game: Game? = nil, initType: InitType? = nil, isGlsl: Bool = false, hideCompletion: (()->Void)? = nil, didTapClose: (()->Void)? = nil, didSelectShader: ((Shader)->Void)? = nil) {
+    static func show(game: Game? = nil,
+                     initType: InitType? = nil,
+                     isGlsl: Bool = false,
+                     ignoreShaderConfig: Bool,
+                     hideCompletion: (()->Void)? = nil,
+                     didTapClose: (()->Void)? = nil,
+                     didSelectShader: ((Shader)->Void)? = nil,
+                     didUpdateShaderConfig: ((ShaderConfig.SettingType)->Void)? = nil) {
         guard game != nil || initType != nil else { return }
         Sheet.lazyPush(identifier: String(describing: ShadersListView.self) + (isShow ? "\(Int.random(in: 0...10))" : "")) { sheet in
             sheet.configGamePlayingStyle(hideCompletion: hideCompletion)
@@ -704,12 +898,12 @@ extension ShadersListView {
                     })
                 }
             }
-
+            
             var isGlsl = isGlsl
             if let game, game.gameType == .n64, !game.isN64ParaLLEl {
                 isGlsl = true
             }
-            let listView = ShadersListView(initType: initType ?? .gamePlay, isGlsl: isGlsl, usingShaderPath: game?.filterName)
+            let listView = ShadersListView(initType: initType ?? .gamePlay, isGlsl: isGlsl, ignoreShaderConfig: ignoreShaderConfig, usingShaderPath: game?.filterName, currentCoreName: game?.gameType.localizedShortName)
             listView.didTapClose = { [weak sheet] in
                 sheet?.pop()
                 didTapClose?()
@@ -722,6 +916,9 @@ extension ShadersListView {
                 if let initType, initType == .preview {
                     didTapClose?()
                 }
+            }
+            listView.didUpdateShaderConfig = { type in
+                didUpdateShaderConfig?(type)
             }
             containerView.addSubview(listView)
             listView.snp.makeConstraints { make in

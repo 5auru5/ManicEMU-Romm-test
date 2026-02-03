@@ -825,3 +825,25 @@ PlayCaseは、アクセサリーやスキンとの互換性を考慮して作ら
 "NotInstallMeloNX" = "MeloNXがインストールされていません";
 "FetchGamesFromMeloNX" = "MeloNXからゲームをインポート";
 "ChangeAlert" = "内容が変更されました。閉じると変更は失われます。閉じてもよろしいですか？";
+
+"JGenesisAlert" = "申し訳ありませんが、JGenesisコアは.chd ROMファイルのみをサポートしています。";
+"RedeemOfferCode" = "オファーを引き換える";
+"CheatImportFailed" = "インポートに失敗しました。ファイルを解析できなかったか、一致するチートコードが見つかりませんでした。";
+"RemoveAllCheats" = "すべてのチートを削除";
+"RemoveAllCheatsAlert" = "すべてのチートコードを削除してもよろしいですか？この操作は元に戻せません。";
+"CheatCodeStatus" = "有効";
+"Background" = "背景";
+"AddBackgroundForLandscape" = "横画面の背景を追加";
+"AddBackgroundForPortrait" = "縦画面の背景を追加";
+"UpdateBackground" = "背景を設定";
+"UpdateBackgroundForGame" = "このゲーム用に設定";
+"UpdateBackgroundForConsole" = "%@ プラットフォーム用に設定";
+"UpdateBackgroundForGlobal" = "グローバルに設定";
+"RemoveBackgroundForGame" = "ゲーム背景を削除";
+"RemoveBackgroundForConsole" = "%@ プラットフォーム背景を削除";
+"RemoveBackgroundForGlobal" = "グローバル背景を削除";
+"ShaderConfigAlert" = "%@ 用に設定されました。";
+"Global" = "グローバル";
+"RemoveShaderForGlobal" = "グローバルシェーダーを削除";
+"FeaturedItems" = "おすすめアイテム";
+"ReUpload" = "再アップロード";

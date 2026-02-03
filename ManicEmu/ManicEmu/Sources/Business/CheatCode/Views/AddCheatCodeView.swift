@@ -13,8 +13,8 @@ import ProHUD
 
 class AddCheatCodeView: BaseView {
 
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -47,27 +47,10 @@ class AddCheatCodeView: BaseView {
             var isValid = false
             if CheatType(cheatCodeType) == .autoDetect {
                 //自动检测模式下需要帮用户做一下检查
-                for cheatFormat in supportedCheatFormats.filter({ $0.type != .autoDetect }) {
-                    let formatString: String
-                    if cheatFormat.type == .cwCheat {
-                        formatString = formattedCWCheat(code: cheatCode)
-                    } else {
-                        formatString = cheatCode.replacingOccurrences(of: "-", with: "").replacingOccurrences(of: ":", with: "").components(separatedBy: .whitespacesAndNewlines).joined().formatted(with: cheatFormat)
-                    }
-                    
-                    var isMatchThisFormat = true
-                    for subString in formatString.lines() {
-                        if !isCodeMatchingFormat(format: cheatFormat.format, code: subString) {
-                            isMatchThisFormat = false
-                            break
-                        }
-                    }
-                    if isMatchThisFormat {
-                        isValid = true
-                        cheatCode = formatString
-                        cheatCodeType = cheatFormat.type.rawValue
-                        break
-                    }
+                if let result = Self.checkCheat(cheatCode: cheatCode, supportedCheatFormats: supportedCheatFormats) {
+                    isValid = true
+                    cheatCode = result.formatString
+                    cheatCodeType = result.cheatFormat.type.rawValue
                 }
             } else {
                 //指定了作弊码类型 且已经通过校验
@@ -115,7 +98,6 @@ class AddCheatCodeView: BaseView {
         }
         return view
     }()
-    
     
     private var game: Game
     private let autoDetectCheatFormat = CheatFormat(name: R.string.localizable.autoDetectCheatTypeName(), format: R.string.localizable.autoDetectFormat(), type: .autoDetect)
@@ -165,7 +147,8 @@ class AddCheatCodeView: BaseView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -232,29 +215,16 @@ class AddCheatCodeView: BaseView {
         } else {
             let cheatType = CheatType(rawValue: cheatCodeType)
             if cheatType != .autoDetect {
-                let formatString: String
-                if currentCheatFormat.type == .cwCheat {
-                    formatString = formattedCWCheat(code: cheatCode)
-                } else {
-                    formatString = cheatCode.replacingOccurrences(of: "-", with: "").replacingOccurrences(of: ":", with: "").components(separatedBy: .whitespacesAndNewlines).joined().formatted(with: currentCheatFormat)
-                }
-                
-                for subString in formatString.lines() {
-                    if !isCodeMatchingFormat(format: currentCheatFormat.format, code: subString) {
-                        isValid = false
-                        break
-                    }
-                }
-                if isValid {
-                    cheatCode = formatString
-                    cheatCodeType = currentCheatFormat.type.rawValue
+                if let result = Self.checkCheat(cheatCode: cheatCode, currentCheatFormat: currentCheatFormat) {
+                    cheatCode = result.formatString
+                    cheatCodeType = result.cheatFormat.type.rawValue
                 }
             }
         }
         updateConfirmButton(enable: isValid)
     }
     
-    private func formattedCWCheat(code: String) -> String {
+    private static func formattedCWCheat(code: String) -> String {
         var index = 0
         let codes = code.trimmingCharacters(in: .whitespacesAndNewlines).components(separatedBy: .whitespacesAndNewlines)
         return codes.reduce("", {
@@ -266,7 +236,7 @@ class AddCheatCodeView: BaseView {
         })
     }
     
-    private func isCodeMatchingFormat(format: String, code: String) -> Bool {
+    private static func isCodeMatchingFormat(format: String, code: String) -> Bool {
         // 将 format 和 code 按空格分割成数组
         let formatComponents = format.components(separatedBy: " ")
         let codeComponents = code.components(separatedBy: " ")
@@ -320,6 +290,54 @@ class AddCheatCodeView: BaseView {
             }
         }
         
+    }
+    
+    static func checkCheat(cheatCode: String,
+                           currentCheatFormat: CheatFormat? = nil,
+                           supportedCheatFormats: [CheatFormat] = []) -> (formatString: String, cheatFormat: CheatFormat)? {
+        if let currentCheatFormat {
+            //指定作弊码类型的检查
+            var isValid = true
+            let formatString: String
+            if currentCheatFormat.type == .cwCheat {
+                formatString = Self.formattedCWCheat(code: cheatCode)
+            } else {
+                formatString = cheatCode.replacingOccurrences(of: "-", with: "").replacingOccurrences(of: ":", with: "").components(separatedBy: .whitespacesAndNewlines).joined().formatted(with: currentCheatFormat)
+            }
+            
+            for subString in formatString.lines() {
+                if !Self.isCodeMatchingFormat(format: currentCheatFormat.format, code: subString) {
+                    return nil
+                }
+            }
+
+            return (formatString, currentCheatFormat)
+
+        } else {
+            //未指定作弊码类型的检查
+            for cheatFormat in supportedCheatFormats.filter({ $0.type != .autoDetect }) {
+                let formatString: String
+                if cheatFormat.type == .cwCheat {
+                    formatString = formattedCWCheat(code: cheatCode)
+                } else {
+                    formatString = cheatCode.replacingOccurrences(of: "-", with: "").replacingOccurrences(of: ":", with: "").components(separatedBy: .whitespacesAndNewlines).joined().formatted(with: cheatFormat)
+                }
+                
+                var isMatchThisFormat = true
+                for subString in formatString.lines() {
+                    if !isCodeMatchingFormat(format: cheatFormat.format, code: subString) {
+                        isMatchThisFormat = false
+                        break
+                    }
+                }
+                if isMatchThisFormat {
+                    return (formatString, cheatFormat)
+                } else {
+                    return nil
+                }
+            }
+        }
+        return nil
     }
 }
 

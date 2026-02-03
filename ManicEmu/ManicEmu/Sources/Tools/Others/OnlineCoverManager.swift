@@ -74,49 +74,59 @@ class OnlineCoverManager {
             var boxArtUrl: URL? = nil
             switch coverMatch.gameType {
             case ._3ds:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo 3DS/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo 3DS/Named_Boxarts")
             case .ds:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo DS/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo DS/Named_Boxarts")
             case .gba:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy Advance/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy Advance/Named_Boxarts")
             case .gbc:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy Color/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy Color/Named_Boxarts")
             case .gb:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Game Boy/Named_Boxarts")
             case .nes:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo Entertainment System/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo Entertainment System/Named_Boxarts")
             case .fds:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Family Computer Disk System/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Family Computer Disk System/Named_Boxarts")
             case .snes:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Super Nintendo Entertainment System/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Super Nintendo Entertainment System/Named_Boxarts")
             case .psp:
-                boxArtUrl = host.appendingPathComponent("Sony - PlayStation Portable/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sony - PlayStation Portable/Named_Boxarts")
             case .md:
-                boxArtUrl = host.appendingPathComponent("Sega - Mega Drive - Genesis/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - Mega Drive - Genesis/Named_Boxarts")
             case .mcd:
-                boxArtUrl = host.appendingPathComponent("Sega - Mega-CD - Sega CD/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - Mega-CD - Sega CD/Named_Boxarts")
             case ._32x:
-                boxArtUrl = host.appendingPathComponent("Sega - 32X/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - 32X/Named_Boxarts")
             case .gg:
-                boxArtUrl = host.appendingPathComponent("Sega - Game Gear/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - Game Gear/Named_Boxarts")
             case .ms:
-                boxArtUrl = host.appendingPathComponent("Sega - Master System - Mark III/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - Master System - Mark III/Named_Boxarts")
             case .sg1000:
-                boxArtUrl = host.appendingPathComponent("Sega - SG-1000/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - SG-1000/Named_Boxarts")
             case .ss:
-                boxArtUrl = host.appendingPathComponent("Sega - Saturn/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - Saturn/Named_Boxarts")
             case .n64:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo 64/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Nintendo 64/Named_Boxarts")
             case .vb:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Virtual Boy/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Virtual Boy/Named_Boxarts")
             case .pm:
-                boxArtUrl = host.appendingPathComponent("Nintendo - Pokemon Mini/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Nintendo - Pokemon Mini/Named_Boxarts")
             case .ps1:
-                boxArtUrl = host.appendingPathComponent("Sony - PlayStation/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sony - PlayStation/Named_Boxarts")
             case .dc:
-                boxArtUrl = host.appendingPathComponent("Sega - Dreamcast/Named_Boxarts/")
+                boxArtUrl = host.appendingPathComponent("Sega - Dreamcast/Named_Boxarts")
             case .arcade:
                 boxArtUrl = host.appendingPathComponent("MAME/Named_Boxarts")
+            case .a2600:
+                boxArtUrl = host.appendingPathComponent("Atari - 2600/Named_Boxarts")
+            case .a5200:
+                boxArtUrl = host.appendingPathComponent("Atari - 5200/Named_Boxarts")
+            case .a7800:
+                boxArtUrl = host.appendingPathComponent("Atari - 7800/Named_Boxarts")
+            case .jaguar:
+                boxArtUrl = host.appendingPathComponent("Atari - Jaguar/Named_Boxarts")
+            case .lynx:
+                boxArtUrl = host.appendingPathComponent("Atari - Lynx/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }
@@ -225,7 +235,7 @@ class OnlineCoverManager {
                     if let links {
                         //进行缓存
                         DispatchQueue.global().async {
-                            try? links.joined(separator: "\n").write(to: URL(fileURLWithPath: cachePath), atomically: true, encoding: .utf8)
+                            try? links.joined(separator: "\n").writeWithCompletePath(to: URL(fileURLWithPath: cachePath))
                         }
                         completion?(links)
                     } else {

@@ -148,14 +148,20 @@ public class ButtonsDynamicEffectView: UIView {
     
     //通过input查找到对应的视图
     private func findItemView(with input: SomeInput) -> DynamicEffectView? {
+        var result = [DynamicEffectView]()
         for itemView in itemViews {
             if case .standard(let inputs) = itemView.item.inputs, inputs.contains(where: { $0 == input }) {
-                return itemView
+                result.append(itemView)
             } else if case .directional(let up, let down, let left, let right) = itemView.item.inputs, ((up == input) || (down == input) || (left == input) || (right == input)) {
-                return itemView
+                result.append(itemView)
             }
         }
-        return nil
+        
+        if result.count > 1, let itemID = input.itemID {
+            return result.first(where: { $0.item.id == itemID })
+        }
+        
+        return result.first
     }
 }
 

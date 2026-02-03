@@ -325,6 +325,9 @@ void set_melonds_wfc_dns(const char *dns);
 //定义3DS的布局信息
 void set_azahar_custom_layout(const char *layout);
 
+//定义DeSmuME的布局信息
+void set_desmume_custom_layout(const char *layout);
+
 //定义日志回调
 typedef void (*LogCallback)(enum retro_log_level level, const char *fmt, va_list args);
 void log_register_callback(LogCallback callback);

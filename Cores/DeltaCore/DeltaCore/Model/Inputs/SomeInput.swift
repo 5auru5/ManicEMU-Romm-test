@@ -12,19 +12,21 @@ public struct SomeInput: Input, Codable, Hashable
 {
     public let stringValue: String
     public let intValue: Int?
+    public var itemID: String? = nil
     
     public var type: InputType
     public var isContinuous: Bool
     
     public init(_ input: Input)
     {
-        self.init(stringValue: input.stringValue, intValue: input.intValue, type: input.type, isContinuous: input.isContinuous)
+        self.init(stringValue: input.stringValue, intValue: input.intValue, type: input.type, isContinuous: input.isContinuous, itemID: (input as? SomeInput)?.itemID )
     }
     
-    public init(stringValue: String, intValue: Int?, type: InputType, isContinuous: Bool? = nil)
+    public init(stringValue: String, intValue: Int?, type: InputType, isContinuous: Bool? = nil, itemID: String? = nil)
     {
         self.stringValue = stringValue
         self.intValue = intValue
+        self.itemID = itemID
         
         self.type = type
         self.isContinuous = false

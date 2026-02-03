@@ -824,3 +824,25 @@ Pokud chcete vylepšit své nastavení, PlayCase je perfektním doplňkem tohoto
 "NotInstallMeloNX" = "MeloNX není nainstalováno";
 "FetchGamesFromMeloNX" = "Importovat hry z MeloNX";
 "ChangeAlert" = "Obsah byl změněn. Zavření nyní povede ke ztrátě všech změn. Pokračovat v zavírání?";
+
+"JGenesisAlert" = "Omlouváme se, jádro JGenesis podporuje pouze .chd ROM soubory.";
+"RedeemOfferCode" = "Uplatnit Nabídku";
+"CheatImportFailed" = "Import se nezdařil. Soubor nelze analyzovat nebo nebyly nalezeny odpovídající cheaty.";
+"RemoveAllCheats" = "Odstranit Všechny Cheaty";
+"RemoveAllCheatsAlert" = "Opravdu chcete odstranit všechny cheaty? Tuto akci nelze vrátit zpět.";
+"CheatCodeStatus" = "Povoleno";
+"Background" = "Pozadí";
+"AddBackgroundForLandscape" = "Přidat Pozadí na Výšku";
+"AddBackgroundForPortrait" = "Přidat Pozadí na Šířku";
+"UpdateBackground" = "Nastavit Pozadí";
+"UpdateBackgroundForGame" = "Nastavit pro Tuto Hru";
+"UpdateBackgroundForConsole" = "Nastavit pro Platformu %@";
+"UpdateBackgroundForGlobal" = "Nastavit Globálně";
+"RemoveBackgroundForGame" = "Odstranit Pozadí Hry";
+"RemoveBackgroundForConsole" = "Odstranit Pozadí Platformy %@";
+"RemoveBackgroundForGlobal" = "Odstranit Globální Pozadí";
+"ShaderConfigAlert" = "Nastaveno pro %@.";
+"Global" = "Globální";
+"RemoveShaderForGlobal" = "Odstranit Globální Shader";
+"FeaturedItems" = "Doporučené Položky";
+"ReUpload" = "Znovu Nahrát";

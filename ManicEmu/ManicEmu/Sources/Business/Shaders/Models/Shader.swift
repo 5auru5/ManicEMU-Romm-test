@@ -31,6 +31,21 @@ struct Shader: Equatable {
     var isOriginal: Bool = false
     var baseRelativePath: String? = nil
     var forceBase: String? = nil
+    var coreConfigs: [String] = []
+    var isGlobalConfig: Bool = false
+    var configAlert: String? {
+        var placeholder = ""
+        if isGlobalConfig {
+            placeholder += R.string.localizable.global()
+        }
+        if coreConfigs.count > 0 {
+            placeholder += "\(placeholder.isEmpty ? "" : " ") \(coreConfigs.reduce("", { $0 + ($0.isEmpty ? "" : " ") + $1}))"
+        }
+        if !placeholder.isEmpty {
+            return R.string.localizable.shaderConfigAlert(placeholder)
+        }
+        return nil
+    }
     
     //计算属性
     var filePath: String {

@@ -829,3 +829,25 @@
 "NotInstallMeloNX" = "Το MeloNX δεν είναι εγκατεστημένο";
 "FetchGamesFromMeloNX" = "Εισαγωγή παιχνιδιών από το MeloNX";
 "ChangeAlert" = "Το περιεχόμενο έχει αλλάξει. Αν κλείσετε τώρα, θα χαθούν όλες οι αλλαγές. Συνέχεια κλεισίματος;";
+
+"JGenesisAlert" = "Συγγνώμη, ο πυρήνας JGenesis υποστηρίζει μόνο αρχεία ROM .chd.";
+"RedeemOfferCode" = "Εξαργύρωση Προσφοράς";
+"CheatImportFailed" = "Αποτυχία εισαγωγής. Δεν ήταν δυνατή η ανάλυση του αρχείου ή δεν βρέθηκαν αντίστοιχοι κωδικοί cheat.";
+"RemoveAllCheats" = "Αφαίρεση Όλων των Cheat";
+"RemoveAllCheatsAlert" = "Είστε σίγουροι ότι θέλετε να αφαιρέσετε όλους τους κωδικούς cheat; Αυτή η ενέργεια δεν μπορεί να αναιρεθεί.";
+"CheatCodeStatus" = "Ενεργοποιημένο";
+"Background" = "Φόντο";
+"AddBackgroundForLandscape" = "Προσθήκη Οριζόντιου Φόντο";
+"AddBackgroundForPortrait" = "Προσθήκη Κατακόρυφου Φόντο";
+"UpdateBackground" = "Ορισμός Φόντο";
+"UpdateBackgroundForGame" = "Ορισμός για Αυτό το Παιχνίδι";
+"UpdateBackgroundForConsole" = "Ορισμός για Πλατφόρμα %@";
+"UpdateBackgroundForGlobal" = "Ορισμός Παγκοσμίως";
+"RemoveBackgroundForGame" = "Αφαίρεση Φόντο Παιχνιδιού";
+"RemoveBackgroundForConsole" = "Αφαίρεση Φόντο Πλατφόρμας %@";
+"RemoveBackgroundForGlobal" = "Αφαίρεση Παγκόσμιου Φόντο";
+"ShaderConfigAlert" = "Ορίστηκε για %@.";
+"Global" = "Παγκόσμιο";
+"RemoveShaderForGlobal" = "Αφαίρεση Παγκόσμιου Shader";
+"FeaturedItems" = "Προτεινόμενα Αντικείμενα";
+"ReUpload" = "Επαναφόρτωση";

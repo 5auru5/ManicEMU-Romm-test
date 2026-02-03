@@ -23,7 +23,7 @@ extension GameType {
         case "iso":
             return [.psp, .mcd, .ss]
         case "bin":
-            return [.md, .gg, .ms, ._32x, .dc]
+            return [.md, .gg, .ms, ._32x, .dc, .a2600, .a5200, .a7800, .jaguar]
         case "cue":
             return [.ps1, .mcd, .ss, .dc]
         case "m3u":
@@ -86,6 +86,16 @@ extension GameType {
             self = .dc
         } else if ["zip", "7z", "cmd"].contains(ext) {
             self = .arcade
+        } else if ["a26", "bin"].contains(ext) {
+            self = .a2600
+        } else if ["a52", "bin"].contains(ext) {
+            self = .a5200
+        } else if ["a78", "bin", "cdf"].contains(ext) {
+            self = .a7800
+        } else if ["j64", "jag", "rom", "abs", "cof", "bin", "prg"].contains(ext) {
+            self = .jaguar
+        } else if ["lnx", "o"].contains(ext) {
+            self = .lynx
         } else {
             self = .notSupport
         }
@@ -148,7 +158,17 @@ extension GameType {
             self = .arcade
         } else if shortName.uppercased() == "NS" {
             self = .ns
-        }  else {
+        } else if shortName.uppercased() == "2600" {
+            self = .a2600
+        } else if shortName.uppercased() == "5200" {
+            self = .a5200
+        } else if shortName.uppercased() == "7800" {
+            self = .a7800
+        } else if shortName.uppercased() == "JAGUAR" {
+            self = .jaguar
+        } else if shortName.uppercased() == "LYNX" {
+            self = .lynx
+        } else {
             return nil
         }
     }
@@ -179,6 +199,11 @@ extension GameType {
         case .dc: return "Dreamcast"
         case .arcade: return "Arcade"
         case .ns: return "Nintendo Switch"
+        case .a2600: return "Atari 2600"
+        case .a5200: return "Atari 5200 SuperSystem"
+        case .a7800: return "Atari 7800 ProSystem"
+        case .jaguar: return "Atari Jaguar"
+        case .lynx: return "Atari Lynx"
         default: return ""
         }
     }
@@ -209,6 +234,11 @@ extension GameType {
         case .dc: return NSLocalizedString("DC", comment: "")
         case .arcade: return NSLocalizedString("Arcade", comment: "")
         case .ns: return  NSLocalizedString("NS", comment: "")
+        case .a2600: return  NSLocalizedString("2600", comment: "")
+        case .a5200: return  NSLocalizedString("5200", comment: "")
+        case .a7800: return  NSLocalizedString("7800", comment: "")
+        case .jaguar: return  NSLocalizedString("JAGUAR", comment: "")
+        case .lynx: return  NSLocalizedString("LYNX", comment: "")
         case .unknown: return R.string.localizable.unknownPlatform()
         default: return ""
         }
@@ -240,6 +270,11 @@ extension GameType {
         case .dc: return 1998
         case .arcade: return 1971
         case .ns: return 2017
+        case .a2600: return 1977
+        case .a5200: return 1982
+        case .a7800: return 1986
+        case .lynx: return 1989
+        case .jaguar: return 1993
         default: return 0
         }
     }
@@ -269,6 +304,11 @@ extension GameType {
         case .ps1: return PS1.core
         case .dc: return DC.core
         case .arcade: return Arcade.core
+        case .a2600: return A2600.core
+        case .a5200: return A5200.core
+        case .a7800: return A7800.core
+        case .jaguar: return Jaguar.core
+        case .lynx: return Lynx.core
         default: return nil
         }
     }
@@ -299,6 +339,12 @@ extension GameType {
 #endif
         } else if self == ._3ds {
             return [LibretroCore.Cores.Citra.name, LibretroCore.Cores.Azahar.name]
+        } else if self == ._32x || self == .mcd {
+#if SIDE_LOAD
+            return [LibretroCore.Cores.PicoDrive.name, LibretroCore.Cores.JGenesis.name]
+#endif
+        } else if self == .ds {
+            return [LibretroCore.Cores.melonDSDS.name, LibretroCore.Cores.DeSmuME.name]
         }
         return []
     }
@@ -353,6 +399,8 @@ extension GameType {
             return .sega
         case .arcade:
             return .arcade
+        case .a2600, .a5200, .a7800, .jaguar, .lynx:
+            return .atari
         default:
             return .nintendo
         }

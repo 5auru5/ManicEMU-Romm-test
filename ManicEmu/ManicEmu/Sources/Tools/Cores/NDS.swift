@@ -33,10 +33,12 @@ extension GameType
     case down
     case left
     case right
+    ///Thumbstick移动光标
     case rightThumbstickUp
     case rightThumbstickDown
     case rightThumbstickLeft
     case rightThumbstickRight
+    
     case touchScreenX
     case touchScreenY
 
@@ -106,6 +108,8 @@ struct DS: ManicEmuCoreProtocol {
 
 class DSEmulatorBridge : NSObject, EmulatorBase {
     static let shared = DSEmulatorBridge()
+    var touchScale: CGFloat = 1
+    var isDeSmuMECore: Bool = false
     
     var gameURL: URL?
     
@@ -117,7 +121,8 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
     
     var saveUpdateHandler: (() -> Void)?
     
-    private var thumbstickPosition: CGPoint = .zero
+    private var leftThumbstickPosition: CGPoint = .zero
+    private var rightThumbstickPosition: CGPoint = .zero
     private var touchPointX: CGFloat? = nil
     private var touchPointY: CGFloat? = nil
     var touchInputFrame: CGRect = .zero
@@ -136,11 +141,11 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
         guard playerIndex >= 0 else { return }
         
         if input == DSGameInput.rightThumbstickUp || input == DSGameInput.rightThumbstickDown {
-            thumbstickPosition.y = input == DSGameInput.rightThumbstickUp ? value : -value
-            LibretroCore.sharedInstance().moveStick(false, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            rightThumbstickPosition.y = input == DSGameInput.rightThumbstickUp ? value : -value
+            LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else if input == DSGameInput.rightThumbstickLeft || input == DSGameInput.rightThumbstickRight {
-            thumbstickPosition.x = input == DSGameInput.rightThumbstickRight ? value : -value
-            LibretroCore.sharedInstance().moveStick(false, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            rightThumbstickPosition.x = input == DSGameInput.rightThumbstickRight ? value : -value
+            LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else {
             if input == DSGameInput.touchScreenX || input == DSGameInput.touchScreenY {
                 if input == DSGameInput.touchScreenX {
@@ -149,10 +154,10 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
                     touchPointY = value
                 }
                 if let x = touchPointX, let y = touchPointY {
-                    let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x, y: touchInputFrame.minY + touchInputFrame.height*y)
+                    let touchPoint = CGPoint(x: touchInputFrame.minX + touchInputFrame.width*x*touchScale, y: touchInputFrame.minY + touchInputFrame.height*y*touchScale)
                     
 #if DEBUG
-                    Log.debug("\(String(describing: Self.self)) 触摸屏幕:\(touchPoint)")
+                    Log.debug("\(String(describing: Self.self)) 触摸屏幕:\(touchPoint) Ratio:(\(x), \(y))")
 #endif
                     LibretroCore.sharedInstance().sendTouchEventX(touchPoint.x, y: touchPoint.y)
                     touchPointX = nil
@@ -168,6 +173,7 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
         }
     }
     
+    //功能映射以MelonDS为准
     func gameInputToCoreInput(gameInput: DSGameInput) -> LibretroButton? {
         if gameInput == .a { return .A }
         else if gameInput == .b { return .B }
@@ -177,9 +183,9 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
         else if gameInput == .r { return .R1 }
         else if gameInput == .l1 { return .L1 }
         else if gameInput == .r1 { return .R1 }
-        else if gameInput == .l2 { return .L2 }
-        else if gameInput == .l3 { return .L3 }
-        else if gameInput == .r3 { return .R3 }
+        else if gameInput == .l2 { return isDeSmuMECore ? .L3 : .L2 }
+        else if gameInput == .l3 { return isDeSmuMECore ? .L2 : .L3 }
+        else if gameInput == .r3 { return isDeSmuMECore ? .R2 : .R3 }
         else if gameInput == .start { return .start }
         else if gameInput == .select { return .select }
         else if gameInput == .up { return .up }
@@ -191,11 +197,11 @@ class DSEmulatorBridge : NSObject, EmulatorBase {
     
     func deactivateInput(_ input: Int, playerIndex: Int) {
         if input == DSGameInput.rightThumbstickUp || input == DSGameInput.rightThumbstickDown {
-            thumbstickPosition.y = 0
-            LibretroCore.sharedInstance().moveStick(false, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            rightThumbstickPosition.y = 0
+            LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else if input == DSGameInput.rightThumbstickLeft || input == DSGameInput.rightThumbstickRight {
-            thumbstickPosition.x = 0
-            LibretroCore.sharedInstance().moveStick(false, x: thumbstickPosition.x, y: thumbstickPosition.y, playerIndex: UInt32(playerIndex))
+            rightThumbstickPosition.x = 0
+            LibretroCore.sharedInstance().moveStick(false, x: rightThumbstickPosition.x, y: rightThumbstickPosition.y, playerIndex: UInt32(playerIndex))
         } else {
             if input == DSGameInput.touchScreenX || input == DSGameInput.touchScreenY {
                 if input == DSGameInput.touchScreenX {

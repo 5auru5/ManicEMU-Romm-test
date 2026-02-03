@@ -14,8 +14,8 @@ import VisualEffectView
 
 class PlayHistoryView: BaseView {
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         if UIDevice.isPad {
             view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         } else {
@@ -64,9 +64,10 @@ class PlayHistoryView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
         }
         
@@ -74,7 +75,7 @@ class PlayHistoryView: BaseView {
         headerTitleLabel.text = R.string.localizable.historyHeaderTitle()
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(Constants.Size.ContentSpaceMax)
             make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)

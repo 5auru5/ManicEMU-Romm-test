@@ -14,6 +14,7 @@
 //
 
 import Foundation
+import CommonCrypto
 
 //模式匹配可用
 
@@ -197,6 +198,34 @@ extension String {
         return !self.unicodeScalars.contains { !allowedCharacterSet.contains($0) }
     }
     
+    /// 高效 SHA256（固定 64 位 hex）
+    @inline(__always)
+    func sha256() -> String {
+        let data = Data(self.utf8)
+        
+        var hash = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+        data.withUnsafeBytes { buffer in
+            _ = CC_SHA256(buffer.baseAddress, CC_LONG(buffer.count), &hash)
+        }
+        
+        return hash.map { String(format: "%02x", $0) }.joined()
+    }
+    
+    func trimedExceptNumberAndLetters() -> String {
+        return self.filter { ($0 >= "a" && $0 <= "z") || ($0 >= "A" && $0 <= "Z") || ($0 >= "0" && $0 <= "9") }
+    }
+    
+    func writeWithCompletePath(to path: String) throws {
+        try writeWithCompletePath(to: URL(fileURLWithPath: path))
+    }
+    
+    func writeWithCompletePath(to url: URL) throws {
+        let parentUrl = url.deletingLastPathComponent()
+        if !FileManager.default.fileExists(atPath: parentUrl.path) {
+            try FileManager.default.createDirectory(at: parentUrl, withIntermediateDirectories: true)
+        }
+        try write(to: url, atomically: true, encoding: .utf8)
+    }
 }
 
 // 扩展用于识别 emoji 的字符集

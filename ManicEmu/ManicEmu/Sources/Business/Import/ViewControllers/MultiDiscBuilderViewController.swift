@@ -58,8 +58,8 @@ class MultiDiscBuilderViewController: BaseViewController {
         }
     }
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -70,6 +70,7 @@ class MultiDiscBuilderViewController: BaseViewController {
         view.contentInsetAdjustmentBehavior = .never
         view.register(cellWithClass: MultiDiscDescCollectionCell.self)
         view.register(cellWithClass: MultiDiscItemCollectionCell.self)
+        view.register(cellWithClass: MultiDiscAddCollectionCell.self)
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
@@ -92,10 +93,6 @@ class MultiDiscBuilderViewController: BaseViewController {
                 UIView.makeToast(message: R.string.localizable.generateM3uFailed())
             }
         }))
-        actions.append(UIAction(title: R.string.localizable.m3uFileImport()) { [weak self] _ in
-            guard let self = self else { return }
-            self.importGame()
-        })
         let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view
     }()
@@ -109,12 +106,233 @@ class MultiDiscBuilderViewController: BaseViewController {
         return view
     }()
     
-    private lazy var addFileButton: SymbolButton = {
-        let view = SymbolButton(image: nil, title: R.string.localizable.multiDiscAddFile("ROM"), titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
+    private lazy var addToLibraryButton: SymbolButton = {
+        let view = SymbolButton(image: nil, title: R.string.localizable.m3uFileImport(), titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
         view.enableRoundCorner = true
         view.backgroundColor = Constants.Color.Main
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
+            self.importGame()
+        }
+        return view
+    }()
+    
+    private var bottomBlurView: UIView = {
+        let view = BlurUIKit.VariableBlurView()
+        view.direction = .up
+        view.maximumBlurRadius = 15
+        view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.5, darkModeAlpha: 0.6)
+        view.dimmingTintColor = Constants.Color.Background
+        return view
+    }()
+    
+    private var addItemText = R.string.localizable.multiDiscAddFile("ROM")
+    
+    private var hasAddToLibrary = false;
+    
+    deinit {
+        Log.debug("\(String(describing: Self.self)) deinit")
+    }
+    
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        isModalInPresentation = true
+    }
+    
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        view.addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            make.height.equalTo(Constants.Size.ItemHeightMid)
+        }
+        
+        let icon = UIImageView(image: UIImage(symbol: .opticaldisc))
+        navigationBlurView.addSubview(icon)
+        icon.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
+            make.size.equalTo(Constants.Size.IconSizeMin)
+            make.centerY.equalToSuperview()
+        }
+        let headerTitleLabel = UILabel()
+        headerTitleLabel.text = R.string.localizable.multiDiscBuilder()
+        headerTitleLabel.textColor = Constants.Color.LabelPrimary
+        headerTitleLabel.font = Constants.Font.title(size: .s)
+        navigationBlurView.addSubview(headerTitleLabel)
+        headerTitleLabel.snp.makeConstraints { make in
+            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
+            make.centerY.equalTo(icon)
+        }
+        
+        addCloseButton { [weak self] in
+            guard let self else { return }
+            guard self.datas.count > 0, !self.hasAddToLibrary else {
+                self.dismiss(animated: true)
+                return
+            }
+            UIView.makeAlert(detail: R.string.localizable.multiDiscCloseAlert(),
+                             cancelTitle: R.string.localizable.m3uFileImport(),
+                             confirmTitle: R.string.localizable.multiDiscContinueClose(),
+                             cancelAction: { [weak self] in
+                guard let self else { return }
+                //导入游戏库
+                self.importGame()
+                self.dismiss(animated: true)
+            }, confirmAction: { [weak self] in
+                guard let self else { return }
+                self.dismiss(animated: true)
+            })
+        }
+        
+        navigationBlurView.addSubview(moreContextMenuButton)
+        moreContextMenuButton.snp.makeConstraints { make in
+            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMax)
+            make.centerY.equalTo(closeButton)
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        }
+        
+        navigationBlurView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.edges.equalTo(moreContextMenuButton)
+        }
+        
+        view.addSubview(bottomBlurView)
+        view.addSubview(addToLibraryButton)
+        addToLibraryButton.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+            make.height.equalTo(Constants.Size.ItemHeightMid)
+            make.bottom.equalToSuperview().offset(-Constants.Size.ContentInsetBottom-Constants.Size.ContentSpaceMid)
+        }
+        bottomBlurView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(addToLibraryButton.snp.centerY)
+        }
+    }
+    
+    private func generateM3uFile() -> URL? {
+        guard self.datas.count > 0 else {
+            return nil
+        }
+        
+        let m3uContent = self.datas.reduce("") { partialResult, item in
+            if partialResult.isEmpty {
+                return partialResult + item.url.lastPathComponent
+            } else {
+                return partialResult + "\n" + item.url.lastPathComponent
+            }
+        }
+        let name = self.datas.first!.url.lastPathComponent.deletingPathExtension + ".m3u"
+        let m3uUrl = URL(fileURLWithPath: Constants.Path.Temp.appendingPathComponent(name))
+        try? FileManager.safeRemoveItem(at: m3uUrl)
+        try? m3uContent.writeWithCompletePath(to: m3uUrl)
+        return m3uUrl
+    }
+    
+    private func importGame() {
+        guard datas.count > 0 else {
+            UIView.makeToast(message: R.string.localizable.generateM3uFailed())
+            return
+        }
+        //导入游戏库
+        if let m3uUrl = generateM3uFile() {
+            var urls: [URL] = [m3uUrl]
+            for item in datas {
+                urls.append(item.url)
+                for subItem in item.files {
+                    urls.append(subItem)
+                }
+            }
+            FilesImporter.importFiles(urls: urls)
+            hasAddToLibrary = true
+        } else {
+            UIView.makeToast(message: R.string.localizable.generateM3uFailed())
+        }
+    }
+    
+    private func createLayout() -> UICollectionViewLayout {
+        let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
+            guard let self else { return nil }
+            //item布局
+            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
+                                                                                 heightDimension: .fractionalHeight(1)))
+            //group布局
+            let height: NSCollectionLayoutDimension
+            if sectionIndex == 0 {
+                height = .estimated(100)
+            } else if sectionIndex == self.datas.count + 1 {
+                height = .estimated(Constants.Size.ItemHeightMax)
+            } else {
+                height = .absolute(MultiDiscItemCollectionCell.CellHeight(itemCount: self.datas[sectionIndex-1].files.count))
+            }
+            
+            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: height), subitems: [item])
+            group.contentInsets = NSDirectionalEdgeInsets(top: 0,
+                                                            leading: Constants.Size.ContentSpaceMid,
+                                                            bottom: 0,
+                                                            trailing: Constants.Size.ContentSpaceMid)
+            
+            //section布局
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
+            return section
+        }
+        return layout
+    }
+}
+
+extension MultiDiscBuilderViewController: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1 + datas.count + 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if indexPath.section == 0 {
+            let cell = collectionView.dequeueReusableCell(withClass: MultiDiscDescCollectionCell.self, for: indexPath)
+            return cell
+        } else if indexPath.section == datas.count + 1 {
+            //添加文件按钮
+            let cell = collectionView.dequeueReusableCell(withClass: MultiDiscAddCollectionCell.self, for: indexPath)
+            cell.titleLabel.text = addItemText
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withClass: MultiDiscItemCollectionCell.self, for: indexPath)
+            cell.setData(index: indexPath.section, item: datas[indexPath.section-1])
+            cell.deleteIcon.addTapGesture { [weak self] gesture in
+                guard let self else { return }
+                self.datas.remove(at: indexPath.section-1)
+                self.collectionView.reloadData()
+                if self.datas.count == 0 {
+                    self.addItemText = R.string.localizable.multiDiscAddFile("ROM")
+                }
+            }
+            return cell
+        }
+    }
+    
+}
+
+extension MultiDiscBuilderViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return indexPath.section == datas.count + 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if indexPath.section == datas.count + 1 {
             let supportedType: [UTType]
             if let cue = UTType(filenameExtension: "cue"), let bin = UTType(filenameExtension: "bin"), let chd = UTType(filenameExtension: "chd"), let cdi = UTType(filenameExtension: "cdi") {
                 switch self.fileType {
@@ -155,10 +373,10 @@ class MultiDiscBuilderViewController: BaseViewController {
                                 }
                                 cues.append(CUE(url: tempCueUrl, files: bins))
                             }
+                            self.addItemText = R.string.localizable.multiDiscAddFile(".cue .bin")
                             self.datas.append(contentsOf: cues)
                             self.collectionView.reloadData()
                         }
-                        self.addFileButton.titleLabel.text = R.string.localizable.multiDiscAddFile(".cue .bin")
                     } else if isChd {
                         var chds = [CHD]()
                         for url in urls {
@@ -167,8 +385,8 @@ class MultiDiscBuilderViewController: BaseViewController {
                             chds.append(CHD(url: tempChdUrl, files: []))
                         }
                         self.datas.append(contentsOf: chds)
+                        self.addItemText = R.string.localizable.multiDiscAddFile(".chd")
                         self.collectionView.reloadData()
-                        self.addFileButton.titleLabel.text = R.string.localizable.multiDiscAddFile(".chd")
                     } else if isCdi {
                         var cdis = [CDI]()
                         for url in urls {
@@ -177,212 +395,24 @@ class MultiDiscBuilderViewController: BaseViewController {
                             cdis.append(CDI(url: tempChdUrl, files: []))
                         }
                         self.datas.append(contentsOf: cdis)
+                        self.addItemText = R.string.localizable.multiDiscAddFile(".cdi")
                         self.collectionView.reloadData()
-                        self.addFileButton.titleLabel.text = R.string.localizable.multiDiscAddFile(".cdi")
                     } else {
                         UIView.makeToast(message: R.string.localizable.multiDiscImportErrorMissing())
                     }
                 }
             }
         }
-        return view
-    }()
-    
-    private var bottomBlurView: UIView = {
-        let view = BlurUIKit.VariableBlurView()
-        view.direction = .up
-        view.maximumBlurRadius = 15
-        view.dimmingAlpha = .interfaceStyle(lightModeAlpha: 0.5, darkModeAlpha: 0.6)
-        view.dimmingTintColor = Constants.Color.Background
-        return view
-    }()
-    
-    deinit {
-        Log.debug("\(String(describing: Self.self)) deinit")
     }
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        isModalInPresentation = true
-    }
-    
-    @MainActor required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        view.addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-        }
-        
-        let icon = UIImageView(image: UIImage(symbol: .opticaldisc))
-        topBlurView.addSubview(icon)
-        icon.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
-            make.size.equalTo(Constants.Size.IconSizeMin)
-            make.centerY.equalToSuperview()
-        }
-        let headerTitleLabel = UILabel()
-        headerTitleLabel.text = R.string.localizable.multiDiscBuilder()
-        headerTitleLabel.textColor = Constants.Color.LabelPrimary
-        headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
-        headerTitleLabel.snp.makeConstraints { make in
-            make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
-            make.centerY.equalTo(icon)
-        }
-        
-        addCloseButton { [weak self] in
-            guard let self else { return }
-            guard self.datas.count > 0 else {
-                self.dismiss(animated: true)
-                return
-            }
-            UIView.makeAlert(detail: R.string.localizable.multiDiscCloseAlert(),
-                             cancelTitle: R.string.localizable.m3uFileImport(),
-                             confirmTitle: R.string.localizable.multiDiscContinueClose(),
-                             cancelAction: { [weak self] in
-                guard let self else { return }
-                //导入游戏库
-                self.importGame()
-                self.dismiss(animated: true)
-            }, confirmAction: { [weak self] in
-                guard let self else { return }
-                self.dismiss(animated: true)
-            })
-        }
-        
-        topBlurView.addSubview(moreContextMenuButton)
-        moreContextMenuButton.snp.makeConstraints { make in
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMax)
-            make.centerY.equalTo(closeButton)
-            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
-        }
-        
-        topBlurView.addSubview(moreButton)
-        moreButton.snp.makeConstraints { make in
-            make.edges.equalTo(moreContextMenuButton)
-        }
-        
-        view.addSubview(bottomBlurView)
-        view.addSubview(addFileButton)
-        addFileButton.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
-            make.height.equalTo(Constants.Size.ItemHeightMid)
-            make.bottom.equalToSuperview().offset(-Constants.Size.ContentInsetBottom-Constants.Size.ContentSpaceMid)
-        }
-        bottomBlurView.snp.makeConstraints { make in
-            make.leading.trailing.bottom.equalToSuperview()
-            make.top.equalTo(addFileButton.snp.centerY)
-        }
-    }
-    
-    private func generateM3uFile() -> URL? {
-        guard self.datas.count > 0 else {
-            return nil
-        }
-        
-        let m3uContent = self.datas.reduce("") { partialResult, item in
-            if partialResult.isEmpty {
-                return partialResult + item.url.lastPathComponent
-            } else {
-                return partialResult + "\n" + item.url.lastPathComponent
-            }
-        }
-        let name = self.datas.first!.url.lastPathComponent.deletingPathExtension + ".m3u"
-        let m3uUrl = URL(fileURLWithPath: Constants.Path.Temp.appendingPathComponent(name))
-        try? FileManager.safeRemoveItem(at: m3uUrl)
-        try? m3uContent.write(to: m3uUrl, atomically: true, encoding: .utf8)
-        return m3uUrl
-    }
-    
-    private func importGame() {
-        guard datas.count > 0 else {
-            UIView.makeToast(message: R.string.localizable.generateM3uFailed())
-            return
-        }
-        //导入游戏库
-        if let m3uUrl = generateM3uFile() {
-            var urls: [URL] = [m3uUrl]
-            for item in datas {
-                urls.append(item.url)
-                for subItem in item.files {
-                    urls.append(subItem)
-                }
-            }
-            FilesImporter.importFiles(urls: urls)
-        } else {
-            UIView.makeToast(message: R.string.localizable.generateM3uFailed())
-        }
-    }
-    
-    private func createLayout() -> UICollectionViewLayout {
-        let layout = UICollectionViewCompositionalLayout { sectionIndex, env in
-            //item布局
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
-                                                                                 heightDimension: .fractionalHeight(1)))
-            //group布局
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: sectionIndex == 0 ? .estimated(100) : .absolute(MultiDiscItemCollectionCell.CellHeight(itemCount: self.datas[sectionIndex-1].files.count))), subitems: [item])
-            group.contentInsets = NSDirectionalEdgeInsets(top: 0,
-                                                            leading: Constants.Size.ContentSpaceMid,
-                                                            bottom: 0,
-                                                            trailing: Constants.Size.ContentSpaceMid)
-            
-            //section布局
-            let section = NSCollectionLayoutSection(group: group)
-            section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: Constants.Size.ContentSpaceMin, trailing: 0)
-            return section
-        }
-        return layout
-    }
-}
-
-extension MultiDiscBuilderViewController: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1 + datas.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if indexPath.section == 0 {
-            let cell = collectionView.dequeueReusableCell(withClass: MultiDiscDescCollectionCell.self, for: indexPath)
-            return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withClass: MultiDiscItemCollectionCell.self, for: indexPath)
-            cell.setData(index: indexPath.section, item: datas[indexPath.section-1])
-            cell.deleteIcon.addTapGesture { [weak self] gesture in
-                guard let self else { return }
-                self.datas.remove(at: indexPath.section-1)
-                self.collectionView.reloadData()
-                if self.datas.count == 0 {
-                    self.addFileButton.titleLabel.text = R.string.localizable.multiDiscAddFile("ROM")
-                }
-            }
-            return cell
-        }
-    }
-    
-}
-
-extension MultiDiscBuilderViewController: UICollectionViewDelegate {
-    
 }
 
 extension MultiDiscBuilderViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+    func enableDragAndDrop(indexPath: IndexPath) -> Bool {
+        return indexPath.section > 0 && indexPath.section < datas.count + 1
+    }
+    
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: any UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        guard indexPath.section > 0 else { return [] }
+        guard enableDragAndDrop(indexPath: indexPath) else { return [] }
         let item = datas[indexPath.section-1]
         let itemProvider = NSItemProvider(object: item.url.path as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
@@ -393,11 +423,11 @@ extension MultiDiscBuilderViewController: UICollectionViewDragDelegate, UICollec
     func collectionView(_ collectionView: UICollectionView,
                         performDropWith coordinator: UICollectionViewDropCoordinator) {
         guard let destinationIndexPath = coordinator.destinationIndexPath,
-              destinationIndexPath.section > 0 else { return }
+              enableDragAndDrop(indexPath: destinationIndexPath) else { return }
         
         coordinator.items.forEach { dropItem in
             guard let sourceIndexPath = dropItem.sourceIndexPath,
-                  sourceIndexPath.section > 0 else { return }
+                  enableDragAndDrop(indexPath: sourceIndexPath) else { return }
             
             datas.swapAt(sourceIndexPath.section-1, destinationIndexPath.section-1)
             collectionView.reloadSections([sourceIndexPath.section, destinationIndexPath.section])

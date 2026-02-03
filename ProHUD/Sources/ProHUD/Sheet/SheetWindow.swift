@@ -18,6 +18,7 @@ class SheetWindow: Window {
         } else {
             super.init(frame: AppContext.appBounds)
         }
+        tintColor = UIColor(red: 1, green: 36/255, blue: 66/255, alpha: 1)
         sheet.window = self
         windowLevel = .phSheet
         isHidden = false

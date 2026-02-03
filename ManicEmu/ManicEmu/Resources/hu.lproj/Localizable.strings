@@ -828,3 +828,25 @@ Ha fejleszteni szeretnéd a beállításod, a PlayCase tökéletes kiegészítő
 "NotInstallMeloNX" = "A MeloNX nincs telepítve";
 "FetchGamesFromMeloNX" = "Játékok importálása a MeloNX-ből";
 "ChangeAlert" = "A tartalom megváltozott. A bezárás az összes módosítás elvesztéséhez vezet. Folytatja a bezárást?";
+
+"JGenesisAlert" = "Sajnáljuk, a JGenesis mag csak .chd ROM fájlokat támogat.";
+"RedeemOfferCode" = "Ajánlat Beváltása";
+"CheatImportFailed" = "Importálás sikertelen. A fájl nem elemezhető, vagy nem találhatók megfelelő csaláskódok.";
+"RemoveAllCheats" = "Összes Csalás Eltávolítása";
+"RemoveAllCheatsAlert" = "Biztosan el szeretné távolítani az összes csaláskódot? Ez a művelet nem visszavonható.";
+"CheatCodeStatus" = "Engedélyezve";
+"Background" = "Háttér";
+"AddBackgroundForLandscape" = "Fekvő Háttér Hozzáadása";
+"AddBackgroundForPortrait" = "Álló Háttér Hozzáadása";
+"UpdateBackground" = "Háttér Beállítása";
+"UpdateBackgroundForGame" = "Beállítás ehhez a Játékhoz";
+"UpdateBackgroundForConsole" = "Beállítás a(z) %@ Platformhoz";
+"UpdateBackgroundForGlobal" = "Globális Beállítás";
+"RemoveBackgroundForGame" = "Játék Háttér Eltávolítása";
+"RemoveBackgroundForConsole" = "%@ Platform Háttér Eltávolítása";
+"RemoveBackgroundForGlobal" = "Globális Háttér Eltávolítása";
+"ShaderConfigAlert" = "Beállítva a(z) %@ számára.";
+"Global" = "Globális";
+"RemoveShaderForGlobal" = "Globális Shader Eltávolítása";
+"FeaturedItems" = "Kiemelt Tételek";
+"ReUpload" = "Újrafeltöltés";

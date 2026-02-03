@@ -829,3 +829,25 @@ Jos haluat parantaa kokoonpanoasi, PlayCase on täydellinen lisä tälle skinill
 "NotInstallMeloNX" = "MeloNX ei ole asennettu";
 "FetchGamesFromMeloNX" = "Tuo pelejä MeloNX:stä";
 "ChangeAlert" = "Sisältöä on muutettu. Sulkeminen nyt johtaa kaikkien muutosten menettämiseen. Jatka sulkemista?";
+
+"JGenesisAlert" = "Valitettavasti JGenesis-ydin tukee vain .chd ROM-tiedostoja.";
+"RedeemOfferCode" = "Lunasta Tarjous";
+"CheatImportFailed" = "Tuonti epäonnistui. Tiedostoa ei voitu jäsentää tai sopivia huijauskoodeja ei löytynyt.";
+"RemoveAllCheats" = "Poista Kaikki Huijaukset";
+"RemoveAllCheatsAlert" = "Haluatko varmasti poistaa kaikki huijauskoodit? Tätä toimintoa ei voi kumota.";
+"CheatCodeStatus" = "Käytössä";
+"Background" = "Tausta";
+"AddBackgroundForLandscape" = "Lisää Vaakatausta";
+"AddBackgroundForPortrait" = "Lisää Pystytusta";
+"UpdateBackground" = "Aseta Tausta";
+"UpdateBackgroundForGame" = "Aseta Tälle Pelille";
+"UpdateBackgroundForConsole" = "Aseta %@-alustalle";
+"UpdateBackgroundForGlobal" = "Aseta Globaalisti";
+"RemoveBackgroundForGame" = "Poista Pelin Tausta";
+"RemoveBackgroundForConsole" = "Poista %@-alustan Tausta";
+"RemoveBackgroundForGlobal" = "Poista Globaali Tausta";
+"ShaderConfigAlert" = "Asetettu kohteelle %@.";
+"Global" = "Globaali";
+"RemoveShaderForGlobal" = "Poista Globaali Shader";
+"FeaturedItems" = "Suositellut Tuotteet";
+"ReUpload" = "Lataa Uudelleen";

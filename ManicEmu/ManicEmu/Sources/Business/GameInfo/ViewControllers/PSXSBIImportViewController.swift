@@ -15,8 +15,8 @@ class PSXSBIImportViewController: BaseViewController {
     
     private let game: Game
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -66,14 +66,15 @@ class PSXSBIImportViewController: BaseViewController {
             make.edges.equalToSuperview()
         }
         
-        view.addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        view.addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
         let icon = UIImageView(image: UIImage(symbol: .lockRectangleStack))
-        topBlurView.addSubview(icon)
+        navigationBlurView.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.size.equalTo(Constants.Size.IconSizeMin)
@@ -83,7 +84,7 @@ class PSXSBIImportViewController: BaseViewController {
         headerTitleLabel.text = R.string.localizable.sbiImport()
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
             make.centerY.equalTo(icon)

@@ -837,3 +837,25 @@
 "NotInstallMeloNX" = "尚未安装 MeloNX";
 "FetchGamesFromMeloNX" = "从 MeloNX 导入游戏";
 "ChangeAlert" = "内容已变更，关闭页面将会丢失已变更内容，是否继续关闭？";
+
+"JGenesisAlert" = "抱歉，JGenesis 核心仅支持 .chd 格式的 ROM 文件。";
+"RedeemOfferCode" = "兑换优惠";
+"CheatImportFailed" = "导入失败，文件解析出错或未找到匹配的作弊码。";
+"RemoveAllCheats" = "清空作弊码";
+"RemoveAllCheatsAlert" = "确定要移除所有作弊码吗？此操作无法恢复。";
+"CheatCodeStatus" = "启用状态";
+"Background" = "背景";
+"AddBackgroundForLandscape" = "添加横屏背景";
+"AddBackgroundForPortrait" = "添加竖屏背景";
+"UpdateBackground" = "设定背景";
+"UpdateBackgroundForGame" = "为当前游戏设定";
+"UpdateBackgroundForConsole" = "为 %@ 平台设定";
+"UpdateBackgroundForGlobal" = "设为全局";
+"RemoveBackgroundForGame" = "移除当前游戏背景";
+"RemoveBackgroundForConsole" = "移除 %@ 平台背景";
+"RemoveBackgroundForGlobal" = "移除全局背景";
+"ShaderConfigAlert" = "该着色器已为 %@ 设定。";
+"Global" = "全局";
+"RemoveShaderForGlobal" = "移除全局着色器";
+"FeaturedItems" = "精选周边";
+"ReUpload" = "重新上传";

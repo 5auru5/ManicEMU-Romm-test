@@ -18,8 +18,8 @@ class GamesViewController: BaseViewController {
         return view
     }()
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -247,14 +247,14 @@ class GamesViewController: BaseViewController {
                 let image = UIImage(contentsOfFile: Constants.Path.GameListBackground) {
                 self.backgroundImageView.image = image
                 self.enableBackground = true
-                self.topBlurView.setBlurVisble(false)
+                self.navigationBlurView.setBlurVisble(false)
                 self.gamesListView.enableBackground = self.enableBackground
                 self.gamesToolView.enableBackground = self.enableBackground
             } else {
                 //移除了背景
                 self.backgroundImageView.image = nil
                 self.enableBackground = false
-                self.topBlurView.setBlurVisble(true)
+                self.navigationBlurView.setBlurVisble(true)
                 self.gamesListView.enableBackground = self.enableBackground
                 self.gamesToolView.enableBackground = self.enableBackground
             }
@@ -276,9 +276,11 @@ class GamesViewController: BaseViewController {
     override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
         if UIDevice.isPad {
-            hideSideMenu { [weak self] in
-                self?.updateViews()
-            }
+            DispatchQueue.main.asyncAfter(delay: UIDevice.isIOS15 ? 0.35 : 0, execute: { [weak self] in
+                self?.hideSideMenu { [weak self] in
+                    self?.updateViews()
+                }
+            })
         } else if UIDevice.isPhone {
             self.gamesToolView.stopSearch()
             self.gamesToolView.stopSelect()
@@ -302,7 +304,7 @@ class GamesViewController: BaseViewController {
                 make.edges.equalToSuperview()
             }
 
-            view.addSubview(topBlurView)
+            view.addSubview(navigationBlurView)
             
             view.addSubview(gamesNavigationView)
             gamesNavigationView.snp.makeConstraints { make in
@@ -319,7 +321,7 @@ class GamesViewController: BaseViewController {
             }
             
             
-            topBlurView.snp.makeConstraints { make in
+            navigationBlurView.snp.makeConstraints { make in
                 make.leading.top.trailing.equalToSuperview()
                 make.bottom.equalTo(gamesNavigationView)
             }
@@ -350,7 +352,7 @@ class GamesViewController: BaseViewController {
                 }
             }
             
-            view.addSubview(topBlurView)
+            view.addSubview(navigationBlurView)
             
             view.addSubview(gamesNavigationView)
             
@@ -372,7 +374,7 @@ class GamesViewController: BaseViewController {
             }
             
             
-            topBlurView.snp.makeConstraints { make in
+            navigationBlurView.snp.makeConstraints { make in
                 make.leading.top.trailing.equalTo(gamesListView)
                 make.bottom.equalTo(gamesNavigationView)
             }
@@ -431,7 +433,7 @@ class GamesViewController: BaseViewController {
             }
             
         }
-        topBlurView.setBlurVisble(!enableBackground)
+        navigationBlurView.setBlurVisble(!enableBackground)
         gamesListView.enableBackground = enableBackground
         gamesToolView.enableBackground = enableBackground
     }
@@ -486,7 +488,7 @@ class GamesViewController: BaseViewController {
     
     ///更新顶部的模糊视图 如果编辑模式 则toolView不会隐藏 所以需要将blurView加大 反之则需要减小
     private func updateTopBlurView() {
-        topBlurView.snp.updateConstraints { make in
+        navigationBlurView.snp.updateConstraints { make in
             make.bottom.equalTo(self.gamesNavigationView).offset((gamesListView.isSelectionMode || gamesListView.isSearchMode) ? Constants.Size.GamesToolViewHeight : 0)
         }
     }
@@ -554,7 +556,7 @@ class GamesViewController: BaseViewController {
                     make.top.equalToSuperview().offset(0)
                 }
                 gamesToolView.isHidden = true
-                topBlurView.snp.updateConstraints { make in
+                navigationBlurView.snp.updateConstraints { make in
                     make.leading.equalToSuperview().inset(-Constants.Size.SafeAera.left)
                     make.trailing.equalToSuperview().inset(-Constants.Size.SafeAera.right)
                 }
@@ -563,7 +565,7 @@ class GamesViewController: BaseViewController {
                     make.top.equalToSuperview().offset(Constants.Size.ContentInsetTop)
                 }
                 gamesToolView.isHidden = false
-                topBlurView.snp.updateConstraints { make in
+                navigationBlurView.snp.updateConstraints { make in
                     make.leading.equalToSuperview()
                     make.trailing.equalToSuperview()
                 }

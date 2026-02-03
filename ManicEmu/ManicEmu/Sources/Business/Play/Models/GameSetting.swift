@@ -656,6 +656,19 @@ struct GameSetting: SettingCellItem {
         }
         
         switch gameType {
+        case .a2600, .a5200, .a7800, .lynx, .jaguar:
+            if gameType == .a5200, type == .retro {
+                return false
+            }
+            
+            if gameType == .jaguar && (type == .saveState || type == .quickLoadState || type == .stateList) {
+                return false
+            }
+            
+            if type == .cheatCode || type == .swapScreen || type == .resolution || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .swapDisk || type == .airPlayLayout || type == .toggleAnalog {
+                return false
+            }
+            return true
         case ._3ds:
             if defaultCore == 0 {
                 if type == .fastForward || type == .filter || type == .palette || type == .swapDisk || type == .retro || type == .airPlayScaling {
@@ -668,13 +681,26 @@ struct GameSetting: SettingCellItem {
             }
             return true
         case .ds:
-            if type == .resolution || type == .consoleHome || type == .amiibo || type == .palette || type == .swapDisk {
+            if (type == .resolution && defaultCore == 0) || type == .consoleHome || type == .amiibo || type == .palette || type == .swapDisk {
                 return false
             }
             return true
         case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm, .arcade:
             if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes || gameType == .fds) && type == .palette {
                 return true
+            }
+            
+            if gameType == ._32x || gameType == .mcd {
+                let notEnableForJGenesis = (type == .cheatCode || type == .filter || type == .retro || type == .swapDisk)
+#if SIDE_LOAD
+                if defaultCore == 1 && notEnableForJGenesis {
+                    return false
+                }
+#else
+                if notEnableForJGenesis {
+                    return false
+                }
+#endif
             }
             
             if (gameType == .mcd || gameType == .ss || gameType == .fds) && type == .swapDisk {

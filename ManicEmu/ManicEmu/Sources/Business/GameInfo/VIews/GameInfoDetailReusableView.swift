@@ -1182,7 +1182,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                         updateDSFunctionButton()
                     } else if game.gameType == .n64 {
                         updateN64FunctionButton()
-                    } else if game.gameType == .vb || game.gameType == .pm {
+                    } else if game.gameType == .vb || game.gameType == .pm || game.isJGenesisCore {
                         updateVBOrPMFunctionButton()
                     } else if game.gameType == .ps1 {
                         updatePS1FunctionButton()
@@ -1194,6 +1194,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                         updateSNESFunctionButton()
                     } else if game.gameType == .ns {
                         updateNSFunctionButton()
+                    } else if game.isAtari {
+                        updateAtariFunctionButton()
                     }
                     addManualsButton()
                     hasSetupViews = true
@@ -1507,6 +1509,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         ndsSystemTypeButton.removeFromSuperview()
         gbaSlotContextMenuButton.removeFromSuperview()
         gbaSlotButton.removeFromSuperview()
+        let isMelonDS = (game?.defaultCore ?? 0) == 0
         if let lastView = functionButtonContainerView.subviews.last {
             //语言选择按钮
             functionButtonContainerView.addSubview(languageContextMenuButton)
@@ -1532,38 +1535,40 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                 make.edges.equalTo(microphoneButton)
             }
             
-            var enableGBASlot = true
-            if let game, let mode = game.getExtraString(key: ExtraKey.ndsSystemMode.rawValue), mode == "DSi" {
-                enableGBASlot = false
-            }
-            
-            //系统类型
-            functionButtonContainerView.addSubview(ndsSystemTypeContextMenuButton)
-            functionButtonContainerView.addSubview(ndsSystemTypeButton)
-            ndsSystemTypeButton.snp.makeConstraints { make in
-                make.leading.equalTo(microphoneButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-                make.centerY.equalToSuperview()
-                make.size.equalTo(Constants.Size.IconSizeHuge)
-                if !enableGBASlot {
-                    make.trailing.equalToSuperview()
+            if isMelonDS {
+                var enableGBASlot = true
+                if let game, let mode = game.getExtraString(key: ExtraKey.ndsSystemMode.rawValue), mode == "DSi" {
+                    enableGBASlot = false
                 }
-            }
-            ndsSystemTypeContextMenuButton.snp.makeConstraints { make in
-                make.edges.equalTo(ndsSystemTypeButton)
-            }
-            
-            if enableGBASlot {
-                //GBA Slot
-                functionButtonContainerView.addSubview(gbaSlotContextMenuButton)
-                functionButtonContainerView.addSubview(gbaSlotButton)
-                gbaSlotButton.snp.makeConstraints { make in
-                    make.leading.equalTo(ndsSystemTypeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                
+                //系统类型
+                functionButtonContainerView.addSubview(ndsSystemTypeContextMenuButton)
+                functionButtonContainerView.addSubview(ndsSystemTypeButton)
+                ndsSystemTypeButton.snp.makeConstraints { make in
+                    make.leading.equalTo(microphoneButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
                     make.centerY.equalToSuperview()
                     make.size.equalTo(Constants.Size.IconSizeHuge)
-                    make.trailing.equalToSuperview()
+                    if !enableGBASlot {
+                        make.trailing.equalToSuperview()
+                    }
                 }
-                gbaSlotContextMenuButton.snp.makeConstraints { make in
-                    make.edges.equalTo(gbaSlotButton)
+                ndsSystemTypeContextMenuButton.snp.makeConstraints { make in
+                    make.edges.equalTo(ndsSystemTypeButton)
+                }
+                
+                if enableGBASlot {
+                    //GBA Slot
+                    functionButtonContainerView.addSubview(gbaSlotContextMenuButton)
+                    functionButtonContainerView.addSubview(gbaSlotButton)
+                    gbaSlotButton.snp.makeConstraints { make in
+                        make.leading.equalTo(ndsSystemTypeButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+                        make.centerY.equalToSuperview()
+                        make.size.equalTo(Constants.Size.IconSizeHuge)
+                        make.trailing.equalToSuperview()
+                    }
+                    gbaSlotContextMenuButton.snp.makeConstraints { make in
+                        make.edges.equalTo(gbaSlotButton)
+                    }
                 }
             }
         }
@@ -1758,6 +1763,21 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     
     private func updateNSFunctionButton() {
         functionButtonContainerView.subviews.forEach({ $0.removeFromSuperview() })
+    }
+    
+    private func updateAtariFunctionButton() {
+        cheatCodeButton.removeFromSuperview()
+        
+        retroButton.snp.makeConstraints { make in
+            make.leading.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+        }
+        
+        skinButton.snp.makeConstraints { make in
+            make.leading.equalTo(retroButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.size.equalTo(Constants.Size.IconSizeHuge)
+            make.trailing.equalToSuperview()
+        }
     }
     
     

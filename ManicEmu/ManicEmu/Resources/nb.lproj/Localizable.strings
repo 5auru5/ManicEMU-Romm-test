@@ -820,3 +820,25 @@ Hvis du vil forbedre oppsettet ditt, er PlayCase et perfekt tilbehør til dette 
 "NotInstallMeloNX" = "MeloNX er ikke installert";
 "FetchGamesFromMeloNX" = "Importer spill fra MeloNX";
 "ChangeAlert" = "Innholdet er endret. Hvis du lukker nå, vil alle endringer gå tapt. Fortsette å lukke?";
+
+"JGenesisAlert" = "Beklager, JGenesis-kjernen støtter kun .chd ROM-filer.";
+"RedeemOfferCode" = "Løs Inn Tilbud";
+"CheatImportFailed" = "Import mislyktes. Filen kunne ikke analyseres eller ingen matchende jukkekoder ble funnet.";
+"RemoveAllCheats" = "Fjern Alle Jukkekoder";
+"RemoveAllCheatsAlert" = "Er du sikker på at du vil fjerne alle jukkekoder? Denne handlingen kan ikke angres.";
+"CheatCodeStatus" = "Aktivert";
+"Background" = "Bakgrunn";
+"AddBackgroundForLandscape" = "Legg Til Landskapsbakgrunn";
+"AddBackgroundForPortrait" = "Legg Til Portrettbakgrunn";
+"UpdateBackground" = "Sett Bakgrunn";
+"UpdateBackgroundForGame" = "Sett for Dette Spillet";
+"UpdateBackgroundForConsole" = "Sett for %@ Plattform";
+"UpdateBackgroundForGlobal" = "Sett Globalt";
+"RemoveBackgroundForGame" = "Fjern Spillbakgrunn";
+"RemoveBackgroundForConsole" = "Fjern %@ Plattformbakgrunn";
+"RemoveBackgroundForGlobal" = "Fjern Global Bakgrunn";
+"ShaderConfigAlert" = "Satt for %@.";
+"Global" = "Global";
+"RemoveShaderForGlobal" = "Fjern Global Shader";
+"FeaturedItems" = "Utvalgte Gjenstander";
+"ReUpload" = "Last Opp På Nytt";

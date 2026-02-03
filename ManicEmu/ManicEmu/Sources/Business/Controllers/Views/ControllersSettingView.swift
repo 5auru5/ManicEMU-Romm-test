@@ -16,8 +16,8 @@ class ControllersSettingView: BaseView {
     private let asSideMenu: Bool
     private let initGameType: GameType
     
-    var topBlurView: UIView = {
-        let view = UIView()
+    var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         if UIDevice.isPad {
             view.backgroundColor = UIColor(.dm, light: .white, dark: .black)
         } else {
@@ -95,9 +95,10 @@ class ControllersSettingView: BaseView {
         }
         
         if asSideMenu {
-            addSubview(topBlurView)
-            topBlurView.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
+            addSubview(navigationBlurView)
+            navigationBlurView.snp.makeConstraints { make in
+                make.top.equalToSuperview()
+                make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
                 make.height.equalTo(Constants.Size.ContentInsetTop)
             }
         }

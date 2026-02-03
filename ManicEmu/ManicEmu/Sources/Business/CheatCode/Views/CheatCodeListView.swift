@@ -10,11 +10,13 @@
 import SwipeCellKit
 import RealmSwift
 import ProHUD
+import UniformTypeIdentifiers
+import ManicEmuCore
 
 class CheatCodeListView: BaseView {
     /// 充当导航条
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -33,9 +35,54 @@ class CheatCodeListView: BaseView {
         return view
     }()
     
-    private var howToButton: HowToButton = {
-        let view = HowToButton(title: R.string.localizable.howToFetch(), enableGlass: true) {
+    private lazy var moreContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append(UIMenu(title: R.string.localizable.gameSortType(),
+                              image: UIImage(symbol: .arrowUpArrowDown),
+                              options: .singleSelection,
+                              children: GameCheatSortType.allCases.map({ type in
+            let currentType = GameCheatSortType(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.cheatSort.rawValue) ?? 0) ?? .dateAscending
+            return UIAction(title: type.title,
+                            state: currentType == type ? .on : .off,
+                            handler: { [weak self] _ in
+                guard let self = self else { return }
+                Settings.defalut.updateExtra(key: ExtraKey.cheatSort.rawValue, value: type.rawValue)
+                self.reloadCheats()
+                self.tableView.reloadData()
+            })
+        })))
+        actions.append((UIAction(title: R.string.localizable.removeAllCheats(), image: UIImage(symbol: .trash)) { [weak self] _ in
+            guard let self = self else { return }
+            //移除所有作弊码
+            UIView.makeAlert(detail: R.string.localizable.removeAllCheatsAlert(),
+                             confirmTitle: R.string.localizable.removeTitle(),
+                             confirmAction: {
+                Game.change { realm in
+                    if Settings.defalut.iCloudSyncEnable {
+                        self.gameCheatsResults.forEach({ $0.isDeleted = true })
+                    } else {
+                        realm.delete(self.gameCheatsResults)
+                    }
+                }
+                self.reloadCheats()
+                self.tableView.reloadData()
+            })
+            
+        }))
+        actions.append((UIAction(title: R.string.localizable.howToFetch(), image: UIImage(symbol: .book)) { [weak self] _ in
+            guard let self = self else { return }
+            //如何获取
             topViewController()?.present(WebViewController(url: Constants.URLs.CheatCodesGuide), animated: true)
+        }))
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+        return view
+    }()
+    
+    private lazy var moreButton: SymbolButton = {
+        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
+        view.enableRoundCorner = true
+        view.addTapGesture { [weak self] gesture in
+            self?.moreContextMenuButton.triggerTapGesture()
         }
         return view
     }()
@@ -68,8 +115,34 @@ class CheatCodeListView: BaseView {
         return view
     }()
     
+    private lazy var appendButton: SymbolButton = {
+        var cheatFileExtension = ""
+        var supportFileExtensions: [UTType] = []
+        if game.gameType == ._3ds {
+            cheatFileExtension = ".txt"
+            supportFileExtensions.append(UTType(filenameExtension: "txt")!)
+        } else if game.gameType == .psp {
+            cheatFileExtension = ".db .ini"
+            supportFileExtensions.append(UTType(filenameExtension: "db")!)
+            supportFileExtensions.append(UTType(filenameExtension: "ini")!)
+        }
+        let view = SymbolButton(image: nil, title: R.string.localizable.tabbarTitleImport() + " \(cheatFileExtension)", titleFont: Constants.Font.body(size: .l, weight: .medium), titleColor: Constants.Color.LabelPrimary.forceStyle(.dark), horizontalContian: true, titlePosition: .right)
+        view.enableRoundCorner = true
+        view.backgroundColor = Constants.Color.Red
+        view.addTapGesture { [weak self] gesture in
+            guard let self else { return }
+            FilesImporter.shared.presentImportController(supportedTypes: supportFileExtensions) { [weak self] urls in
+                guard let self else { return }
+                self.parseImportCheatFiles(urls: urls)
+            }
+        }
+        return view
+    }()
+    
     ///游戏
-    private var gameCheats: Results<GameCheat>
+    private var gameCheatsResults: Results<GameCheat>
+    private var gameCheats: [GameCheat] = []
+    private var game: Game
     
     var didTapAdd: (()->Void)? = nil
     var didTapClose: (()->Void)? = nil
@@ -81,16 +154,18 @@ class CheatCodeListView: BaseView {
     
     private var gamesCheatsUpdateToken: NotificationToken? = nil
     init(game: Game) {
-        self.gameCheats = game.gameCheats.where({ !$0.isDeleted })
+        self.game = game
+        self.gameCheatsResults = game.gameCheats.where({ !$0.isDeleted })
         super.init(frame: .zero)
         Log.debug("\(String(describing: Self.self)) init")
         
-        gamesCheatsUpdateToken = gameCheats.observe { [weak self] changes in
+        gamesCheatsUpdateToken = gameCheatsResults.observe { [weak self] changes in
             guard let self = self else { return }
             switch changes {
-            case .update(_, let deletions, let insertions, _):
-                if !deletions.isEmpty || !insertions.isEmpty {
+            case .update(_, let deletions, let insertions, let modifications):
+                if !deletions.isEmpty || !insertions.isEmpty || !modifications.isEmpty {
                     Log.debug("作弊码列表更新")
+                    reloadCheats()
                     DispatchQueue.main.asyncAfter(delay: 0.4) {
                         self.tableView.reloadData()
                     }
@@ -100,6 +175,8 @@ class CheatCodeListView: BaseView {
             }
         }
         
+        reloadCheats()
+        
         addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -107,7 +184,8 @@ class CheatCodeListView: BaseView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -135,16 +213,141 @@ class CheatCodeListView: BaseView {
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         }
         
-        navigationBlurView.addSubview(howToButton)
-        howToButton.snp.makeConstraints { make in
-            make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
-            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceTiny)
+        navigationBlurView.addSubview(moreContextMenuButton)
+        navigationBlurView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
             make.centerY.equalTo(closeButton)
+        }
+        moreContextMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(moreButton)
+        }
+        
+        if game.gameType == ._3ds || game.gameType == .psp {
+            //table底部缩进
+            var tableContentInset = tableView.contentInset
+            tableContentInset.bottom = tableContentInset.bottom + Constants.Size.ItemHeightMid + Constants.Size.ContentSpaceMid
+            tableView.contentInset = tableContentInset
+            
+            addSubview(appendButton)
+            appendButton.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceHuge)
+                make.bottom.equalToSuperview().inset(Constants.Size.ContentInsetBottom)
+                make.height.equalTo(Constants.Size.ItemHeightMid)
+            }
         }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func reloadCheats() {
+        let sortType = GameCheatSortType(rawValue: Settings.defalut.getExtraInt(key: ExtraKey.cheatSort.rawValue) ?? 0) ?? .dateAscending
+        gameCheats = gameCheatsResults.sorted(by: {
+            switch sortType {
+            case .nameAscending:
+                return $0.name <= $1.name
+            case .nameDescending:
+                return $0.name > $1.name
+            case .dateAscending:
+                return $0.id <= $1.id
+            case .dateDescending:
+                return $0.id > $1.id
+            case .status:
+                if $0.activate, !$1.activate {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        })
+    }
+    
+    private func parseImportCheatFiles(urls: [URL]) {
+        if game.gameType == ._3ds {
+            UIView.makeLoading()
+            //解析txt
+            var newCheats: [GameCheat] = []
+            let supportedCheatFormats = Array(game.gameType.manicEmuCore?.supportCheatFormats ?? Set())
+            var index: Int = 0
+            for url in urls {
+                if let txt = try? String(contentsOf: url, encoding: .utf8) {
+                    let cheats = ThreeDS.parseCheatFile(txt)
+                    for cheat in cheats {
+                        if !gameCheats.contains(where: { $0.code == cheat.code }),
+                           !newCheats.contains(where: { $0.code == cheat.code }),
+                           let result = AddCheatCodeView.checkCheat(cheatCode: cheat.code, supportedCheatFormats: supportedCheatFormats) {
+                            let gameCheat = GameCheat()
+                            gameCheat.id += index
+                            gameCheat.name = cheat.name
+                            gameCheat.code = result.formatString
+                            gameCheat.type = result.cheatFormat.type.rawValue
+                            newCheats.append(gameCheat)
+                            index += 1
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.async {
+                UIView.hideLoading()
+            }
+            if newCheats.count > 0 {
+                Game.change { realm in
+                    game.gameCheats.append(objectsIn: newCheats)
+                }
+            } else {
+                UIView.makeToast(message: R.string.localizable.cheatImportFailed())
+            }
+            
+        } else if game.gameType == .psp {
+            guard let gameCodeForPSP = game.gameCodeForPSP else {
+                UIView.makeToast(message: R.string.localizable.cheatImportFailed())
+                return
+            }
+            UIView.makeLoading()
+            var cheats: [PSP.GameCheat] = []
+            for url in urls {
+                if let txt = try? String(contentsOf: url, encoding: .utf8) {
+                    cheats.append(contentsOf: PSP.parseCheatFiles(content: txt))
+                }
+            }
+            if cheats.count > 0 {
+                for cheat in cheats {
+                    if cheat.gameCode.trimedExceptNumberAndLetters() == gameCodeForPSP {
+                        var newCheats: [GameCheat] = []
+                        var index = 0
+                        for c in cheat.cheats {
+                            if !gameCheats.contains(where: { $0.code == c.code }),
+                               !newCheats.contains(where: { $0.code == c.code }) {
+                                let gameCheat = GameCheat()
+                                gameCheat.id += index
+                                gameCheat.name = c.name
+                                gameCheat.code = c.code
+                                gameCheat.type = CheatType.cwCheat.rawValue
+                                newCheats.append(gameCheat)
+                                index += 1
+                            }
+                        }
+                        if newCheats.count > 0 {
+                            Game.change { realm in
+                                game.gameCheats.append(objectsIn: newCheats)
+                            }
+                        }
+                        
+                        break
+                    }
+                }
+            }
+            
+            DispatchQueue.main.async {
+                UIView.hideLoading()
+            }
+            if cheats.count == 0 {
+                UIView.makeToast(message: R.string.localizable.cheatImportFailed())
+            }
+        }
     }
 }
 

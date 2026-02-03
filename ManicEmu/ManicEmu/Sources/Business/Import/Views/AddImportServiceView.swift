@@ -13,8 +13,8 @@ import RealmSwift
 
 class AddImportServiceView: BaseView {
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur(blurColor: UIColor(.dm, light: .white, dark: .black))
         return view
     }()
@@ -69,14 +69,15 @@ class AddImportServiceView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ContentInsetTop + Constants.Size.ItemHeightMid)
         }
         
         let cloudIcon = UIImageView(image: UIImage(symbol: .cloudFill))
-        topBlurView.addSubview(cloudIcon)
+        navigationBlurView.addSubview(cloudIcon)
         cloudIcon.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.size.equalTo(Constants.Size.IconSizeMin)
@@ -86,7 +87,7 @@ class AddImportServiceView: BaseView {
         headerTitleLabel.text = R.string.localizable.addImportServiceHeaderTitle()
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(cloudIcon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
             make.trailing.equalToSuperview().inset(Constants.Size.ContentSpaceMax)

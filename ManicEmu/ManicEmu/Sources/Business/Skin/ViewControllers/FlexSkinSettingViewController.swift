@@ -27,6 +27,23 @@ class FlexSkinSettingViewController: BaseViewController {
     private let skin: Skin
     private let traits: ControllerSkin.Traits
     private let images: [UIImage?]
+    private var initBackground: FlexBackground? = nil
+    private var background: FlexBackground? = nil {
+        didSet {
+            if let background, let image = try? UIImage(url: background.imageUrl) {
+                backgroundImage = image
+            } else {
+                backgroundImage = nil
+            }
+        }
+    }
+    private let game: Game
+    private var backgroundImage: UIImage? = nil {
+        didSet {
+            backgroundImageView.image = backgroundImage
+        }
+    }
+    private var backgroundType: FlexBackground.BackgroundType? = nil
     
     private lazy var firstTimeGuideView: UIView = {
         let view = UIView()
@@ -75,6 +92,188 @@ class FlexSkinSettingViewController: BaseViewController {
         return view
     }()
     
+    private lazy var backgroundContextMenuButton: ContextMenuButton = {
+        let view = ContextMenuButton(image: nil, menu: nil)
+        return view
+    }()
+    
+    private lazy var backgroundImageButton: SymbolButton = {
+        let view = SymbolButton(image: nil,
+                                title: R.string.localizable.background(),
+                                titleFont: Constants.Font.body(size: .m),
+                                edgeInsets: UIEdgeInsets(top: 0, left: Constants.Size.ContentSpaceTiny, bottom: 0, right: Constants.Size.ContentSpaceTiny),
+                                titlePosition: .left,
+                                enableGlass: true)
+        view.titleLabel.textAlignment = .center
+        view.enableRoundCorner = true
+        view.addTapGesture { [weak self] gesture in
+            guard let self else { return }
+            var actions: [UIMenuElement] = []
+            let isLandScape = self.traits.orientation == .landscape
+
+            let fetchImageActions = [
+                UIAction(title: R.string.localizable.readyEditCoverTakePhoto(),
+                         image: .symbolImage(.camera),
+                         state: .off,
+                         handler: { [weak self] _ in
+                             guard let self else { return }
+                             //拍摄
+                             ImageFetcher.capture(preferenceSize: nil, isOpenEditor: false, completion: { [weak self] image in
+                                 guard let self, let image else { return }
+                                 self.addBackground(isLandScape: isLandScape, image: image)
+                             })
+                         }),
+                UIAction(title: R.string.localizable.readyEditCoverAlbum(),
+                         image: .symbolImage(.photoOnRectangleAngled),
+                         state: .off,
+                         handler: { [weak self] _ in
+                             guard let self else { return }
+                             //相册
+                             ImageFetcher.pick(preferenceSize: nil, isOpenEditor: false, completion: { [weak self] image in
+                                 guard let self, let image else { return }
+                                 self.addBackground(isLandScape: isLandScape, image: image)
+                             })
+                         }),
+                UIAction(title: R.string.localizable.readyEditCoverFile(),
+                         image: .symbolImage(.folder),
+                         state: .off,
+                         handler: { [weak self] _ in
+                             guard let self else { return }
+                             //文件
+                             ImageFetcher.file(preferenceSize: nil, isOpenEditor: false, completion: { [weak self] image in
+                                 guard let self, let image else { return }
+                                 self.addBackground(isLandScape: isLandScape, image: image)
+                             })
+                         }),
+            ]
+            
+            if let background = self.background {
+                actions.append(UIMenu(title: isLandScape ? R.string.localizable.addBackgroundForLandscape() : R.string.localizable.addBackgroundForPortrait(), options: .singleSelection, children: fetchImageActions))
+                
+                if let backgroundImage {
+                    actions.append(UIAction(title: R.string.localizable.editTitle() + R.string.localizable.background()) { [weak self] _ in
+                        guard let self else { return }
+                        //编辑背景
+                        ImageFetcher.edit(image: backgroundImage, preferenceSize: nil) { [weak self] image in
+                            guard let self, let image else { return }
+                            self.background?.update(image: image)
+                            self.backgroundImage = image
+                        }
+                    })
+                }
+                actions.append(UIMenu(title: R.string.localizable.updateBackground(), options: .singleSelection, children: [
+                    UIAction(title: R.string.localizable.updateBackgroundForGame(),
+                             state: (self.backgroundType ?? .game) == .game ? .on : .off,
+                             handler: { [weak self] _ in
+                                 guard let self else { return }
+                                 //为当前游戏设定
+                                 self.background = background.updateForGame(isLandScape: isLandScape, gameID: self.game.id)
+                                 self.backgroundType = .game
+                                 
+                             }),
+                    UIAction(title: R.string.localizable.updateBackgroundForConsole(self.game.gameType.localizedShortName),
+                             state: (self.backgroundType ?? .game) == .console ? .on : .off,
+                             handler: { [weak self] _ in
+                                 guard let self else { return }
+                                 //为平台设定
+                                 self.background = background.updateForConsole(isLandScape: isLandScape, console: self.game.gameType.localizedShortName, gameID: self.game.id)
+                                 self.backgroundType = .console
+                             }),
+                    UIAction(title: R.string.localizable.updateBackgroundForGlobal(),
+                             state: (self.backgroundType ?? .game) == .global ? .on : .off,
+                             handler: { [weak self] _ in
+                                 guard let self else { return }
+                                 //为全局设定
+                                 self.background = background.updateForGlobal(isLandScape: isLandScape, console: self.game.gameType.localizedShortName, gameID: self.game.id)
+                                 self.backgroundType = .global
+                             }),
+                ]))
+                
+                var removeActions = [UIMenuElement]()
+                if background.games.contains(self.game.id) {
+                    removeActions.append(UIAction(title: R.string.localizable.removeBackgroundForGame(),
+                                                  state: .off,
+                                                  handler: { [weak self] _ in
+                        guard let self else { return }
+                        //移除当前游戏背景
+                        if let newBg = background.removeForGame(gameID: self.game.id) {
+                            if newBg.consoles.contains(self.game.gameType.localizedShortName) {
+                                self.background = newBg
+                                self.backgroundType = .console
+                            } else if newBg.global {
+                                self.background = newBg
+                                self.backgroundType = .global
+                            } else {
+                                self.background = nil
+                                self.backgroundType = nil
+                            }
+                        } else {
+                            self.background = nil
+                            self.backgroundType = nil
+                        }
+                    }))
+                }
+                if background.consoles.contains(self.game.gameType.localizedShortName) {
+                    removeActions.append(UIAction(title: R.string.localizable.removeBackgroundForConsole(self.game.gameType.localizedShortName),
+                                                  state: .off,
+                                                  handler: { [weak self] _ in
+                        guard let self else { return }
+                        //移除平台背景
+                        if let newBg = background.removeForConsole(console: self.game.gameType.localizedShortName) {
+                            if newBg.games.contains(self.game.id) {
+                                self.background = newBg
+                                self.backgroundType = .game
+                            } else if newBg.global {
+                                self.background = newBg
+                                self.backgroundType = .global
+                            } else {
+                                self.background = nil
+                                self.backgroundType = nil
+                            }
+                        } else {
+                            self.background = nil
+                            self.backgroundType = nil
+                        }
+                        
+                    }))
+                }
+                if background.global {
+                    removeActions.append(UIAction(title: R.string.localizable.removeBackgroundForGlobal(),
+                                                  state: .off,
+                                                  handler: { [weak self] _ in
+                        guard let self else { return }
+                        //移除全局背景
+                        if let newBg = background.removeForGlobal() {
+                            if newBg.games.contains(self.game.id) {
+                                self.background = newBg
+                                self.backgroundType = .game
+                            } else if newBg.consoles.contains(self.game.gameType.localizedShortName) {
+                                self.background = newBg
+                                self.backgroundType = .console
+                            } else {
+                                self.background = nil
+                                self.backgroundType = nil
+                            }
+                        } else {
+                            self.background = nil
+                            self.backgroundType = nil
+                        }
+                    }))
+                }
+                
+                if removeActions.count > 0 {
+                    actions.append(UIMenu(title: R.string.localizable.removeTitle() + R.string.localizable.background(), options: .singleSelection, children: removeActions))
+                }
+                
+            } else {
+                actions = fetchImageActions
+            }
+            self.backgroundContextMenuButton.menu = UIMenu(children: actions)
+            self.backgroundContextMenuButton.triggerTapGesture()
+        }
+        return view
+    }()
+    
     private lazy var controlView: ControllerView = {
         let view = ControllerView()
         view.controllerSkin = ControllerSkin(fileURL: skin.fileURL)
@@ -93,6 +292,12 @@ class FlexSkinSettingViewController: BaseViewController {
         let view = UIView()
         return view
     }()
+    
+    private lazy var backgroundImageView: UIImageView = {
+        let view = UIImageView(image: backgroundImage)
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
 
     private var screenBounds: CGRect {
         return containerView.frame
@@ -100,10 +305,15 @@ class FlexSkinSettingViewController: BaseViewController {
     
     var didCompletion: (()->Void)? = nil
 
-    init(skin: Skin, traits: ControllerSkin.Traits, images: [UIImage?]) {
+    init(skin: Skin, traits: ControllerSkin.Traits, images: [UIImage?], game: Game, background: FlexBackground? = nil, backgroundImage: UIImage? = nil, backgroundType: FlexBackground.BackgroundType? = nil) {
         self.skin = skin
         self.traits = traits
         self.images = images
+        self.game = game
+        self.initBackground = background
+        self.background = background
+        self.backgroundImage = backgroundImage
+        self.backgroundType = backgroundType
         super.init(fullScreen: true)
         FlexSkinSettingViewController.isShow = true
     }
@@ -115,6 +325,13 @@ class FlexSkinSettingViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black
+        
+        FlexBackground.flushBackgrounds()
+        
+        view.addSubview(backgroundImageView)
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         
         if let controllerSkin = controlView.controllerSkin as? ControllerSkin,
             let frames = controllerSkin.getFrames(),
@@ -152,6 +369,18 @@ class FlexSkinSettingViewController: BaseViewController {
             make.top.equalToSuperview().offset(Constants.Size.SafeAera.top == 0 ? 20 : Constants.Size.SafeAera.top)
             make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
             make.width.greaterThanOrEqualTo(44)
+        }
+        
+        view.addSubview(backgroundContextMenuButton)
+        view.addSubview(backgroundImageButton)
+        backgroundImageButton.snp.makeConstraints { make in
+            make.leading.equalTo(resetButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
+            make.centerY.equalTo(resetButton)
+            make.height.equalTo(resetButton)
+            make.width.greaterThanOrEqualTo(44)
+        }
+        backgroundContextMenuButton.snp.makeConstraints { make in
+            make.edges.equalTo(backgroundImageButton)
         }
         
         if !UserDefaults.standard.bool(forKey: Constants.DefaultKey.FlexSkinFirstTimeGuide) {
@@ -208,6 +437,13 @@ class FlexSkinSettingViewController: BaseViewController {
         setupEdgeHandleGestures(for: container)
 
         return container
+    }
+    
+    private func addBackground(isLandScape: Bool, image: UIImage) {
+        if let bg = FlexBackground.addBackgound(isLandScape: isLandScape, image: image, gameID: game.id) {
+            self.background = bg
+            self.backgroundType = .game
+        }
     }
     
     // MARK: - 设置边缘手柄手势

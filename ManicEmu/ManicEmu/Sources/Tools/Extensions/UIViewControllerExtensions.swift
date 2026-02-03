@@ -41,7 +41,6 @@ extension BaseViewController {
     func addCloseButton(onTap: (() -> Void)? = nil, makeConstraints: ((ConstraintMaker) -> Void)? = nil) {
         
         view.addSubview(closeButton)
-        closeButton.backgroundColor = Constants.Color.BackgroundSecondary
         
         closeButton.snp.makeConstraints { (maker) in
             if makeConstraints != nil {

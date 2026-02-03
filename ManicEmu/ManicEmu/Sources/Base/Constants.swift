@@ -96,6 +96,11 @@ struct Constants {
                 case .mcd: return (Locale.prefersUS ? 0.5864 : 1.1)
                 case .arcade: return 0.731
                 case .ns: return 0.611
+                case .a2600: return 0.735
+                case .a5200: return 0.732
+                case .a7800: return 0.709
+                case .jaguar: return 0.724
+                case .lynx: return 1.118
                 default: return 1.0
                 }
             case .style2:
@@ -246,22 +251,6 @@ struct Constants {
                                     dark: UIColor(hexString: "#FB89DE")!)
     }
     
-    struct Cipher {
-        static let BaiduYunAppKey = ""
-        static let BaiduYunSecretKey = ""
-        static let DropboxAppKey = ""
-        static let DropboxAppSecret = ""
-        static let GoogleDriveAppId = ""
-        static let OneDriveAppId = ""
-        static let OneDriveSecrectKey = ""
-        static let AliYunAppId = ""
-        static let AliYunSecrectKey = ""
-        static let UMAppKey = ""
-        static let ManicKey = ""
-        static let DeepSeek = ""
-        static let RetroAPI = ""
-    }
-    
     struct Path {
         static let Document = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first!
         static var Data: String {
@@ -318,6 +307,11 @@ struct Constants {
         static let Flycast = Document.appendingPathComponent(LibretroCore.Cores.Flycast.name)
         static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
         static let MAME = Document.appendingPathComponent(LibretroCore.Cores.MAME.name)
+        static let Stella = Document.appendingPathComponent(LibretroCore.Cores.Stella.name)
+        static let Atari800 = Document.appendingPathComponent(LibretroCore.Cores.Atari800.name)
+        static let ProSystem = Document.appendingPathComponent(LibretroCore.Cores.ProSystem.name)
+        static let VirtualJaguar = Document.appendingPathComponent(LibretroCore.Cores.VirtualJaguar.name)
+        static let Holani = Document.appendingPathComponent(LibretroCore.Cores.Holani.name)
         static let LibretroSavePath = Document
         static let GamesDB = Resource.appendingPathComponent("Games.db")
         static let MAMEDB = Resource.appendingPathComponent("MAME.db")
@@ -340,6 +334,8 @@ struct Constants {
         static let ShaderRetroArchSlang = ShaderRetroArch.appendingPathComponent("slang")
         static let ShaderImported = Shaders.appendingPathComponent("imported")
         static let ShaderImportedInDocument = Document.appendingPathComponent("Shaders")
+        static let JGenesis = Resource.appendingPathComponent("jgenesis")
+        static let RomPatcher = Resource.appendingPathComponent("RomPatcher")
     }
     
     struct DefaultKey {
@@ -426,7 +422,7 @@ struct Constants {
         static let PSPConsoleLanguage = ["Automatic", "English", "日本語", "Français", "Español", "Deutsch", "Italiano", "Nederlands", "Português", "Русский", "한국어", "繁體中文", "简体中文"]
         static let ThreeDSConsoleLanguage = ["Automatic", "Japan", "USA" , "Europe", "Australia", "China", "Korea", "Taiwan"]
         static let SaturnConsoleLanguage = ["Auto Detect", "Japan", "North America", "Europe", "South Korea", "Asia (NTSC)", "Asia (PAL)", "Brazil", "Latin America"]
-        static let DSConsoleLanguage = ["Automatic", "Japanese", "English", "French", "German", "Italian", "Spanish"]
+        static let DSConsoleLanguage = ["Auto", "Japanese", "English", "French", "German", "Italian", "Spanish"]
         static let DCConsoleLanguage = ["Default", "Japanese", "English", "German",  "French",  "Spanish", "Italian"]
         static let ManicScheme = "manicemu"
         static var PSXController = "PlayStation Controller"
@@ -600,6 +596,7 @@ struct Constants {
             case .vb: return URL(string: "\(deltastyles)/systems/virtualboy")!
             case .ps1: return URL(string: "\(deltastyles)/systems/ps1")!
             case .dc: return URL(string: "\(deltastyles)/systems/dreamcast")!
+            case .arcade: return URL(string: "\(deltastyles)/systems/arcade")!
             default: return URL(string: deltastyles)!
             }
         }
@@ -617,7 +614,6 @@ struct Constants {
         }
         static let Retro = URL(string: "https://retroachievements.org")!
         static let MobyGames = URL(string: "https://www.mobygames.com")!
-        static let RomPatcher = URL(string: "https://www.marcrobledo.com/RomPatcher.js")!
         static let InstallSideload = URL(string: "sidestore://source?url=apps.manicemu.site/altstore")!
         static let SideStore = URL(string: "https://sidestore.io")!
         static let GLSLShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip")!
@@ -693,6 +689,7 @@ struct Constants {
         ]
         
         static var MAMEBiosMap: [String: String] {
+            //Source: MAME 0.282 (arcade).dat
             ["3dobios.zip" : "3DO BIOS",
              "airlbios.zip" : "NAOMI Airline Pilots (deluxe) BIOS",
              "aleck64.zip" : "Aleck64 PIF BIOS",
@@ -774,5 +771,17 @@ struct Constants {
              "triforce.zip" : "Triforce BIOS",
              "v4bios.zip" : "MPU4 Video Firmware"]
         }
+        
+        static let A5200Bios = [
+            BIOSItem(fileName: "5200.rom", imported: false, desc: "5200 BIOS", required: false)
+        ]
+        
+        static let A7800Bios = [
+            BIOSItem(fileName: "7800 BIOS (U).rom", imported: false, desc: "7800 BIOS", required: false)
+        ]
+        
+        static let LynxBios = [
+            BIOSItem(fileName: "lynxboot.img", imported: false, desc: "Lynx Boot Image", required: false)
+        ]
     }
 }

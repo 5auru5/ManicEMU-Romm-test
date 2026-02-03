@@ -20,8 +20,8 @@ class GameSettingView: BaseView {
         return (hasGrabber ? 20 : 0) + Constants.Size.ItemHeightMid + Constants.Size.ContentSpaceMin + itemHeight * CGFloat(line) + itemSpacing * CGFloat(line-1) + Constants.Size.ContentInsetBottom
     }
     /// 充当导航条
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         return view
     }()
     
@@ -159,7 +159,8 @@ class GameSettingView: BaseView {
             
             addSubview(navigationBlurView)
             navigationBlurView.snp.makeConstraints { make in
-                make.leading.top.trailing.equalToSuperview()
+                make.top.equalToSuperview()
+                make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
                 make.height.equalTo(Constants.Size.ItemHeightMid)
             }
             
@@ -480,7 +481,7 @@ extension GameSettingView: UICollectionViewDelegate {
         }
         var item = gameSettings[indexPath.row]
         guard item.enable(for: game.gameType, defaultCore: game.defaultCore) else {
-            UIView.makeToast(message: R.string.localizable.notSupportGameSetting(game.gameType.localizedShortName))
+            UIView.makeToast(message: R.string.localizable.notSupportGameSetting(game.gameType.localizedShortName + game.coreNameForMultiSupport))
             return
         }
         
@@ -562,9 +563,21 @@ extension GameSettingView: UICollectionViewDelegate {
         }
     }
     
-    //长按弹出可交互菜单
+    //长按弹出可交互菜单 (iOS 15兼容)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //长按弹出可交互菜单 (iOS 16+)
+    @available(iOS 16.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let indexPath = indexPaths.first, !isEditingMode, !isMappingMode else { return nil }
+        guard let indexPath = indexPaths.first else { return nil }
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //长按弹出可交互菜单
+    private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        guard !isEditingMode, !isMappingMode else { return nil }
         var item = gameSettings[indexPath.row]
         guard item.enable(for: game.gameType, defaultCore: game.defaultCore) else { return nil }
         if item.type == .quickLoadState {

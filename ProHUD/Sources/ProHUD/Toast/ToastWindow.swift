@@ -16,6 +16,7 @@ class ToastWindow: Window {
     init(toast: ToastTarget) {
         self.toast = toast
         super.init(frame: .zero)
+        tintColor = UIColor(red: 1, green: 36/255, blue: 66/255, alpha: 1)
         windowScene = AppContext.windowScene
         toast.window = self
         windowLevel = .phToast

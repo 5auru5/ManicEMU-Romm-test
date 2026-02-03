@@ -202,6 +202,16 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.arcade_group_brand(compatibleWith: traitCollection)
             } else if gameType == .ns {
                 image = R.image.ns_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .a2600 {
+                image = R.image.a2600_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .a5200 {
+                image = R.image.a5200_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .a7800 {
+                image = R.image.a7800_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .jaguar {
+                image = R.image.jaguar_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .lynx {
+                image = R.image.lynx_group_brand(compatibleWith: traitCollection)
             }
             Self.brandImageCaches[key] = image
             return image

@@ -356,6 +356,12 @@ void set_azahar_custom_layout(const char *layout) {
    g_azahar_custom_layout = strdup(layout);
 }
 
+//定义DeSmuME的布局信息
+static const char *g_desmume_custom_layout = NULL;
+void set_desmume_custom_layout(const char *layout) {
+   g_desmume_custom_layout = strdup(layout);
+}
+
 //定义Shutdown通知
 static LogCallback g_log_callback = NULL;
 void log_register_callback(LogCallback callback) {
@@ -1470,6 +1476,11 @@ bool runloop_environment_cb(unsigned cmd, void *data)
             
             if (g_azahar_custom_layout && string_is_equal(var->key, "citra_custom_layout_config")) {
                var->value = strdup(g_azahar_custom_layout);
+               break;
+            }
+            
+            if (g_desmume_custom_layout && string_is_equal(var->key, "desmume_custom_layout_config")) {
+               var->value = strdup(g_desmume_custom_layout);
                break;
             }
 

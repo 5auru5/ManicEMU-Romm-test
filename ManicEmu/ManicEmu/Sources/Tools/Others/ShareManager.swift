@@ -229,7 +229,7 @@ extension ShareManager: UIDocumentInteractionControllerDelegate {
             try? FileManager.default.removeItem(at: tempURL)
         }
         do {
-            try data.write(to: tempURL)
+            try data.writeWithCompletePath(to: tempURL)
         } catch {
             return
         }

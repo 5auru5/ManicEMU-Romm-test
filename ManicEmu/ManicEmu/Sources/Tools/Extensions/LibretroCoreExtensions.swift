@@ -9,7 +9,7 @@
 
 extension LibretroCore {
     enum Cores {
-        case Nestopia, Snes9x, PicoDrive, Yabause, BeetleSaturn, Mupen64PlushNext, BeetleVB, PokeMini, BeetlePSXHW, bsnes, Gambatte, VBAM, mGBA, Flycast, Gearsystem, ClownMDEmu, bsnesJG, melonDSDS, PPSSPP, MAME, FinalBurnNeo, Citra, Azahar
+        case Nestopia, Snes9x, PicoDrive, Yabause, BeetleSaturn, Mupen64PlushNext, BeetleVB, PokeMini, BeetlePSXHW, bsnes, Gambatte, VBAM, mGBA, Flycast, Gearsystem, ClownMDEmu, bsnesJG, melonDSDS, PPSSPP, MAME, FinalBurnNeo, Citra, Azahar, JGenesis, DeSmuME, Stella, Atari800, ProSystem, VirtualJaguar, Holani
         
         var name: String {
             switch self {
@@ -59,6 +59,20 @@ extension LibretroCore {
                 "Citra"
             case .Azahar:
                 "Azahar"
+            case .JGenesis:
+                "JGenesis"
+            case .DeSmuME:
+                "DeSmuME"
+            case .Stella:
+                "Stella"
+            case .Atari800:
+                "Atari800"
+            case .ProSystem:
+                "ProSystem"
+            case .VirtualJaguar:
+                "Virtual Jaguar"
+            case .Holani:
+                "Holani"
             }
         }
     }

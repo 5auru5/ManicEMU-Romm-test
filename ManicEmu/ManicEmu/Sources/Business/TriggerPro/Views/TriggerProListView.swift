@@ -13,8 +13,8 @@ import ProHUD
 
 class TriggerProListView: BaseView {
     /// 充当导航条
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -116,7 +116,8 @@ class TriggerProListView: BaseView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         

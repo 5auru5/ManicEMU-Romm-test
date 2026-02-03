@@ -829,3 +829,25 @@ Als je je setup naar een hoger niveau wilt tillen, is PlayCase de perfecte match
 "NotInstallMeloNX" = "MeloNX is niet geïnstalleerd";
 "FetchGamesFromMeloNX" = "Games importeren vanuit MeloNX";
 "ChangeAlert" = "De inhoud is gewijzigd. Sluiten nu zal alle wijzigingen verwijderen. Doorgaan met sluiten?";
+
+"JGenesisAlert" = "Sorry, de JGenesis-kern ondersteunt alleen .chd ROM-bestanden.";
+"RedeemOfferCode" = "Aanbieding Inwisselen";
+"CheatImportFailed" = "Importeren mislukt. Het bestand kon niet worden geparseerd of er zijn geen bijpassende cheatcodes gevonden.";
+"RemoveAllCheats" = "Alle Cheats Verwijderen";
+"RemoveAllCheatsAlert" = "Weet je zeker dat je alle cheatcodes wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.";
+"CheatCodeStatus" = "Ingeschakeld";
+"Background" = "Achtergrond";
+"AddBackgroundForLandscape" = "Landschap Achtergrond Toevoegen";
+"AddBackgroundForPortrait" = "Portret Achtergrond Toevoegen";
+"UpdateBackground" = "Achtergrond Instellen";
+"UpdateBackgroundForGame" = "Instellen voor Dit Spel";
+"UpdateBackgroundForConsole" = "Instellen voor %@ Platform";
+"UpdateBackgroundForGlobal" = "Globaal Instellen";
+"RemoveBackgroundForGame" = "Spel Achtergrond Verwijderen";
+"RemoveBackgroundForConsole" = "%@ Platform Achtergrond Verwijderen";
+"RemoveBackgroundForGlobal" = "Globale Achtergrond Verwijderen";
+"ShaderConfigAlert" = "Ingesteld voor %@.";
+"Global" = "Globaal";
+"RemoveShaderForGlobal" = "Globale Shader Verwijderen";
+"FeaturedItems" = "Uitgelichte Items";
+"ReUpload" = "Opnieuw Uploaden";

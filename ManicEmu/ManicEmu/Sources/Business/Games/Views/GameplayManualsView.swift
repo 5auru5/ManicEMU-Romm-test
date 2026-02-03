@@ -7,13 +7,14 @@
 //
 import PDFKit
 import ProHUD
+import UniformTypeIdentifiers
 
 class GameplayManualsView: UIView {
     var didTapClose: (()->Void)? = nil
     private var game: Game
     
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -22,6 +23,53 @@ class GameplayManualsView: UIView {
         let view = PDFView()
         view.backgroundColor = Constants.Color.Background
         view.autoScales = true
+        return view
+    }()
+    
+    private lazy var moreContextMenuButton: ContextMenuButton = {
+        var actions: [UIMenuElement] = []
+        actions.append((UIAction(title: R.string.localizable.removeTitle()) { [weak self] _ in
+            guard let self = self else { return }
+            //移除
+            if let manualsPath = game.manualsPath {
+                try? FileManager.safeRemoveItem(at: URL(fileURLWithPath: Constants.Path.GameplayManuals.appendingPathComponent(manualsPath)))
+                self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: nil)
+                self.game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: nil)
+                self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: nil)
+                self.pdfView.document = PDFDocument()
+            }
+        }))
+        actions.append(UIAction(title: R.string.localizable.reUpload()) { [weak self] _ in
+            guard let self = self else { return }
+            //重新上传
+            FilesImporter.shared.presentImportController(supportedTypes: [UTType.pdf],
+                                                         allowsMultipleSelection: false,
+                                                         manualHandle: { [weak self] urls in
+                guard let self else { return }
+                if let pdfUrl = urls.first {
+                    do {
+                        let pdfName = pdfUrl.lastPathComponent
+                        let manualsPath = URL(fileURLWithPath: Constants.Path.GameplayManuals.appendingPathComponent(pdfName))
+                        try FileManager.safeCopyItem(at: pdfUrl, to: manualsPath, shouldReplace: true)
+                        self.game.updateExtra(key: ExtraKey.manualPage.rawValue, value: nil)
+                        self.game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: nil)
+                        self.game.updateExtra(key: ExtraKey.manualFileName.rawValue, value: pdfName)
+                        self.pdfView.document = PDFDocument(url: manualsPath)
+                        self.pdfView.autoScales = true
+                    } catch {}
+                }
+            })
+        })
+        let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
+        return view
+    }()
+    
+    private lazy var moreButton: SymbolButton = {
+        let view = SymbolButton(symbol: .ellipsis, enableGlass: true)
+        view.enableRoundCorner = true
+        view.addTapGesture { [weak self] gesture in
+            self?.moreContextMenuButton.triggerTapGesture()
+        }
         return view
     }()
     
@@ -36,6 +84,8 @@ class GameplayManualsView: UIView {
                 let pageIndex = document.index(for: currentPage)
                 game.updateExtra(key: ExtraKey.manualPage.rawValue, value: pageIndex)
             }
+            // 记录当前的缩放比例
+            game.updateExtra(key: ExtraKey.manualScaleFactor.rawValue, value: pdfView.scaleFactor)
         }
         return view
     }()
@@ -47,7 +97,8 @@ class GameplayManualsView: UIView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -58,7 +109,24 @@ class GameplayManualsView: UIView {
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         }
         
+        navigationBlurView.addSubview(moreContextMenuButton)
+        moreContextMenuButton.snp.makeConstraints { make in
+            make.trailing.equalTo(closeButton.snp.leading).offset(-Constants.Size.ContentSpaceMid)
+            make.centerY.equalToSuperview()
+            make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
+        }
+        
+        navigationBlurView.addSubview(moreButton)
+        moreButton.snp.makeConstraints { make in
+            make.edges.equalTo(moreContextMenuButton)
+        }
+        
+        let lastScaleFactor = game.getExtraDouble(key: ExtraKey.manualScaleFactor.rawValue)
+        
         addSubview(pdfView)
+        if lastScaleFactor != nil {
+            pdfView.autoScales = false
+        }
         pdfView.snp.makeConstraints { make in
             make.top.equalTo(navigationBlurView.snp.bottom)
             make.leading.trailing.equalToSuperview()
@@ -69,15 +137,30 @@ class GameplayManualsView: UIView {
             pdfView.document = PDFDocument(url: URL(fileURLWithPath: manualsPath))
         }
         
-        // 加载到上一次读取的位置
+        // 加载到上一次读取的位置和缩放比例
         if let lastReadPage = game.getExtraInt(key: ExtraKey.manualPage.rawValue),
            let document = pdfView.document,
            lastReadPage < document.pageCount,
            let page = document.page(at: lastReadPage) {
-            DispatchQueue.main.asyncAfter(delay: 1, execute: { [weak self] in
+            pdfView.isHidden = true
+            DispatchQueue.main.asyncAfter(delay: 0.5, execute: { [weak self] in
                 guard let self else { return }
+                self.pdfView.isHidden = false
                 self.pdfView.go(to: page)
+                
+                // 恢复上一次的缩放比例
+                if let lastScaleFactor {
+                    self.pdfView.scaleFactor = CGFloat(lastScaleFactor)
+                }
             })
+        } else {
+            // 如果没有保存的页数，但有保存的缩放比例，也要恢复
+            if let lastScaleFactor {
+                DispatchQueue.main.asyncAfter(delay: 0.5, execute: { [weak self] in
+                    guard let self else { return }
+                    self.pdfView.scaleFactor = CGFloat(lastScaleFactor)
+                })
+            }
         }
     }
     

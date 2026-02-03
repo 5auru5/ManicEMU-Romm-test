@@ -47,8 +47,8 @@ class ShaderOrderView: BaseView {
         }
     }
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -92,7 +92,7 @@ class ShaderOrderView: BaseView {
         view.addTapGesture { [weak self] gesture in
             guard let self else { return }
             let isGlsl = self.shader.relativePath.pathExtension.lowercased() == "glslp"
-            ShadersListView.show(initType: .preview, isGlsl: isGlsl, didSelectShader: { [weak self] shader in
+            ShadersListView.show(initType: .preview, isGlsl: isGlsl, ignoreShaderConfig: true, didSelectShader: { [weak self] shader in
                 guard let self else { return }
                 self.shader.appendedShaders.append(shader)
                 self.isShaderModified = true
@@ -126,9 +126,10 @@ class ShaderOrderView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -140,7 +141,7 @@ class ShaderOrderView: BaseView {
         }
         
         let icon = UIImageView(image: UIImage(symbol: .sparklesRectangleStackFill))
-        topBlurView.addSubview(icon)
+        navigationBlurView.addSubview(icon)
         icon.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.size.equalTo(Constants.Size.IconSizeMin)
@@ -150,13 +151,13 @@ class ShaderOrderView: BaseView {
         headerTitleLabel.text = R.string.localizable.shadersOrder()
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.equalTo(icon.snp.trailing).offset(Constants.Size.ContentSpaceUltraTiny)
             make.centerY.equalTo(icon)
         }
         
-        topBlurView.addSubview(closeButton)
+        navigationBlurView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
             make.centerY.equalToSuperview()

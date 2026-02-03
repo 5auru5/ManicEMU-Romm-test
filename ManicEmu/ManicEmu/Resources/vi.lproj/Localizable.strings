@@ -822,3 +822,25 @@ Nếu bạn muốn nâng cấp thiết lập của mình, PlayCase là sự kế
 "NotInstallMeloNX" = "Chưa cài đặt MeloNX";
 "FetchGamesFromMeloNX" = "Nhập trò chơi từ MeloNX";
 "ChangeAlert" = "Nội dung đã thay đổi. Đóng ngay bây giờ sẽ mất mọi thay đổi. Tiếp tục đóng?";
+
+"JGenesisAlert" = "Xin lỗi, lõi JGenesis chỉ hỗ trợ tệp ROM .chd.";
+"RedeemOfferCode" = "Đổi Ưu Đãi";
+"CheatImportFailed" = "Nhập thất bại. Không thể phân tích tệp hoặc không tìm thấy mã cheat phù hợp.";
+"RemoveAllCheats" = "Xóa Tất Cả Cheat";
+"RemoveAllCheatsAlert" = "Bạn có chắc chắn muốn xóa tất cả mã cheat không? Hành động này không thể hoàn tác.";
+"CheatCodeStatus" = "Đã Bật";
+"Background" = "Nền";
+"AddBackgroundForLandscape" = "Thêm Nền Ngang";
+"AddBackgroundForPortrait" = "Thêm Nền Dọc";
+"UpdateBackground" = "Đặt Nền";
+"UpdateBackgroundForGame" = "Đặt cho Trò Chơi Này";
+"UpdateBackgroundForConsole" = "Đặt cho Nền Tảng %@";
+"UpdateBackgroundForGlobal" = "Đặt Toàn Cục";
+"RemoveBackgroundForGame" = "Xóa Nền Trò Chơi";
+"RemoveBackgroundForConsole" = "Xóa Nền Nền Tảng %@";
+"RemoveBackgroundForGlobal" = "Xóa Nền Toàn Cục";
+"ShaderConfigAlert" = "Đã đặt cho %@.";
+"Global" = "Toàn Cục";
+"RemoveShaderForGlobal" = "Xóa Shader Toàn Cục";
+"FeaturedItems" = "Mục Nổi Bật";
+"ReUpload" = "Tải Lên Lại";

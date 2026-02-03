@@ -128,4 +128,8 @@ extension TouchControllerSkin: ControllerSkinBase
     public func menuInsets(for traits: ControllerSkin.Traits) -> UIEdgeInsets? {
         return nil
     }
+    
+    public func switchView(for item: ControllerSkin.Item, traits: ControllerSkin.Traits, onImageSize: CGSize, offImageSize: CGSize) -> (UIImage?, UIImage?)? {
+        return nil
+    }
 }

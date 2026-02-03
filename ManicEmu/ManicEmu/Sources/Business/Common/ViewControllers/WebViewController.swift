@@ -13,138 +13,16 @@ import MessageUI
 class WebViewController: BaseViewController {
     static var isShow = false
     
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
     
-    private var isRomPatcher = false
     private let url: URL
     private lazy var webView: WKWebView = {
         let view: WKWebView
-        if isRomPatcher {
-            let config = WKWebViewConfiguration()
-            let userContentController = WKUserContentController()
-            let js = """
-            // 拦截blob下载并获取文件名
-            var originalCreateObjectURL = URL.createObjectURL;
-            var romFileName = '';
-            var patchFileName = '';
-            
-            function removeFileRestrictions() {
-                // 移除ROM文件上传限制
-                var romInput = document.getElementById('rom-patcher-input-file-rom');
-                if (romInput) {
-                    romInput.removeAttribute('accept');
-                    console.log('ROM文件限制已移除');
-                    
-                    // 监听ROM文件选择，获取文件名
-                    romInput.addEventListener('change', function(e) {
-                        if (e.target.files && e.target.files[0]) {
-                            romFileName = e.target.files[0].name;
-                            console.log('ROM文件名:', romFileName);
-                        }
-                    });
-                }
-                
-                // 移除补丁文件上传限制
-                var patchInput = document.getElementById('rom-patcher-input-file-patch');
-                if (patchInput) {
-                    patchInput.removeAttribute('accept');
-                    console.log('补丁文件限制已移除');
-                    
-                    // 监听补丁文件选择，获取文件名
-                    patchInput.addEventListener('change', function(e) {
-                        if (e.target.files && e.target.files[0]) {
-                            patchFileName = e.target.files[0].name;
-                            console.log('补丁文件名:', patchFileName);
-                        }
-                    });
-                }
-            }
-            
-            // 重写URL.createObjectURL来拦截blob下载
-            URL.createObjectURL = function(blob) {
-                console.log('Blob下载被拦截:', blob);
-                
-                // 生成下载文件名
-                var downloadFileName = generatePatchedFileName(romFileName, patchFileName);
-                
-                // 读取blob内容
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    var base64Data = e.target.result;
-                    // 发送给iOS
-                    window.webkit.messageHandlers.downloadHandler.postMessage({
-                        type: 'blob_download',
-                        data: base64Data,
-                        size: blob.size,
-                        mimeType: blob.type,
-                        fileName: downloadFileName,
-                        romFileName: romFileName,
-                        patchFileName: patchFileName
-                    });
-                };
-                reader.readAsDataURL(blob);
-                
-                // 继续原始下载流程
-                return originalCreateObjectURL.call(this, blob);
-            };
-            
-            // 生成补丁后的文件名
-            function generatePatchedFileName(romName, patchName) {
-                if (!romName) return 'patched_rom.bin';
-                
-                // 移除扩展名
-                var nameWithoutExt = romName.replace(/\\.[^/.]+$/, '');
-                var romExt = romName.split('.').pop() || 'bin';
-                
-                // 如果有补丁文件名，尝试从中提取描述信息
-                var patchInfo = '';
-                if (patchName) {
-                    // 移除补丁文件扩展名
-                    var patchWithoutExt = patchName.replace(/\\.[^/.]+$/, '');
-                    // 如果补丁名不包含在ROM名中，添加到文件名
-                    if (!nameWithoutExt.toLowerCase().includes(patchWithoutExt.toLowerCase())) {
-                        patchInfo = '_' + patchWithoutExt;
-                    }
-                }
-                
-                return nameWithoutExt + patchInfo + '_patched.' + romExt;
-            }
-            
-            // 立即执行一次
-            removeFileRestrictions();
-            
-            // DOM完全加载后再执行一次
-            document.addEventListener('DOMContentLoaded', removeFileRestrictions);
-            
-            // 使用MutationObserver监听DOM变化
-            var observer = new MutationObserver(function(mutations) {
-                removeFileRestrictions();
-            });
-            observer.observe(document.body || document.documentElement, {
-                childList: true,
-                subtree: true
-            });
-            
-            // 延时执行，确保页面完全加载
-            setTimeout(removeFileRestrictions, 1000);
-            setTimeout(removeFileRestrictions, 3000);
-            """
-            let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-            userContentController.addUserScript(script)
-            
-            // 添加消息处理器来接收JS消息
-            userContentController.add(self, name: "downloadHandler")
-            
-            config.userContentController = userContentController
-            view = WKWebView(frame: CGRect.zero, configuration: config)
-        } else {
-            view = WKWebView(frame: CGRect.zero)
-        }
-        
+        view = WKWebView(frame: CGRect.zero)
         view.navigationDelegate = self
         view.uiDelegate = self
         view.isOpaque = false
@@ -230,9 +108,6 @@ class WebViewController: BaseViewController {
     
     deinit {
         webView.navigationDelegate = nil
-        if isRomPatcher {
-            webView.configuration.userContentController.removeScriptMessageHandler(forName: "downloadHandler")
-        }
     }
 
     init(url: URL = URL(string: Constants.URLs.ManicEMU)!, showClose: Bool = true, isShow: Bool? = nil, bottomInset: CGFloat? = nil) {
@@ -244,9 +119,6 @@ class WebViewController: BaseViewController {
         }
         super.init(nibName: nil, bundle: nil)
         self.bottomInset = bottomInset
-        if url == Constants.URLs.RomPatcher {
-            isRomPatcher = true
-        }
     }
     
     init(searchGame: Game) {
@@ -272,7 +144,8 @@ class WebViewController: BaseViewController {
         
         view.addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
@@ -310,7 +183,6 @@ class WebViewController: BaseViewController {
                 make.centerY.equalTo(self.backButton)
                 make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax-Constants.Size.ContentSpaceUltraTiny)
             })
-            closeButton.backgroundColor = Constants.Color.BackgroundPrimary
         }
     }
     
@@ -441,75 +313,5 @@ extension WebViewController: MFMailComposeViewControllerDelegate {
             controller.dismiss(animated: true)
         }
     
-    }
-}
-
-extension WebViewController: WKScriptMessageHandler {
-    func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if message.name == "downloadHandler" {
-            if let messageDict = message.body as? [String: Any] {
-                if let type = messageDict["type"] as? String {
-                    switch type {
-                    case "blob_download":
-                        handleBlobDownload(messageDict)
-                    default:
-                        break
-                    }
-                }
-            }
-        }
-    }
-    
-    
-    private func handleBlobDownload(_ messageDict: [String: Any]) {
-        guard let base64Data = messageDict["data"] as? String,
-              let size = messageDict["size"] as? Int else {
-            Log.debug("无效的blob下载数据")
-            return
-        }
-        
-        Log.debug("接收到blob下载，大小: \(size) bytes")
-        
-        // 移除data:前缀并解码base64
-        guard let commaRange = base64Data.range(of: ","),
-              let data = Data(base64Encoded: String(base64Data[commaRange.upperBound...])) else {
-            Log.debug("base64数据解码失败")
-            return
-        }
-        
-        // 从JS获取生成的文件名
-        let romFileName = messageDict["romFileName"] as? String ?? ""
-        let patchFileName = messageDict["patchFileName"] as? String ?? ""
-
-        // 保存文件
-        saveDownloadedFile(data: data, fileName: romFileName.deletingPathExtension + " (\(patchFileName.deletingPathExtension))." + romFileName.pathExtension)
-    }
-    
-    
-    private func saveDownloadedFile(data: Data, fileName: String) {
-        let fileUrl = URL(fileURLWithPath: Constants.Path.Cache.appendingPathComponent(fileName))
-        
-        
-        if FileManager.default.fileExists(atPath: fileUrl.path) {
-            try? FileManager.default.removeItem(at: fileUrl)
-        }
-        
-        do {
-            try data.write(to: fileUrl)
-            DispatchQueue.main.async {
-                UIView.makeAlert(title: R.string.localizable.downloadCompletion(), detail: fileName, cancelTitle: R.string.localizable.gamesShareRom(), confirmTitle: R.string.localizable.m3uFileImport(), cancelAction: {
-                    //分享
-                    ShareManager.shareFile(fileUrl: fileUrl)
-                }, confirmAction: {
-                    //导入
-                    FilesImporter.importFiles(urls: [fileUrl])
-                })
-            }
-        } catch {
-            DispatchQueue.main.async {
-                UIView.makeToast(message: "文件保存失败: \(error.localizedDescription)")
-            }
-            Log.debug("文件保存失败: \(error)")
-        }
     }
 }

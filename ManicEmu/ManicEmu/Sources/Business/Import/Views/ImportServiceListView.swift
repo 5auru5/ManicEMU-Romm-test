@@ -12,8 +12,8 @@ import RealmSwift
 
 class ImportServiceListView: BaseView {
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -33,7 +33,7 @@ class ImportServiceListView: BaseView {
         }))
         actions.append((UIAction(title: R.string.localizable.fetchGamesFromMeloNX(), image: UIImage(symbol: .gamecontroller)) { [weak self] _ in
             guard let self = self else { return }
-            MelonNXKit.fetchGames()
+            MeloNXKit.fetchGames()
         }))
         let view = ContextMenuButton(image: nil, menu: UIMenu(children: actions))
         return view
@@ -131,9 +131,10 @@ class ImportServiceListView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             if UIDevice.isPhone, UIDevice.isLandscape {
                 make.height.equalTo(Constants.Size.ItemHeightMid)
             } else {
@@ -142,7 +143,7 @@ class ImportServiceListView: BaseView {
         }
         
         let navigationContainer = UIView()
-        topBlurView.addSubview(navigationContainer)
+        navigationBlurView.addSubview(navigationContainer)
         navigationContainer.snp.makeConstraints { make in
             make.leading.bottom.trailing.equalToSuperview()
             make.height.equalTo(Constants.Size.ItemHeightMid)
@@ -176,7 +177,7 @@ class ImportServiceListView: BaseView {
     
     func updateViews() {
         if UIDevice.isPhone {
-            topBlurView.snp.updateConstraints { make in
+            navigationBlurView.snp.updateConstraints { make in
                 if UIDevice.isLandscape {
                     make.height.equalTo(Constants.Size.ItemHeightMid)
                 } else {
@@ -372,15 +373,27 @@ extension ImportServiceListView: UICollectionViewDelegate {
             topViewController()?.present(MultiDiscBuilderViewController(), animated: true)
         case .romPatcher:
             //RomPatcher
-            topViewController()?.present(WebViewController(url: Constants.URLs.RomPatcher), animated: true)
+            topViewController()?.present(RomPatcherViewController(), animated: true)
         }
     }
     
-    //长按弹出可交互菜单
+    //长按弹出可交互菜单 (iOS 15兼容)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //长按弹出可交互菜单 (iOS 16+)
+    @available(iOS 16.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let indexPath = indexPaths.first, indexPath.section == 1 else { return nil }
+        guard let indexPath = indexPaths.first else { return nil }
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //统一的上下文菜单配置逻辑
+    private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        guard indexPath.section == 1 else { return nil }
         let service = services[indexPath.row]
-        guard service.type != .wifi && service.type != .paste else { return nil }
+        guard service.type != .wifi && service.type != .paste && service.type != .multiDisc && service.type != .romPatcher else { return nil }
         return UIContextMenuConfiguration(actionProvider:  { _ in
             UIMenu(children: [UIAction(title: R.string.localizable.importServiceDelete(), image: UIImage(systemSymbol: .trash), attributes: .destructive, handler: { _ in
                 ImportService.change { realm in

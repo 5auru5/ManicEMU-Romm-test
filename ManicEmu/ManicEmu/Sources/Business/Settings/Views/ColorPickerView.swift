@@ -28,8 +28,8 @@ class ColorPickerView: UIView {
         view.enableRoundCorner = true
         return view
     }()
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -172,20 +172,21 @@ class ColorPickerView: UIView {
             self.colorView.animatedGradientView.setColors(self.colorPicker.handles.map({ $0.color }))
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
-        topBlurView.addSubview(closeButton)
+        navigationBlurView.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-Constants.Size.ContentSpaceMax)
             make.centerY.equalToSuperview()
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         }
         
-        topBlurView.addSubview(saveButton)
+        navigationBlurView.addSubview(saveButton)
         saveButton.snp.makeConstraints { make in
             make.leading.equalTo(Constants.Size.ContentSpaceMax)
             make.centerY.equalToSuperview()

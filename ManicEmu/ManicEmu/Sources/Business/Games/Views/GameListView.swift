@@ -78,7 +78,12 @@ class GameListView: BaseView {
     ///搜索模式数据源
     private lazy var searchDatas: [GameType: [Game]] = [:]
     
-    private var coverSizes = [GameType: CGSize]()
+    struct CoverSizeIdentifier: Hashable {
+        var gameType: GameType
+        var isLandscape: Bool = UIDevice.isLandscape
+    }
+    
+    private var coverSizes = [CoverSizeIdentifier: CGSize]()
     
     ///选择模式
     var isSelectionMode: Bool { selectionMode != .normalMode }
@@ -86,6 +91,9 @@ class GameListView: BaseView {
         didSet {
             guard selectionMode != oldValue else { return }
             for (gameTypeIndex, gameType) in self.sortDatasKeys().enumerated() {
+                if foldedGameTypes[gameType] ?? false {
+                    continue
+                }
                 if let games = (isSearchMode ? searchDatas : normalDatas)[gameType] {
                     for (gameIndex, _) in games.enumerated() {
                         switch selectionMode {
@@ -444,14 +452,14 @@ class GameListView: BaseView {
                 let coverWidth = coverHeight*Constants.Size.GameCoverRatio(gameType: gameType)
                 let itemEstimatedWidth = coverWidth + Constants.Size.GamesListSelectionEdge*2
                 let coverSize = CGSize(width: coverWidth, height: coverHeight)
-                if let size =  self.coverSizes[gameType] {
+                if let size =  self.coverSizes[CoverSizeIdentifier(gameType: gameType)] {
                     //尺寸存在
                     if size != coverSize {
-                        self.coverSizes[gameType] = coverSize
+                        self.coverSizes[CoverSizeIdentifier(gameType: gameType)] = coverSize
                     }
                 } else {
                     //尺寸不存在
-                    self.coverSizes[gameType] = coverSize
+                    self.coverSizes[CoverSizeIdentifier(gameType: gameType)] = coverSize
                 }
                 let newItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1),
                                                                                         heightDimension: .fractionalHeight(1)))
@@ -473,14 +481,14 @@ class GameListView: BaseView {
                 //一个item的高度 = 间距 + 封面高度 + 间距 + title高度 + 间距
                 let itemEstimatedHeight = Constants.Size.GamesListSelectionEdge + coverHeight + (self.isSearchMode || !Constants.Size.GamesHideTitle ? Constants.Size.ContentSpaceMin + Constants.Font.body().lineHeight : 0) + Constants.Size.GamesListSelectionEdge
                 let coverSize = CGSize(width: coverWidth, height: coverHeight)
-                if let size =  self.coverSizes[gameType] {
+                if let size =  self.coverSizes[CoverSizeIdentifier(gameType: gameType)] {
                     //尺寸存在
                     if size != coverSize {
-                        self.coverSizes[gameType] = coverSize
+                        self.coverSizes[CoverSizeIdentifier(gameType: gameType)] = coverSize
                     }
                 } else {
                     //尺寸不存在
-                    self.coverSizes[gameType] = coverSize
+                    self.coverSizes[CoverSizeIdentifier(gameType: gameType)] = coverSize
                 }
                 
                 let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: widthDimension,
@@ -848,7 +856,12 @@ extension GameListView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withClass: GameCollectionViewCell.self, for: indexPath)
         if let game = getGame(at: indexPath) {
-            cell.setData(game: game, isSelect: isSelectionMode, highlightString: searchString, coverSize: coverSizes[game.gameType] ?? .zero, showTitle: !Constants.Size.GamesHideTitle || isSearchMode, indexPath: indexPath)
+            cell.setData(game: game,
+                         isSelect: isSelectionMode,
+                         highlightString: searchString,
+                         coverSize: coverSizes[CoverSizeIdentifier(gameType: game.gameType)] ?? .zero,
+                         showTitle: !Constants.Size.GamesHideTitle || isSearchMode,
+                         indexPath: indexPath)
         }
         return cell
     }
@@ -1087,9 +1100,21 @@ extension GameListView: UICollectionViewDelegate {
         return false
     }
     
-    //长按弹出可交互菜单
+    //长按弹出可交互菜单 (iOS 15兼容)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //长按弹出可交互菜单 (iOS 16+)
+    @available(iOS 16.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
-        guard selectionMode == .normalMode, let indexPath = indexPaths.first else { return nil }
+        guard let indexPath = indexPaths.first else { return nil }
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //统一的上下文菜单配置逻辑
+    private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
+        guard selectionMode == .normalMode else { return nil }
         
         if let game = getGame(at: indexPath), let imageView = (collectionView.cellForItem(at: indexPath) as? GameCollectionViewCell)?.imageView {
             

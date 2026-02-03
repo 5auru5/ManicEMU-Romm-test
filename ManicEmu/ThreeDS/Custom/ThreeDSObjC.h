@@ -42,6 +42,7 @@
 #include "core/hle/service/nfc/nfc_device.h"
 #include "core/hle/service/apt/apt_u.h"
 #include "core/hle/service/apt/applet_manager.h"
+#include "core/hle/service/mic/mic_u.h"
 
 namespace InformationForGame {
 std::vector<u8> GetSMDHData(const std::string& path) {

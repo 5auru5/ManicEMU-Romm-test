@@ -177,6 +177,21 @@ class Game: Object, ObjectUpdatable {
             return URL(fileURLWithPath: Constants.Path.BeetlePSXHW.appendingPathComponent("\(name).srm"))
         } else if gameType == .arcade {
             return URL(fileURLWithPath: Constants.Path.MAME.appendingPathComponent("\(name).srm"))
+        } else if gameType == .a2600 {
+            return URL(fileURLWithPath: Constants.Path.Stella.appendingPathComponent("\(name).srm"))
+        } else if gameType == .a5200 {
+            return URL(fileURLWithPath: Constants.Path.Atari800.appendingPathComponent("\(name).srm"))
+        } else if gameType == .a7800 {
+            return URL(fileURLWithPath: Constants.Path.ProSystem.appendingPathComponent("\(name).srm"))
+        } else if gameType == .jaguar {
+            let srmPath = Constants.Path.Holani.appendingPathComponent("\(name).srm")
+            if FileManager.default.fileExists(atPath: srmPath) {
+                return URL(fileURLWithPath: srmPath)
+            } else {
+                return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).cdrom.srm"))
+            }
+        } else if gameType == .lynx {
+            return URL(fileURLWithPath: Constants.Path.Holani.appendingPathComponent("\(name).srm"))
         }
         
         let localUrl = URL(fileURLWithPath: Constants.Path.Data.appendingPathComponent("\(name).\(gameType.manicEmuCore?.gameSaveExtension ?? "")"))
@@ -194,11 +209,8 @@ class Game: Object, ObjectUpdatable {
     }
     
     var gameCodeForPSP: String? {
-        if gameType == .psp,
-           let extras,
-           let extraInfos = try? extras.jsonObject() as? [String: Any],
-           let gameTitle = extraInfos["PSPGameCode"] as? String {
-            return gameTitle
+        if gameType == .psp {
+           return getExtraString(key: ExtraKey.PSPGameCode.rawValue)
         } else {
             return nil
         }
@@ -230,12 +242,7 @@ class Game: Object, ObjectUpdatable {
     func isBIOSMissing(required: Bool = true) -> Bool {
         let requireBIOS: [BIOSItem]
         if gameType == .mcd {
-#if SIDE_LOAD
             requireBIOS = Constants.BIOS.MegaCDBios.filter({ required ? $0.required : true })
-#else
-            //AppStore不需要检查MCD的BIOS
-            return false
-#endif
         } else if gameType == .ss {
             if defaultCore == 0 {
                 requireBIOS = Array(Constants.BIOS.SaturnBios[1...2]).filter({ required ? $0.required : true })
@@ -359,7 +366,11 @@ class Game: Object, ObjectUpdatable {
                 }
             }
         } else if gameType == .ds {
-            return Bundle.main.path(forResource: "melondsds.libretro", ofType: "framework", inDirectory: "Frameworks")
+            if defaultCore == 0 {
+                return Bundle.main.path(forResource: "melondsds.libretro", ofType: "framework", inDirectory: "Frameworks")
+            } else {
+                return Bundle.main.path(forResource: "desmume.libretro", ofType: "framework", inDirectory: "Frameworks")
+            }
         } else if gameType == .arcade {
             if defaultCore == 0 {
                 return Bundle.main.path(forResource: "mame.libretro", ofType: "framework", inDirectory: "Frameworks")
@@ -368,14 +379,31 @@ class Game: Object, ObjectUpdatable {
             }
         } else if gameType == ._3ds, defaultCore == 1 {
             return Bundle.main.path(forResource: "azahar.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .a2600 {
+            return Bundle.main.path(forResource: "stella.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .a5200 {
+            return Bundle.main.path(forResource: "atari800.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .a7800 {
+            return Bundle.main.path(forResource: "prosystem.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .jaguar {
+            return Bundle.main.path(forResource: "virtualjaguar.libretro", ofType: "framework", inDirectory: "Frameworks")
+        } else if gameType == .lynx {
+            return Bundle.main.path(forResource: "holani.libretro", ofType: "framework", inDirectory: "Frameworks")
         }
         return nil
     }
     
     var isPicodriveCore: Bool {
-        if gameType == ._32x || gameType == .mcd {
+#if SIDE_LOAD
+        if (gameType == ._32x || gameType == .mcd) && defaultCore == 0 {
             return true
         }
+#else
+        if gameType == ._32x || gameType == .mcd {
+            return false
+        }
+#endif
+        
         if (gameType == .md || gameType == .sg1000 || gameType == .gg || gameType == .ms) && defaultCore == 1 {
             return true
         }
@@ -436,7 +464,7 @@ class Game: Object, ObjectUpdatable {
         return nil
     }
     
-    func updateExtra(key: String, value: Any) {
+    func updateExtra(key: String, value: Any?) {
         if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
             Self.change { realm in
                 self.extras = data
@@ -470,6 +498,9 @@ class Game: Object, ObjectUpdatable {
             return false
         }
         if gameType == .arcade, defaultCore == 0 {
+            return false
+        }
+        if isJGenesisCore {
             return false
         }
         return true
@@ -629,6 +660,9 @@ class Game: Object, ObjectUpdatable {
         if gameType == ._3ds, defaultCore == 0 {
             return false
         }
+        if (gameType == ._32x || gameType == .mcd) && defaultCore == 1 {
+            return false
+        }
         return true
     }
     
@@ -638,6 +672,26 @@ class Game: Object, ObjectUpdatable {
     
     var isAzahar3DS: Bool {
         return gameType == ._3ds && defaultCore == 1
+    }
+    
+    var isJGenesisCore: Bool {
+#if SIDE_LOAD
+        return ((gameType == ._32x || gameType == .mcd) && defaultCore == 1)
+#else
+        return gameType == ._32x || gameType == .mcd
+#endif
+        
+    }
+    
+    var coreNameForMultiSupport: String {
+        if gameType.supportCores.count > 0, defaultCore < gameType.supportCores.count {
+            return "(\(gameType.supportCores[defaultCore]))"
+        }
+        return ""
+    }
+    
+    var isAtari: Bool {
+        return gameType == .a2600 || gameType == .a5200 || gameType == .a7800 || gameType == .jaguar || gameType == .lynx
     }
 }
 

@@ -75,7 +75,7 @@ class ApplicationSceneDelegate: UIResponder, UIWindowSceneDelegate {
                     OAuthSwift.handle(url: url)
                 } else if scheme == Constants.Strings.ManicScheme {
                     if let host = url.host, host == Constants.Strings.MeloNXScheme {
-                        MelonNXKit.processGames(callbackUrl: url)
+                        MeloNXKit.processGames(callbackUrl: url)
                     } else {
                         Self.launchGameID = url.lastPathComponent
                     }

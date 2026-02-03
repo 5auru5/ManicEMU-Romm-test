@@ -12,11 +12,11 @@ import RealmSwift
 protocol ObjectUpdatable {
     static func change(action: ((_ realm: Realm) throws ->Void))
     static func getExtra(extras: Any, key: String) -> Any?
-    static func updateExtra(extras: Any, key: String, value: Any) -> Data?
+    static func updateExtra(extras: Any, key: String, value: Any?) -> Data?
     func getExtra(key: String) -> Any?
     func getExtraString(key: String) -> String?
     func getExtraInt(key: String) -> Int?
-    func updateExtra(key: String, value: Any)
+    func updateExtra(key: String, value: Any?)
 }
 
 extension ObjectUpdatable {
@@ -45,7 +45,7 @@ extension ObjectUpdatable {
         return nil
     }
     
-    static func updateExtra(extras: Any, key: String, value: Any) -> Data? {
+    static func updateExtra(extras: Any, key: String, value: Any?) -> Data? {
         var extraData: Data? = nil
         if extras is Data {
             extraData = extras as? Data
@@ -81,9 +81,9 @@ extension ObjectUpdatable {
         return nil
     }
     
-    func getExtraFloat(key: String) -> Float? {
-        if let float = self.getExtra(key: key) as? Float {
-            return float
+    func getExtraDouble(key: String) -> Double? {
+        if let double = self.getExtra(key: key) as? Double {
+            return double
         }
         return nil
     }

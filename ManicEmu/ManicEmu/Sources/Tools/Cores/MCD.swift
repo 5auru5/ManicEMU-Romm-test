@@ -60,6 +60,8 @@ extension GameType
 }
 
 struct MCD: ManicEmuCoreProtocol {
+    static var isJGenesisCore: Bool = false
+    
     public static let core = MCD()
     
     public var name: String { "MCD" }
@@ -79,7 +81,7 @@ struct MCD: ManicEmuCoreProtocol {
         return [gameGenieFormat, proActionReplayFormat]
     }
     
-    public var emulatorConnector: EmulatorBase { MDEmulatorBridge.shared }
+    public var emulatorConnector: EmulatorBase { MCDEmulatorBridge.shared }
         
     private init()
     {
@@ -114,13 +116,22 @@ class MCDEmulatorBridge : NSObject, EmulatorBase {
     
     func activateInput(_ input: Int, value: Double, playerIndex: Int) {
         guard playerIndex >= 0 else { return }
-        if let gameInput = MCDGameInput(rawValue: input),
-            let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+        if let gameInput = MCDGameInput(rawValue: input) {
 #if DEBUG
-Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
+                    Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
 #endif
-            LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
+            if MCD.isJGenesisCore {
+                if let jGenesisButton = gameInputToJGenesisCoreInput(gameInput: gameInput) {
+                    PlayViewController.jGenesisView?.pressButton(jGenesisButton, pressed: true, player: playerIndex-1)
+                }
+            } else {
+                if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+                    LibretroCore.sharedInstance().press(libretroButton, playerIndex: UInt32(playerIndex))
+                }
+            }
+            
         }
+        
     }
     
     func gameInputToCoreInput(gameInput: MCDGameInput) -> LibretroButton? {
@@ -141,10 +152,33 @@ Log.debug("\(String(describing: Self.self))点击了:\(gameInput)")
         return nil
     }
     
+    func gameInputToJGenesisCoreInput(gameInput: MCDGameInput) -> JGenesisButton? {
+        if gameInput == .a { return .a }
+        else if gameInput == .b { return .b }
+        else if gameInput == .c { return .c }
+        else if gameInput == .x { return .x }
+        else if gameInput == .y { return .y }
+        else if gameInput == .z { return .z }
+        else if gameInput == .start { return .start }
+        else if gameInput == .up { return .up }
+        else if gameInput == .down { return .down }
+        else if gameInput == .left { return .left }
+        else if gameInput == .right { return .right }
+        return nil
+    }
+    
     func deactivateInput(_ input: Int, playerIndex: Int) {
-        if let gameInput = MCDGameInput(rawValue: input),
-            let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
-            LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
+        if let gameInput = MCDGameInput(rawValue: input) {
+            if MCD.isJGenesisCore {
+                if let jGenesisButton = gameInputToJGenesisCoreInput(gameInput: gameInput) {
+                    PlayViewController.jGenesisView?.pressButton(jGenesisButton, pressed: false, player: playerIndex-1)
+                }
+            } else {
+                if let libretroButton = gameInputToCoreInput(gameInput: gameInput) {
+                    LibretroCore.sharedInstance().release(libretroButton, playerIndex: UInt32(playerIndex))
+                }
+            }
+            
         }
     }
     

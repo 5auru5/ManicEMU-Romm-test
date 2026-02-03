@@ -19,8 +19,8 @@ class CitraAdvancedSettingViewController: QuickTableViewController {
     private let defaultConfig = try? INIFile(fileName: Constants.Path.CitraDefaultConfig)
     private var isModified = false
     
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -84,7 +84,8 @@ class CitraAdvancedSettingViewController: QuickTableViewController {
         
         view.addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         

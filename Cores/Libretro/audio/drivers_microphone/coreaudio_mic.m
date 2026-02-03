@@ -30,6 +30,8 @@ typedef struct coreaudio_microphone
     bool nonblock; /// Non-blocking mode flag
     int sample_rate; /// Current sample rate
     bool use_float; /// Whether to use float format
+    void *render_buffer; /// Reusable buffer for AudioUnitRender
+    size_t render_buffer_size; /// Size of render buffer
 } coreaudio_microphone_t;
 
 /// Callback for receiving audio samples
@@ -44,7 +46,6 @@ static OSStatus coreaudio_input_callback(
     coreaudio_microphone_t *microphone = (coreaudio_microphone_t*)inRefCon;
     AudioBufferList bufferList;
     OSStatus status;
-    void *tempBuffer = NULL;
 
     /// Calculate required buffer size
     size_t bufferSize = inNumberFrames * microphone->format.mBytesPerFrame;
@@ -53,17 +54,24 @@ static OSStatus coreaudio_input_callback(
         return kAudio_ParamError;
     }
 
-    /// Allocate temporary buffer
-    tempBuffer = malloc(bufferSize);
-    if (!tempBuffer) {
-        RARCH_ERR("[CoreAudio]: Failed to allocate temporary buffer\n");
-        return kAudio_MemFullError;
+    /// Ensure render buffer is large enough (resize if needed)
+    if (microphone->render_buffer_size < bufferSize) {
+        if (microphone->render_buffer) {
+            free(microphone->render_buffer);
+        }
+        microphone->render_buffer = calloc(1, bufferSize);
+        microphone->render_buffer_size = bufferSize;
+        if (!microphone->render_buffer) {
+            RARCH_ERR("[CoreAudio]: Failed to allocate render buffer\n");
+            return kAudio_MemFullError;
+        }
     }
 
-    /// Set up buffer list
+    /// Set up buffer list with reusable buffer
     bufferList.mNumberBuffers = 1;
+    bufferList.mBuffers[0].mNumberChannels = 1;
     bufferList.mBuffers[0].mDataByteSize = (UInt32)bufferSize;
-    bufferList.mBuffers[0].mData = tempBuffer;
+    bufferList.mBuffers[0].mData = microphone->render_buffer;
 
     /// Render audio data
     status = AudioUnitRender(microphone->audio_unit,
@@ -74,6 +82,16 @@ static OSStatus coreaudio_input_callback(
                            &bufferList);
 
     if (status == noErr) {
+        /// Check FIFO buffer space before writing
+        size_t avail_write = FIFO_WRITE_AVAIL(microphone->sample_buffer);
+        size_t bytes_to_write = bufferList.mBuffers[0].mDataByteSize;
+        
+        /// Warn if FIFO buffer overflow is about to occur
+        if (avail_write < bytes_to_write) {
+            RARCH_WARN("[CoreAudio]: FIFO buffer overflow! Available: %zu, need: %zu\n",
+                      avail_write, bytes_to_write);
+        }
+        
         /// Write to FIFO buffer
         fifo_write(microphone->sample_buffer,
                   bufferList.mBuffers[0].mData,
@@ -82,8 +100,6 @@ static OSStatus coreaudio_input_callback(
         RARCH_ERR("[CoreAudio]: Failed to render audio: %d\n", status);
     }
 
-    /// Clean up temporary buffer
-    free(tempBuffer);
     return status;
 }
 
@@ -130,9 +146,6 @@ static int coreaudio_microphone_read(void *driver_context,
 
     if (read_amt > 0) {
         fifo_read(microphone->sample_buffer, buf, read_amt);
-#if DEBUG
-        RARCH_LOG("[CoreAudio]: Read %zu bytes from microphone\n", read_amt);
-#endif
     }
 
     return (int)read_amt;
@@ -141,14 +154,15 @@ static int coreaudio_microphone_read(void *driver_context,
 /// Set non-blocking state
 static void coreaudio_microphone_set_nonblock_state(void *driver_context, bool state)
 {
-    /// This method sets non-blocking state for all microphones created by this driver
-    /// For CoreAudio implementation, we don't maintain driver-level state
-    /// Non-blocking behavior is handled per-microphone
+    /// For CoreAudio, we need to set nonblock for all open microphones
+    /// Since we only support one microphone at a time, we don't track a list
     (void)driver_context;
     (void)state;
     
-    /// Note: Individual microphone non-blocking state should be set via
-    /// individual microphone context, not driver context
+    /// Note: Nonblocking state is now set per-microphone in open_mic
+    /// and can be toggled via the microphone context if needed
+    RARCH_LOG("[CoreAudio]: Set nonblock state to %s (applies to future microphones)\n", 
+             state ? "true" : "false");
 }
 
 /// Helper method to set audio format
@@ -190,6 +204,7 @@ static void *coreaudio_microphone_open_mic(void *driver_context,
     /// Initialize handle fields
     microphone->sample_rate = rate;
     microphone->use_float = false; /// Default to integer format
+    microphone->nonblock = true;   /// Default to non-blocking mode for game usage
 
     /// Validate requested sample rate
     if (rate != 44100 && rate != 48000) {
@@ -350,6 +365,8 @@ static void coreaudio_microphone_close_mic(void *driver_context, void *microphon
         }
         if (microphone->sample_buffer)
             fifo_free(microphone->sample_buffer);
+        if (microphone->render_buffer)
+            free(microphone->render_buffer);
         free(microphone);
     } else {
         RARCH_ERR("[CoreAudio]: Failed to close microphone\n");

@@ -1123,46 +1123,8 @@ static BOOL RespectSilentMode = false;
     core_info_t *core_info      = NULL;
     core_info_get_current_core(&core_info);
     
-    //核心选项 开启PSP内部作弊码支持
-    if (strcmp(core_info->core_name, "PPSSPP") == 0 && completion) {
-        core_options_flush();//生成核心配置
-        //获取PSP的游戏信息
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            NSFileManager *fileManager = [NSFileManager defaultManager];
-            NSString *savePath = [[NSString stringWithCString:runloop_state_get_ptr()->savefile_dir encoding:NSUTF8StringEncoding] stringByAppendingPathComponent:@"PSP/Cheats"];
-            NSError *error = nil;
-            NSArray *files = [fileManager contentsOfDirectoryAtPath:savePath error:&error];
-            if (error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    completion(nil);
-                });
-                return;
-            }
-            NSString *latestFileName = nil;
-            NSDate *latestDate = [NSDate distantPast];
-            for (NSString *fileName in files) {
-                if ([[fileName pathExtension] isEqualToString:@"ini"]) {
-                    NSString *fullPath = [savePath stringByAppendingPathComponent:fileName];
-                    NSDictionary *attributes = [fileManager attributesOfItemAtPath:fullPath error:&error];
-                    if (error) {
-                        continue;
-                    }
-                    
-                    NSDate *creationDate = attributes[NSFileCreationDate];
-                    if ([creationDate compare:latestDate] == NSOrderedDescending) {
-                        latestDate = creationDate;
-                        latestFileName = fileName;
-                    }
-                }
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(latestFileName == nil ? nil : @{@"PSPGameCode": [latestFileName stringByDeletingPathExtension]});
-            });
-        });
-    } else {
-        if (completion) {
-            completion(nil);
-        }
+    if (completion) {
+        completion(nil);
     }
     return YES;
 }

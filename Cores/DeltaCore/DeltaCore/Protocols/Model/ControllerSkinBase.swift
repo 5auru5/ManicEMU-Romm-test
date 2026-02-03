@@ -33,6 +33,8 @@ public protocol ControllerSkinBase
     func menuInsets(for traits: ControllerSkin.Traits) -> UIEdgeInsets?
     
     func supportedTraits(for traits: ControllerSkin.Traits) -> ControllerSkin.Traits?
+    
+    func switchView(for item: ControllerSkin.Item, traits: ControllerSkin.Traits, onImageSize: CGSize, offImageSize: CGSize) -> (UIImage?, UIImage?)?
 }
 
 public extension ControllerSkinBase

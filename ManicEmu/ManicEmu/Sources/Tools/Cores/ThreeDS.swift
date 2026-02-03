@@ -138,13 +138,12 @@ struct ThreeDS: ManicEmuCoreProtocol {
     {
     }
     
+    //For Citra
     static func setupCheats(identifier: UInt64, cheatsTxt: String, enableCheats: [String]) {
 #if !targetEnvironment(simulator)
         let manager = CheatsManager(identifier: identifier)
         let path = manager.cheatFilePath()
-        try? cheatsTxt.write(to: URL(fileURLWithPath: path),
-                             atomically: true,
-                             encoding: .utf8)
+        try? cheatsTxt.writeWithCompletePath(to: URL(fileURLWithPath: path))
         manager.loadCheats()
         let cheats = manager.getCheats()
         for (index, cheat) in cheats.enumerated() {
@@ -157,6 +156,34 @@ struct ThreeDS: ManicEmuCoreProtocol {
         }
         manager.saveCheats()
 #endif
+    }
+    
+    struct Cheat {
+        let name: String
+        let code: String
+    }
+
+    static func parseCheatFile(_ text: String) -> [Cheat] {
+        let pattern = #"\[(.*?)\]\s*([\s\S]*?)(?=\n\s*\[|$)"#
+
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        let nsText = text as NSString
+        let matches = regex.matches(
+            in: text,
+            options: [],
+            range: NSRange(location: 0, length: nsText.length)
+        )
+
+        return matches.compactMap { match in
+            guard match.numberOfRanges == 3 else { return nil }
+
+            let title = nsText.substring(with: match.range(at: 1))
+
+            let rawCode = nsText.substring(with: match.range(at: 2))
+            let code = rawCode.trimmingCharacters(in: .whitespacesAndNewlines)
+
+            return Cheat(name: title, code: code)
+        }
     }
 }
 

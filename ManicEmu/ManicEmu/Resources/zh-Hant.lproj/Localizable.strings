@@ -834,3 +834,25 @@ PlayCase 專注於高品質 iPhone 保護殼，設計時充分考慮了配件與
 "NotInstallMeloNX" = "尚未安裝 MeloNX";
 "FetchGamesFromMeloNX" = "從 MeloNX 匯入遊戲";
 "ChangeAlert" = "內容已變更，關閉將導致變更遺失。是否繼續關閉？";
+
+"JGenesisAlert" = "抱歉，JGenesis 核心僅支援 .chd 格式的 ROM 檔案。";
+"RedeemOfferCode" = "兌換優惠";
+"CheatImportFailed" = "導入失敗，檔案解析出錯或未找到匹配的作弊碼。";
+"RemoveAllCheats" = "清空作弊碼";
+"RemoveAllCheatsAlert" = "確定要移除所有作弊碼嗎？此操作無法恢復。";
+"CheatCodeStatus" = "啟用狀態";
+"Background" = "背景";
+"AddBackgroundForLandscape" = "添加橫屏背景";
+"AddBackgroundForPortrait" = "添加豎屏背景";
+"UpdateBackground" = "設定背景";
+"UpdateBackgroundForGame" = "為當前遊戲設定";
+"UpdateBackgroundForConsole" = "為 %@ 平台設定";
+"UpdateBackgroundForGlobal" = "設為全局";
+"RemoveBackgroundForGame" = "移除當前遊戲背景";
+"RemoveBackgroundForConsole" = "移除 %@ 平台背景";
+"RemoveBackgroundForGlobal" = "移除全局背景";
+"ShaderConfigAlert" = "該著色器已為 %@ 設定。";
+"Global" = "全局";
+"RemoveShaderForGlobal" = "移除全局著色器";
+"FeaturedItems" = "精選周邊";
+"ReUpload" = "重新上傳";

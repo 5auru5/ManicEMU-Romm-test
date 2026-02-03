@@ -107,7 +107,7 @@ class Settings: Object, ObjectUpdatable {
         return nil
     }
     
-    func updateExtra(key: String, value: Any) {
+    func updateExtra(key: String, value: Any?) {
         if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
             Self.change { realm in
                 self.extras = data

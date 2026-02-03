@@ -34,8 +34,18 @@ enum ExtraKey: String {
     case pspTexture
     case manualPage
     case manualFileName
+    case manualScaleFactor
+    case manulDestination
     case nesPalette
     case triggerProID
     case forceFullSkin
     case enableManufacturerFilter
+    case PSPGameCode
+    case cheatSort
+    case flexBackground
+    case shaderConfig
+    case tvType
+    case leftDifficulty
+    case rightDifficulty
+    case ignoreShaderConfig
 }

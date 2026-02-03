@@ -25,8 +25,8 @@ class LanServiceEditViewController: BaseViewController {
         let returnKeyType: UIReturnKeyType
     }
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -162,14 +162,15 @@ class LanServiceEditViewController: BaseViewController {
             make.edges.equalToSuperview()
         }
         
-        view.addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        view.addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(view.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMid)
         }
         
         
-        topBlurView.addSubview(confirmButton)
+        navigationBlurView.addSubview(confirmButton)
         confirmButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(Constants.Size.ContentSpaceMax)
             make.height.equalTo(Constants.Size.ItemHeightUltraTiny)
@@ -181,7 +182,7 @@ class LanServiceEditViewController: BaseViewController {
         headerTitleLabel.text = service.title
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }

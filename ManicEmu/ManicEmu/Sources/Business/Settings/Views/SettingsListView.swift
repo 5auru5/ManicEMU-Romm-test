@@ -13,8 +13,8 @@ import MessageUI
 
 class SettingsListView: BaseView {
     
-    private var topBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -143,7 +143,8 @@ class SettingsListView: BaseView {
                                   SettingItem(type: .clearCache, arrowDetail: CacheManager.totleSize),
                                   SettingItem(type: .language, arrowDetail: Locale.getSystemLanguageDisplayName(preferredLanguage: Settings.defalut.language)),
                                   SettingItem(type: .userAgreement),
-                                  SettingItem(type: .privacyPolicy)]
+                                  SettingItem(type: .privacyPolicy),
+                                  SettingItem(type: .featuredItems)]
             }
         }
         return datas
@@ -183,9 +184,10 @@ class SettingsListView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        addSubview(topBlurView)
-        topBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+        addSubview(navigationBlurView)
+        navigationBlurView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             if UIDevice.isPhone, UIDevice.isLandscape {
                 make.height.equalTo(Constants.Size.ItemHeightMid)
             } else {
@@ -198,7 +200,7 @@ class SettingsListView: BaseView {
         headerTitleLabel.text = R.string.localizable.tabbarTitleSettings()
         headerTitleLabel.textColor = Constants.Color.LabelPrimary
         headerTitleLabel.font = Constants.Font.title(size: .s, weight: .semibold)
-        topBlurView.addSubview(headerTitleLabel)
+        navigationBlurView.addSubview(headerTitleLabel)
         headerTitleLabel.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -339,7 +341,7 @@ class SettingsListView: BaseView {
     
     func updateViews() {
         if UIDevice.isPhone {
-            topBlurView.snp.updateConstraints { make in
+            navigationBlurView.snp.updateConstraints { make in
                 if UIDevice.isLandscape {
                     make.height.equalTo(Constants.Size.ItemHeightMid)
                 } else {
@@ -581,6 +583,8 @@ extension SettingsListView: UICollectionViewDelegate {
                 } else {
                     topViewController()?.present(vc, animated: true)
                 }
+            case .featuredItems:
+                UIApplication.shared.open(Constants.URLs.PlayCasePromo)
             default:
                 break
             }

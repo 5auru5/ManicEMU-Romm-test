@@ -803,3 +803,25 @@ Jeśli chcesz ulepszyć swoją konfigurację, PlayCase jest idealnym uzupełnien
 "NotInstallMeloNX" = "MeloNX nie jest zainstalowany";
 "FetchGamesFromMeloNX" = "Importuj gry z MeloNX";
 "ChangeAlert" = "Treść została zmieniona. Zamknięcie spowoduje utratę zmian. Kontynuować zamykanie?";
+
+"JGenesisAlert" = "Przepraszamy, rdzeń JGenesis obsługuje tylko pliki ROM .chd.";
+"RedeemOfferCode" = "Zrealizuj Ofertę";
+"CheatImportFailed" = "Import nie powiódł się. Nie można przeanalizować pliku lub nie znaleziono pasujących kodów oszustw.";
+"RemoveAllCheats" = "Usuń Wszystkie Oszustwa";
+"RemoveAllCheatsAlert" = "Czy na pewno chcesz usunąć wszystkie kody oszustw? Tej czynności nie można cofnąć.";
+"CheatCodeStatus" = "Włączone";
+"Background" = "Tło";
+"AddBackgroundForLandscape" = "Dodaj Tło Poziome";
+"AddBackgroundForPortrait" = "Dodaj Tło Pionowe";
+"UpdateBackground" = "Ustaw Tło";
+"UpdateBackgroundForGame" = "Ustaw dla tej Gry";
+"UpdateBackgroundForConsole" = "Ustaw dla Platformy %@";
+"UpdateBackgroundForGlobal" = "Ustaw Globalnie";
+"RemoveBackgroundForGame" = "Usuń Tło Gry";
+"RemoveBackgroundForConsole" = "Usuń Tło Platformy %@";
+"RemoveBackgroundForGlobal" = "Usuń Globalne Tło";
+"ShaderConfigAlert" = "Ustawiono dla %@.";
+"Global" = "Globalny";
+"RemoveShaderForGlobal" = "Usuń Globalny Shader";
+"FeaturedItems" = "Wyróżnione Elementy";
+"ReUpload" = "Prześlij Ponownie";

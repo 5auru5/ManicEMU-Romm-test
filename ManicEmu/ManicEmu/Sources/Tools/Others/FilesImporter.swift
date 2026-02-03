@@ -490,6 +490,11 @@ extension FilesImporter {
                             game.aliasName = mameInfo.name
                         }
                         
+#if !SIDE_LOAD
+                        if game.isJGenesisCore {
+                            game.defaultCore = 1
+                        }
+#endif
                         do {
                             if ciaTitleUrl == nil {
                                 //cia格式的3DS不需要拷贝了 因为已经安装进游戏目录了
@@ -510,6 +515,13 @@ extension FilesImporter {
                                 SyncManager.upload(localFilePath: game.romUrl.path)
                                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
                                 completion?(game.gameType == ._3ds ? (game.aliasName ?? game.name) : game.name, nil)
+                                
+                                //获取PSP的game code
+                                if gameType == .psp,
+                                    let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
+                                    game.updateExtra(key: ExtraKey.PSPGameCode.rawValue, value: gameCode)
+                                }
+                                
                                 return
                             } catch {
                                 //写入数据失败

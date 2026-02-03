@@ -51,7 +51,7 @@ class DeadZoneControl: UIView, UITextFieldDelegate {
     // MARK: - Init
     init(initialValue: Float = 0.0) {
         super.init(frame: .zero)
-        internalValue = Settings.defalut.getExtraFloat(key: ExtraKey.deadZone.rawValue) ?? 0
+        internalValue = (Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0).float
         setupUI()
     }
 
@@ -86,7 +86,7 @@ class DeadZoneControl: UIView, UITextFieldDelegate {
         textField.keyboardType = .decimalPad
         textField.textAlignment = .center
         textField.delegate = self
-        textField.text = String(format: "%.2f", Settings.defalut.getExtraFloat(key: ExtraKey.deadZone.rawValue) ?? 0)
+        textField.text = String(format: "%.2f", Settings.defalut.getExtraDouble(key: ExtraKey.deadZone.rawValue) ?? 0)
 
         // Layout
         let stack = UIStackView(arrangedSubviews: [minusButton, textField, plusButton])

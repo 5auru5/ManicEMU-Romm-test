@@ -828,3 +828,25 @@ PlayCase спеціалізується на високоякісних чохл
 "NotInstallMeloNX" = "MeloNX не встановлено";
 "FetchGamesFromMeloNX" = "Імпортувати ігри з MeloNX";
 "ChangeAlert" = "Вміст було змінено. Закриття призведе до втрати всіх змін. Продовжити закриття?";
+
+"JGenesisAlert" = "Вибачте, ядро JGenesis підтримує лише ROM-файли .chd.";
+"RedeemOfferCode" = "Використати пропозицію";
+"CheatImportFailed" = "Помилка імпорту. Файл не вдалося проаналізувати або не знайдено відповідних чит-кодів.";
+"RemoveAllCheats" = "Видалити всі чити";
+"RemoveAllCheatsAlert" = "Ви впевнені, що хочете видалити всі чит-коди? Цю дію не можна скасувати.";
+"CheatCodeStatus" = "Увімкнено";
+"Background" = "Фон";
+"AddBackgroundForLandscape" = "Додати фон для альбомної орієнтації";
+"AddBackgroundForPortrait" = "Додати фон для книжної орієнтації";
+"UpdateBackground" = "Встановити фон";
+"UpdateBackgroundForGame" = "Встановити для цієї гри";
+"UpdateBackgroundForConsole" = "Встановити для платформи %@";
+"UpdateBackgroundForGlobal" = "Встановити глобально";
+"RemoveBackgroundForGame" = "Видалити фон гри";
+"RemoveBackgroundForConsole" = "Видалити фон платформи %@";
+"RemoveBackgroundForGlobal" = "Видалити глобальний фон";
+"ShaderConfigAlert" = "Встановлено для %@.";
+"Global" = "Глобальний";
+"RemoveShaderForGlobal" = "Видалити глобальний шейдер";
+"FeaturedItems" = "Рекомендовані товари";
+"ReUpload" = "Повторне завантаження";

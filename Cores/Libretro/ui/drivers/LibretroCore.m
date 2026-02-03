@@ -64,6 +64,7 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
 @interface LibretroCore()
 
 @property (assign) BOOL isRunning;
+@property (assign) unsigned keyboardMods;
 
 @end
 
@@ -174,6 +175,34 @@ NSString * const MAMEGameFileMissingNotification = @"MAMEGameFileMissingNotifica
 
 - (void)releaseButton:(LibretroButton)button playerIndex:(unsigned)playerIndex {
     [[self getRetroArch] releaseButton:(unsigned)button playerIndex:playerIndex];
+}
+
+- (void)pressKeyboard:(LibretroKeyboardCode *_Nonnull)keyboardCode {
+    // 先更新修饰键状态
+    if (keyboardCode.code == RETROK_LSHIFT || keyboardCode.code == RETROK_RSHIFT) {
+        _keyboardMods |= RETROKMOD_SHIFT;
+    } else if (keyboardCode.code == RETROK_LCTRL || keyboardCode.code == RETROK_RCTRL) {
+        _keyboardMods |= RETROKMOD_CTRL;
+    } else if (keyboardCode.code == RETROK_LALT || keyboardCode.code == RETROK_RALT) {
+        _keyboardMods |= RETROKMOD_ALT;
+    }
+    
+    // 再发送键盘事件（包含更新后的修饰键状态）
+    apple_direct_input_keyboard_event(true, keyboardCode.code, 0, _keyboardMods, RETRO_DEVICE_KEYBOARD);
+}
+
+- (void)releaseKeyboard:(LibretroKeyboardCode *_Nonnull)keyboardCode {
+    // 先清除修饰键状态（使用按位取反）
+    if (keyboardCode.code == RETROK_LSHIFT || keyboardCode.code == RETROK_RSHIFT) {
+        _keyboardMods &= ~RETROKMOD_SHIFT;
+    } else if (keyboardCode.code == RETROK_LCTRL || keyboardCode.code == RETROK_RCTRL) {
+        _keyboardMods &= ~RETROKMOD_CTRL;
+    } else if (keyboardCode.code == RETROK_LALT || keyboardCode.code == RETROK_RALT) {
+        _keyboardMods &= ~RETROKMOD_ALT;
+    }
+    
+    // 再发送键盘事件（包含更新后的修饰键状态）
+    apple_direct_input_keyboard_event(false, keyboardCode.code, 0, _keyboardMods, RETRO_DEVICE_KEYBOARD);
 }
 
 - (void)moveStick:(BOOL)isLeft x:(CGFloat)x y:(CGFloat)y playerIndex:(unsigned)playerIndex {
@@ -567,10 +596,12 @@ static void libretroLogCallback(enum retro_log_level level, const char *fmt, va_
     if (layout) {
         if ([layout componentsSeparatedByString:@","].count == 10) {
             set_melonds_custom_layout([layout cStringUsingEncoding:NSUTF8StringEncoding]);
+            set_desmume_custom_layout([layout cStringUsingEncoding:NSUTF8StringEncoding]);
             [self setCoreOptionNeedsUpdate];
         }
     } else {
         set_melonds_custom_layout(NULL);
+        set_desmume_custom_layout(NULL);
         [self setCoreOptionNeedsUpdate];
     }
 }
@@ -756,6 +787,36 @@ static void azahar_keyboard_request_callback(const struct retro_keyboard_config_
         keyboard_input(text_cstr, button);
     }
 #endif
+}
+
++ (NSString *_Nullable)getPSPGameIDWithRomPath:(NSString *_Nonnull)romPath {
+    NSString *corePath = [[NSBundle mainBundle] pathForResource:@"ppsspp.libretro" ofType:@"framework" inDirectory:@"Frameworks"];
+    if (!corePath) {
+        return nil;
+    }
+    
+    NSString *dylibPath = [corePath stringByAppendingPathComponent:@"ppsspp.libretro"];
+    dylib_t lib = dylib_load([dylibPath UTF8String]);
+    if (!lib) {
+        return nil;
+    }
+    
+    typedef const char* (*retro_get_psp_gameid_t)(const char*);
+    retro_get_psp_gameid_t get_psp_gameid = (retro_get_psp_gameid_t)dylib_proc(lib, "retro_get_psp_gameid");
+    if (!get_psp_gameid) {
+        dylib_close(lib);
+        return nil;
+    }
+    
+    const char *romPath_cstr = [romPath UTF8String];
+    const char* gameid = get_psp_gameid(romPath_cstr);
+    NSString *result = nil;
+    if (gameid) {
+        result = [NSString stringWithUTF8String:gameid];
+    }
+    dylib_close(lib);
+    
+    return result;
 }
 
 @end

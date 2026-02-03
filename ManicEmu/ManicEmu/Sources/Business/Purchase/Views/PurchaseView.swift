@@ -57,6 +57,35 @@ class PurchaseView: BaseView {
             }
         }
         
+        if #available(iOS 16.0, *) {
+            let redeemOfferCode = UILabel()
+            redeemOfferCode.isUserInteractionEnabled = true
+            redeemOfferCode.enableInteractive = true
+            redeemOfferCode.font = Constants.Font.caption(size: .l, weight: .regular)
+            redeemOfferCode.textColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+            redeemOfferCode.text = R.string.localizable.redeemOfferCode()
+            view.addSubview(redeemOfferCode)
+            redeemOfferCode.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                make.trailing.equalTo(restorePurchase.snp.leading).offset(-Constants.Size.ContentSpaceMid)
+            }
+            redeemOfferCode.addTapGesture { [weak self] gesture in
+                guard let self = self else { return }
+                //兑换优惠码
+                PurchaseManager.redeemOfferCode { [weak self] isCompleted, isMember in
+                    guard let self else { return }
+                    if isMember {
+                        self.needToClosePurchaseView?()
+                        CheersView.makePurchaseCheers()
+                    } else if isCompleted {
+                        Log.debug("兑换优惠成功")
+                    } else {
+                        Log.debug("兑换优惠失败")
+                    }
+                }
+            }
+        }
+        
         return view
     }()
     

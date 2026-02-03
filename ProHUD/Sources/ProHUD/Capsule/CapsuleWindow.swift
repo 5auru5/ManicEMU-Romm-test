@@ -14,6 +14,7 @@ class CapsuleWindow: Window {
     init(capsule: CapsuleTarget) {
         self.capsule = capsule
         super.init(frame: .zero)
+        tintColor = UIColor(red: 1, green: 36/255, blue: 66/255, alpha: 1)
         isUserInteractionEnabled = false
         windowScene = AppContext.windowScene
         switch capsule.vm?.position {

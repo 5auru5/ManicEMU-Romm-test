@@ -202,6 +202,30 @@ struct PurchaseManager {
         }
     }
     
+    @available(iOS 16.0, *)
+    static func redeemOfferCode(completion: ((_ isCompleted: Bool, _ isMember: Bool)->Void)? = nil) {
+        if let scene = ApplicationSceneDelegate.applicationScene {
+            Task {
+                do {
+                    try await AppStore.presentOfferCodeRedeemSheet(in: scene)
+                    await refreshPurchase()
+                    await MainActor.run {
+                        if PurchaseManager.isMember {
+                            completion?(true, true)
+                        } else {
+                            completion?(true, false)
+                        }
+                    }
+                } catch {
+                    await MainActor.run {
+                        completion?(false, PurchaseManager.isMember)
+                        Log.error("兑换优惠代码失败:\(error)")
+                    }
+                }
+            }
+        }
+    }
+    
     private static func handlePurchaseSuccess(transaction: Transaction) async {
         await transaction.finish()
         if PurchaseManager.isMember {

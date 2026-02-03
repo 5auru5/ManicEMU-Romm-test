@@ -830,3 +830,25 @@ PlayCase हाई-क्वालिटी iPhone केसों पर के
 "NotInstallMeloNX" = "MeloNX इंस्टॉल नहीं है";
 "FetchGamesFromMeloNX" = "MeloNX से गेम आयात करें";
 "ChangeAlert" = "सामग्री बदल दी गई है। अब बंद करने से सभी परिवर्तन खो जाएंगे। बंद करना जारी रखें?";
+
+"JGenesisAlert" = "क्षमा करें, JGenesis कोर केवल .chd ROM फ़ाइलों का समर्थन करता है।";
+"RedeemOfferCode" = "ऑफ़र रिडीम करें";
+"CheatImportFailed" = "आयात विफल। फ़ाइल को पार्स नहीं किया जा सका या कोई मेल खाता चीट कोड नहीं मिला।";
+"RemoveAllCheats" = "सभी चीट हटाएं";
+"RemoveAllCheatsAlert" = "क्या आप वाकई सभी चीट कोड हटाना चाहते हैं? यह कार्य पूर्ववत नहीं किया जा सकता।";
+"CheatCodeStatus" = "सक्षम";
+"Background" = "पृष्ठभूमि";
+"AddBackgroundForLandscape" = "लैंडस्केप पृष्ठभूमि जोड़ें";
+"AddBackgroundForPortrait" = "पोर्ट्रेट पृष्ठभूमि जोड़ें";
+"UpdateBackground" = "पृष्ठभूमि सेट करें";
+"UpdateBackgroundForGame" = "इस गेम के लिए सेट करें";
+"UpdateBackgroundForConsole" = "%@ प्लेटफ़ॉर्म के लिए सेट करें";
+"UpdateBackgroundForGlobal" = "वैश्विक रूप से सेट करें";
+"RemoveBackgroundForGame" = "गेम पृष्ठभूमि हटाएं";
+"RemoveBackgroundForConsole" = "%@ प्लेटफ़ॉर्म पृष्ठभूमि हटाएं";
+"RemoveBackgroundForGlobal" = "वैश्विक पृष्ठभूमि हटाएं";
+"ShaderConfigAlert" = "%@ के लिए सेट किया गया।";
+"Global" = "वैश्विक";
+"RemoveShaderForGlobal" = "वैश्विक शेडर हटाएं";
+"FeaturedItems" = "फ़ीचर्ड आइटम्स";
+"ReUpload" = "पुनः अपलोड करें";

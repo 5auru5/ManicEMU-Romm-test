@@ -12,6 +12,24 @@ import IceCream
 
 extension GameCheat: CKRecordConvertible & CKRecordRecoverable {}
 
+enum GameCheatSortType: Int, CaseIterable {
+    case dateAscending, dateDescending, nameAscending, nameDescending, status
+    var title: String {
+        switch self {
+        case .dateAscending:
+            R.string.localizable.gameSortAddTime() + R.string.localizable.ascending()
+        case .dateDescending:
+            R.string.localizable.gameSortAddTime() + R.string.localizable.descending()
+        case .nameAscending:
+            R.string.localizable.gameSortTitleType() + R.string.localizable.ascending()
+        case .nameDescending:
+            R.string.localizable.gameSortTitleType() + R.string.localizable.descending()
+        case .status:
+            R.string.localizable.cheatCodeStatus()
+        }
+    }
+}
+
 class GameCheat: Object, ObjectUpdatable {
     ///主键 由创建时间戳ms来生成
     @Persisted(primaryKey: true) var id: Int = PersistedKit.incrementID
@@ -35,7 +53,7 @@ class GameCheat: Object, ObjectUpdatable {
         return nil
     }
     
-    func updateExtra(key: String, value: Any) {
+    func updateExtra(key: String, value: Any?) {
         if let extras, let data = Self.updateExtra(extras: extras, key: key, value: value) {
             Self.change { realm in
                 self.extras = data

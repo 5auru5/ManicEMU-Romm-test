@@ -8,6 +8,8 @@
 
 import UIKit
 
+var ButtonInputsPointMapping = [SomeInput: CGPoint]()
+
 class ButtonsInputView: UIView
 {
     var isHapticEnabled = true
@@ -126,6 +128,7 @@ class ButtonsInputView: UIView
             // Don't return inputs for thumbsticks or touch screens since they're handled separately.
             case .directional where item.kind == .thumbstick: break
             case .touch: break
+            case .switch: break
                 
             case .standard(let itemInputs):
                 inputs.append(contentsOf: itemInputs)

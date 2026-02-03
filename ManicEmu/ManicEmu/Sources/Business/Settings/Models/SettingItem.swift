@@ -10,7 +10,7 @@
 struct SettingItem {
     
     enum ItemType: String {
-        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders
+        case theme, quickGame, airPlay, iCloud, fullScreenWhenConnectController, FAQ, feedback, shareApp, qq, telegram, discord, clearCache, language, userAgreement, privacyPolicy, autoSaveState, bios, respectSilentMode, onlinePlay, about, retro, rumble, appearance, triggerPro, skin, jit, shaders, featuredItems
     }
     
     var type: ItemType
@@ -35,6 +35,8 @@ struct SettingItem {
             return Constants.Color.Pink
         case .qq, .telegram, .discord, .retro:
             return .clear
+        case .featuredItems:
+            return Constants.Color.Background.forceStyle(.dark)
         }
     }
     
@@ -102,6 +104,8 @@ struct SettingItem {
             UIImage(symbol: .boltFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         case .shaders:
             R.image.customAppBackgroundDotted()!.applySymbolConfig(font: Constants.Font.body(size: .m, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
+        case .featuredItems:
+            UIImage(symbol: .shippingboxFill, font: Constants.Font.body(size: .s, weight: .medium), color: Constants.Color.LabelPrimary.forceStyle(.dark))
         }
     }
     
@@ -161,6 +165,8 @@ struct SettingItem {
             "JIT"
         case .shaders:
             R.string.localizable.shaders()
+        case .featuredItems:
+            R.string.localizable.featuredItems()
         }
     }
     

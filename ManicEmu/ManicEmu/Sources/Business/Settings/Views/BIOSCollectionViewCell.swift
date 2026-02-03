@@ -135,6 +135,12 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 biosItems = Constants.BIOS.ThreeDSBios
             } else if gameType == .arcade {
                 biosItems = Constants.BIOS.ArcadeDSBios
+            } else if gameType == .a5200 {
+                biosItems = Constants.BIOS.A5200Bios
+            } else if gameType == .a7800 {
+                biosItems = Constants.BIOS.A7800Bios
+            } else if gameType == .lynx {
+                biosItems = Constants.BIOS.LynxBios
             }
             let fileManager = FileManager.default
             for (index, bios) in biosItems.enumerated() {
@@ -142,7 +148,12 @@ class BIOSCollectionViewCell: UICollectionViewCell {
                 if gameType == .dc {
                     biosInLib = Constants.Path.Flycast.appendingPathComponent("dc/\(bios.fileName)")
                 }
-                let isBiosExists = fileManager.fileExists(atPath: biosInLib)
+                let isBiosExists: Bool
+                if gameType == .arcade {
+                    isBiosExists = Constants.BIOS.MAMEBiosMap.keys.allSatisfy({ FileManager.default.fileExists(atPath: Constants.Path.Data.appendingPathComponent($0)) })
+                } else {
+                    isBiosExists = fileManager.fileExists(atPath: biosInLib)
+                }
                 if isBiosExists {
                     biosItems[index].imported = true
                 } else {
@@ -377,6 +388,12 @@ class BIOSCollectionViewCell: UICollectionViewCell {
             itemCount = Constants.BIOS.ThreeDSBios.count
         } else if gameType == .arcade {
             itemCount = Constants.BIOS.ArcadeDSBios.count
+        } else if gameType == .a5200 {
+            itemCount = Constants.BIOS.A5200Bios.count
+        } else if gameType == .a7800 {
+            itemCount = Constants.BIOS.A7800Bios.count
+        } else if gameType == .lynx {
+            itemCount = Constants.BIOS.LynxBios.count
         }
         return (Double(itemCount) * Constants.Size.ItemHeightMax) + (Double(itemCount + 1) * Constants.Size.ContentSpaceMid)
     }

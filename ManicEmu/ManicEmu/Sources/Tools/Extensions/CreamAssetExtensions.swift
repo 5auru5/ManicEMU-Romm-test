@@ -33,5 +33,5 @@ extension CreamAsset: ObjectUpdatable {
         return nil
     }
     
-    func updateExtra(key: String, value: Any) {}
+    func updateExtra(key: String, value: Any?) {}
 }

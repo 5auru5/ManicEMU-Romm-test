@@ -22,8 +22,8 @@ public enum StandardGameControllerInput: String, Codable
     case quickLoad
     case fastForward
     case toggleFastForward
-    case reverseScreens
-    case volume
+    case reverseScreens //bindable
+    case volume //bindable
     case saveStates
     case cheatCodes
     case skins
@@ -39,19 +39,22 @@ public enum StandardGameControllerInput: String, Codable
     case amiibo
     case homeMenu
     case airplay
-    case toggleControlls
+    case toggleControlls //bindable
     case blowing
     case palette
     case swapDisk
     case retroAchievements
     case airPlayScaling
     case airPlayLayout
-    case toggleAnalog
+    case toggleAnalog //bindable
     case gameplayManuals
     case triggerPro
     case fastForward2x
     case fastForward3x
     case fastForward4x
+    case tvType//Color or BW bindable
+    case leftDifficulty // A or B bindable
+    case rightDifficulty //A or B bindable
 
     case up
     case down

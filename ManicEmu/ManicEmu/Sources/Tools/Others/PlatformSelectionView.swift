@@ -91,7 +91,19 @@ class PlatformSelectionView: BaseView {
                 sheet?.pop {
                     Game.change { realm in
                         game.gameType = gameType
+#if !SIDE_LOAD
+                        if game.isJGenesisCore {
+                            game.defaultCore = 1
+                        }
+#endif
                     }
+                    //如果切换到PSP 则检查game code
+                    if gameType == .psp,
+                        game.gameCodeForPSP == nil,
+                        let gameCode = LibretroCore.getPSPGameID(withRomPath: game.romUrl.path) {
+                        game.updateExtra(key: ExtraKey.PSPGameCode.rawValue, value: gameCode)
+                    }
+                    
                     NotificationCenter.default.post(name: Constants.NotificationName.PlatformSelectionChange, object: nil)
                     if !game.hasCoverMatch {
                         OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))

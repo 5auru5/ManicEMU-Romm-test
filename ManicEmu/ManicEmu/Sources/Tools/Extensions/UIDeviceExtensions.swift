@@ -178,6 +178,14 @@ extension UIDevice {
     static var isDarkMode: Bool {
         ApplicationSceneDelegate.applicationWindow?.traitCollection.userInterfaceStyle == .dark
     }
+    
+    static var isIOS15: Bool {
+        if #available(iOS 16, *) {
+            return false
+        } else {
+           return true
+        }
+    }
 }
 
 

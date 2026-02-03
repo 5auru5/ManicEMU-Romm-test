@@ -17,8 +17,8 @@ import ProHUD
 
 class SkinSettingsView: BaseView {
     /// 充当导航条
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         return view
     }()
@@ -254,7 +254,8 @@ class SkinSettingsView: BaseView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(130)
         }
         
@@ -683,7 +684,7 @@ extension SkinSettingsView: UICollectionViewDelegate {
         let skins = (isPortraitSkinPage ? portraitSkins : landscapeSkins)
         if indexPath.row == skins.count {
             //新增皮肤cell
-            UIView.makeAlert(title: R.string.localizable.skinAddTitle(), detail: R.string.localizable.newSkinDesc(), cancelTitle: R.string.localizable.visitSite("DELTASTYLES"), confirmTitle: R.string.localizable.openFile(), cancelAction: { [weak self] in
+            UIView.makeAlert(title: R.string.localizable.skinAddTitle(), detail: R.string.localizable.newSkinDesc(), cancelTitle: R.string.localizable.visitSite("DELTASTYLES"), confirmTitle: R.string.localizable.openFile(), confirmAutoHide: PlayViewController.isGaming ? false : true, cancelAction: { [weak self] in
                 guard let self else { return }
                 //打开网页
                 if let vc = SkinSettingsView.skinSettingsViewSheet {
@@ -693,7 +694,7 @@ extension SkinSettingsView: UICollectionViewDelegate {
                 }
             }, confirmAction: {
                 //打开文件管理器
-                FilesImporter.shared.presentImportController(supportedTypes: UTType.skinTypes, appControllerPresent: true)
+                FilesImporter.shared.presentImportController(supportedTypes: UTType.skinTypes, appControllerPresent: PlayViewController.isGaming ? false : true)
             })
             return false
         }
@@ -753,9 +754,20 @@ extension SkinSettingsView: UICollectionViewDelegate {
         reloadDataAndSelectSkin()
     }
     
-    //长按弹出可交互菜单
+    //长按弹出可交互菜单 (iOS 15兼容)
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //长按弹出可交互菜单 (iOS 16+)
+    @available(iOS 16.0, *)
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemsAt indexPaths: [IndexPath], point: CGPoint) -> UIContextMenuConfiguration? {
         guard let indexPath = indexPaths.first else { return nil }
+        return contextMenuConfiguration(for: collectionView, at: indexPath)
+    }
+    
+    //统一的上下文菜单配置逻辑
+    private func contextMenuConfiguration(for collectionView: UICollectionView, at indexPath: IndexPath) -> UIContextMenuConfiguration? {
         let skins = (isPortraitSkinPage ? portraitSkins : landscapeSkins)
         if indexPath.row == skins.count {
             //新增皮肤cell 不允许弹

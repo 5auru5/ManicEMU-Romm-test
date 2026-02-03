@@ -11,6 +11,7 @@
 #import "CheevosBridge.h"
 #import "AzaharKeyboardConfig.h"
 #import "LibretroShaders.h"
+#import "LibretroKeyboardCode.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -58,6 +59,8 @@ extern NSString * const RetroAchievementsNotification;
 - (void)sendEvent:(UIEvent * _Nonnull)event;
 - (void)pressButton:(LibretroButton)button playerIndex:(unsigned)playerIndex;
 - (void)releaseButton:(LibretroButton)button playerIndex:(unsigned)playerIndex;
+- (void)pressKeyboard:(LibretroKeyboardCode *_Nonnull)keyboardCode;
+- (void)releaseKeyboard:(LibretroKeyboardCode *_Nonnull)keyboardCode;
 ///x,y取值范围 -1~1
 - (void)moveStick:(BOOL)isLeft x:(CGFloat)x y:(CGFloat)y playerIndex:(unsigned)playerIndex;
 - (void)updatePSPCheat:(NSString *_Nonnull)cheatCode cheatFilePath:(NSString *_Nonnull)cheatFilePath reloadGame:(BOOL)reloadGame;
@@ -103,6 +106,7 @@ extern NSString * const RetroAchievementsNotification;
 - (BOOL)isSearchingAmiibo;
 - (void)registerAzaharKeyboard:(void(^ _Nullable)(AzaharKeyboardConfig *_Nonnull config))callback;
 - (void)inputAzaharKeyboard:(NSString *_Nullable)text buttonType:(AzaharButtonType)buttonType;
++ (NSString *_Nullable)getPSPGameIDWithRomPath:(NSString *_Nonnull)romPath;
 
 @end
 

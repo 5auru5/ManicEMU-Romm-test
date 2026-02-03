@@ -801,3 +801,25 @@
 "FetchGamesFromMeloNX" = "استيراد الألعاب من MeloNX";
 
 "ChangeAlert" = "تم تعديل المحتوى. سيؤدي الإغلاق الآن إلى فقدان جميع التعديلات. متابعة الإغلاق؟";
+
+"JGenesisAlert" = "عذرًا، نواة JGenesis تدعم فقط ملفات ROM ذات الصيغة .chd.";
+"RedeemOfferCode" = "استبدال العرض";
+"CheatImportFailed" = "فشل الاستيراد. تعذر تحليل الملف أو لم يتم العثور على رموز الغش المطابقة.";
+"RemoveAllCheats" = "إزالة جميع رموز الغش";
+"RemoveAllCheatsAlert" = "هل أنت متأكد من أنك تريد إزالة جميع رموز الغش؟ لا يمكن التراجع عن هذا الإجراء.";
+"CheatCodeStatus" = "مفعل";
+"Background" = "خلفية";
+"AddBackgroundForLandscape" = "إضافة خلفية أفقية";
+"AddBackgroundForPortrait" = "إضافة خلفية عمودية";
+"UpdateBackground" = "تعيين الخلفية";
+"UpdateBackgroundForGame" = "تعيين لهذه اللعبة";
+"UpdateBackgroundForConsole" = "تعيين لمنصة %@";
+"UpdateBackgroundForGlobal" = "تعيين عالميًا";
+"RemoveBackgroundForGame" = "إزالة خلفية اللعبة";
+"RemoveBackgroundForConsole" = "إزالة خلفية منصة %@";
+"RemoveBackgroundForGlobal" = "إزالة الخلفية العالمية";
+"ShaderConfigAlert" = "تم التعيين لـ %@.";
+"Global" = "عالمي";
+"RemoveShaderForGlobal" = "إزالة الشادر العالمي";
+"FeaturedItems" = "العناصر المميزة";
+"ReUpload" = "إعادة التحميل";

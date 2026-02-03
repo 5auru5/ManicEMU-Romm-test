@@ -11,8 +11,6 @@ import SwipeCellKit
 class ShadersListCell: SwipeTableViewCell {
     private var titleLabel: UILabel = {
         let view = UILabel()
-        view.font = Constants.Font.body(size: .l)
-        view.textColor = Constants.Color.LabelPrimary
         return view
     }()
     
@@ -97,7 +95,20 @@ class ShadersListCell: SwipeTableViewCell {
     }
     
     func setData(shader: Shader?, initType: ShadersListView.InitType) {
-        titleLabel.text = shader?.title
+        
+        let matt = NSMutableAttributedString(string: shader?.title ?? "", attributes: [.font: Constants.Font.body(size: .l), .foregroundColor: Constants.Color.LabelPrimary])
+        if let alert = shader?.configAlert {
+            titleLabel.numberOfLines = 2
+            matt.append(NSAttributedString(string: "\n\(alert)", attributes: [.font: Constants.Font.caption(size: .m), .foregroundColor: Constants.Color.LabelSecondary]))
+            let style = NSMutableParagraphStyle()
+            style.lineSpacing = Constants.Size.ContentSpaceUltraTiny/2
+            style.lineBreakMode = .byTruncatingTail
+            titleLabel.attributedText = matt.applying(attributes: [.paragraphStyle: style])
+        } else {
+            titleLabel.numberOfLines = 1
+            titleLabel.attributedText = matt
+        }
+        
         switch initType {
         case .normal:
             chevronIconView.isHidden = false

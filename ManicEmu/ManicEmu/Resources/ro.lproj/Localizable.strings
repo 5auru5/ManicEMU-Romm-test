@@ -828,3 +828,25 @@ Dacă vrei să îți îmbunătățești setup-ul, PlayCase este potrivirea perfe
 "NotInstallMeloNX" = "MeloNX nu este instalat";
 "FetchGamesFromMeloNX" = "Importă jocuri din MeloNX";
 "ChangeAlert" = "Conținutul a fost modificat. Închiderea acum va duce la pierderea tuturor modificărilor. Continuați închiderea?";
+
+"JGenesisAlert" = "Ne pare rău, nucleul JGenesis suportă doar fișiere ROM .chd.";
+"RedeemOfferCode" = "Răscumpărare Ofertă";
+"CheatImportFailed" = "Import eșuat. Fișierul nu a putut fi analizat sau nu au fost găsite coduri de cheat potrivite.";
+"RemoveAllCheats" = "Elimină Toate Cheat-urile";
+"RemoveAllCheatsAlert" = "Sigur doriți să eliminați toate codurile de cheat? Această acțiune nu poate fi anulată.";
+"CheatCodeStatus" = "Activat";
+"Background" = "Fundal";
+"AddBackgroundForLandscape" = "Adăugare Fundal Peisaj";
+"AddBackgroundForPortrait" = "Adăugare Fundal Portret";
+"UpdateBackground" = "Setează Fundal";
+"UpdateBackgroundForGame" = "Setează pentru Acest Joc";
+"UpdateBackgroundForConsole" = "Setează pentru Platforma %@";
+"UpdateBackgroundForGlobal" = "Setează Global";
+"RemoveBackgroundForGame" = "Elimină Fundalul Jocului";
+"RemoveBackgroundForConsole" = "Elimină Fundalul Platformei %@";
+"RemoveBackgroundForGlobal" = "Elimină Fundalul Global";
+"ShaderConfigAlert" = "Setat pentru %@.";
+"Global" = "Global";
+"RemoveShaderForGlobal" = "Elimină Shader Global";
+"FeaturedItems" = "Articole Recomandate";
+"ReUpload" = "Reîncărcare";

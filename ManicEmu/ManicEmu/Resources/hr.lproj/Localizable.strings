@@ -826,3 +826,25 @@ Ako želite unaprijediti svoju postavu, PlayCase je savršen dodatak ovom skinu.
 "NotInstallMeloNX" = "MeloNX nije instaliran";
 "FetchGamesFromMeloNX" = "Uvezi igre iz MeloNXa";
 "ChangeAlert" = "Sadržaj je promijenjen. Zatvaranje sada će uzrokovati gubitak svih promjena. Nastaviti zatvaranje?";
+
+"JGenesisAlert" = "Žao nam je, JGenesis jezgra podržava samo .chd ROM datoteke.";
+"RedeemOfferCode" = "Iskoristi Ponudu";
+"CheatImportFailed" = "Uvoz nije uspio. Datoteku nije bilo moguće raščlaniti ili nisu pronađeni odgovarajući cheat kodovi.";
+"RemoveAllCheats" = "Ukloni Sve Cheatove";
+"RemoveAllCheatsAlert" = "Jeste li sigurni da želite ukloniti sve cheat kodove? Ova radnja se ne može poništiti.";
+"CheatCodeStatus" = "Omogućeno";
+"Background" = "Pozadina";
+"AddBackgroundForLandscape" = "Dodaj Pejzažnu Pozadinu";
+"AddBackgroundForPortrait" = "Dodaj Portretnu Pozadinu";
+"UpdateBackground" = "Postavi Pozadinu";
+"UpdateBackgroundForGame" = "Postavi za Ovu Igru";
+"UpdateBackgroundForConsole" = "Postavi za %@ Platformu";
+"UpdateBackgroundForGlobal" = "Postavi Globalno";
+"RemoveBackgroundForGame" = "Ukloni Pozadinu Igre";
+"RemoveBackgroundForConsole" = "Ukloni Pozadinu Platforme %@";
+"RemoveBackgroundForGlobal" = "Ukloni Globalnu Pozadinu";
+"ShaderConfigAlert" = "Postavljeno za %@.";
+"Global" = "Globalno";
+"RemoveShaderForGlobal" = "Ukloni Globalni Shader";
+"FeaturedItems" = "Istaknute Stavke";
+"ReUpload" = "Ponovno Učitaj";

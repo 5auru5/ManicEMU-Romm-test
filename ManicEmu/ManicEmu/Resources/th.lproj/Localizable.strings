@@ -818,3 +818,25 @@ PlayCase มุ่งเน้นที่เคส iPhone คุณภาพส
 "NotInstallMeloNX" = "ยังไม่ได้ติดตั้ง MeloNX";
 "FetchGamesFromMeloNX" = "นำเข้าจาก MeloNX";
 "ChangeAlert" = "เนื้อหาได้รับการเปลี่ยนแปลง หากปิดตอนนี้จะสูญเสียการเปลี่ยนแปลงทั้งหมด ยังคงปิดต่อหรือไม่?";
+
+"JGenesisAlert" = "ขออภัย JGenesis core รองรับเฉพาะไฟล์ ROM .chd เท่านั้น";
+"RedeemOfferCode" = "แลกข้อเสนอ";
+"CheatImportFailed" = "นำเข้าไม่สำเร็จ ไม่สามารถแยกวิเคราะห์ไฟล์หรือไม่พบรหัสชีตที่ตรงกัน";
+"RemoveAllCheats" = "ลบชีตทั้งหมด";
+"RemoveAllCheatsAlert" = "คุณแน่ใจหรือไม่ว่าต้องการลบรหัสชีตทั้งหมด? การดำเนินการนี้ไม่สามารถยกเลิกได้";
+"CheatCodeStatus" = "เปิดใช้งาน";
+"Background" = "พื้นหลัง";
+"AddBackgroundForLandscape" = "เพิ่มพื้นหลังแนวนอน";
+"AddBackgroundForPortrait" = "เพิ่มพื้นหลังแนวตั้ง";
+"UpdateBackground" = "ตั้งค่าพื้นหลัง";
+"UpdateBackgroundForGame" = "ตั้งค่าสำหรับเกมนี้";
+"UpdateBackgroundForConsole" = "ตั้งค่าสำหรับแพลตฟอร์ม %@";
+"UpdateBackgroundForGlobal" = "ตั้งค่าแบบทั่วโลก";
+"RemoveBackgroundForGame" = "ลบพื้นหลังเกม";
+"RemoveBackgroundForConsole" = "ลบพื้นหลังแพลตฟอร์ม %@";
+"RemoveBackgroundForGlobal" = "ลบพื้นหลังทั่วโลก";
+"ShaderConfigAlert" = "ตั้งค่าสำหรับ %@";
+"Global" = "ทั่วโลก";
+"RemoveShaderForGlobal" = "ลบชาเดอร์ทั่วโลก";
+"FeaturedItems" = "รายการแนะนำ";
+"ReUpload" = "อัปโหลดอีกครั้ง";

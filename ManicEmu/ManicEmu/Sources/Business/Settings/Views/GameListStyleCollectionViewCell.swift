@@ -177,10 +177,7 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
         func saveImage(_ image: UIImage?) {
             if let image, let data = image.pngData() {
                 do {
-                    if !FileManager.default.fileExists(atPath: Constants.Path.Assets) {
-                        try FileManager.default.createDirectory(atPath: Constants.Path.Assets, withIntermediateDirectories: true)
-                    }
-                    try data.write(to: URL(fileURLWithPath: Constants.Path.GameListBackground))
+                    try data.writeWithCompletePath(to: URL(fileURLWithPath: Constants.Path.GameListBackground))
                     self.backgroundImageView.image = image
                     self.backgroundImageView.contentMode = .scaleAspectFill
                     NotificationCenter.default.post(name: Constants.NotificationName.GameListBackgroundChange, object: nil)
@@ -196,17 +193,17 @@ class GameListStyleCollectionViewCell: UICollectionViewCell {
                 guard let self = self else { return }
                 if index == 0 {
                     //拍摄
-                    ImageFetcher.capture { image in
+                    ImageFetcher.capture(preferenceSize: nil) { image in
                         saveImage(image)
                     }
                 } else if index == 1 {
                     //相册
-                    ImageFetcher.pick { image in
+                    ImageFetcher.pick(preferenceSize: nil) { image in
                         saveImage(image)
                     }
                 } else if index == 2 {
                     //文件
-                    ImageFetcher.file{ image in
+                    ImageFetcher.file(preferenceSize: nil) { image in
                         saveImage(image)
                     }
                 } else if index == 3 {

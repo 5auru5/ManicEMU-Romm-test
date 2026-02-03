@@ -1,5 +1,5 @@
 //
-//  MelonNXKit.swift
+//  MeloNXKit.swift
 //  ManicEmu
 //
 //  Created by Daiuno on 2025/12/16.
@@ -13,7 +13,7 @@ extension GameType {
     static let ns = GameType("public.aoshuang.game.ns")
 }
 
-struct MelonNXKit {
+struct MeloNXKit {
     static var isInstalled: Bool {
         return UIApplication.shared.canOpenURL(Constants.URLs.FetchMeloNXGames)
     }
@@ -62,7 +62,6 @@ struct MelonNXKit {
                     game.hasCoverMatch = true
                     if let icon = mg.iconData {
                         game.gameCover = CreamAsset.create(objectID: game.id, propName: "gameCover", data: icon)
-                        try? icon.write(to: URL(fileURLWithPath: Constants.Path.Document.appendingPathComponent("image.jpg")))
                     }
                     games.append(game)
                 }

@@ -97,4 +97,16 @@ extension Data {
         let digest = Insecure.MD5.hash(data: self)
         return digest.map { String(format: "%02hhx", $0) }.joined()
     }
+    
+    func writeWithCompletePath(to path: String) throws {
+        try writeWithCompletePath(to: URL(fileURLWithPath: path))
+    }
+    
+    func writeWithCompletePath(to url: URL) throws {
+        let parentUrl = url.deletingLastPathComponent()
+        if !FileManager.default.fileExists(atPath: parentUrl.path) {
+            try FileManager.default.createDirectory(at: parentUrl, withIntermediateDirectories: true)
+        }
+        try write(to: url)
+    }
 }

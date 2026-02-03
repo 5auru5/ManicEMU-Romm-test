@@ -76,7 +76,7 @@ public class ControllerView: UIView, GameController
         guard let supportedTraits = controllerSkin.supportedTraits(for: traits) else { return traits }
         return supportedTraits
     }
-
+    
     public var controllerSkinSize: ControllerSkin.Size! {
         let size = customControllerSkinSize ?? UIScreen.main.defaultSkinSize
         return size
@@ -96,6 +96,7 @@ public class ControllerView: UIView, GameController
     public var isThumbstickHaptic = true {
         didSet {
             thumbstickViews.values.forEach { $0.isHapticEnabled = isThumbstickHaptic }
+            switchViews.values.forEach{ $0.isHapticEnabled = isThumbstickHaptic }
         }
     }
     
@@ -104,6 +105,20 @@ public class ControllerView: UIView, GameController
         didSet {
             buttonsView.hapticFeedbackStyle = hapticFeedbackStyle
             thumbstickViews.values.forEach { $0.hapticFeedbackStyle = hapticFeedbackStyle }
+            switchViews.values.forEach { $0.hapticFeedbackStyle = hapticFeedbackStyle }
+        }
+    }
+    
+    public var isIncludeSwitch: Bool { switchViews.count > 0 }
+    public func updateSwitchState(_ inputs: [String: Bool]) {
+        if switchViews.count > 0 {
+            inputs.forEach { inputString, on in
+                self.switchViews.forEach { itemID, switchView in
+                    if switchView.input.stringValue == inputString {
+                        switchView.state = on
+                    }
+                }
+            }
         }
     }
     
@@ -152,6 +167,7 @@ public class ControllerView: UIView, GameController
     private let buttonsView = ButtonsInputView(frame: CGRect.zero)
     private var thumbstickViews = [ControllerSkin.Item.ID: ThumbstickInputView]()
     private var touchViews = [ControllerSkin.Item.ID: TouchInputView]()
+    private var switchViews = [ControllerSkin.Item.ID: SwitchView]()
     
     private var initialLayout = false
     private var delayedUpdatingSkin = false
@@ -271,6 +287,13 @@ public class ControllerView: UIView, GameController
             
             let frame = item.frame.scaled(to: containingFrame)
             
+            var animation: ControllerSkin.Item.Animation? = nil
+            if var a = item.animation {
+                a.begin = a.begin.scaled(to: containingFrame)
+                a.end = a.end.scaled(to: containingFrame)
+                animation = a
+            }
+            
             switch item.kind
             {
             case .button, .dPad: break
@@ -290,6 +313,17 @@ public class ControllerView: UIView, GameController
             case .touchScreen:
                 guard let touchView = touchViews[item.id] else { continue }
                 touchView.frame = frame
+                
+            case .switchButton:
+                //添加switch控件
+                guard let switchView = switchViews[item.id] else { continue }
+                if (switchView.onImage == nil || switchView.offImage == nil),
+                   let (onImage, offImage) = controllerSkin.switchView(for: item, traits: traits, onImageSize: animation?.end.size ?? frame.size, offImageSize: animation?.begin.size ?? frame.size) {
+                    switchView.onImage = onImage
+                    switchView.offImage = offImage
+                }
+                switchView.animation = animation
+                switchView.frame = frame
             }
         }
         
@@ -317,11 +351,11 @@ public class ControllerView: UIView, GameController
             guard thumbstickView.frame.contains(point) else { continue }
             return thumbstickView
         }
-
+        
         for (_, touchView) in touchViews
         {
             guard touchView.frame.contains(point) else { continue }
-
+            
             if let inputs = buttonsView.inputs(at: point)
             {
                 // No other inputs at this position, so return touchView.
@@ -330,6 +364,12 @@ public class ControllerView: UIView, GameController
                     return touchView
                 }
             }
+        }
+        
+        for (_, switchView) in switchViews
+        {
+            guard switchView.frame.contains(point) else { continue }
+            return switchView
         }
         
         return buttonsView
@@ -435,7 +475,7 @@ public class ControllerView: UIView, GameController
             delayedUpdatingSkin = true
             return
         }
-
+        
         if let isDebugModeEnabled = controllerSkin?.isDebugMode
         {
             debugView.isHidden = !isDebugModeEnabled
@@ -446,7 +486,7 @@ public class ControllerView: UIView, GameController
         if let traits = controllerSkinTraits
         {
             var items = controllerSkin?.items(for: traits)
-       
+            
             if traits.displayType == .splitView
             {
                 if isControllerInputView
@@ -514,6 +554,9 @@ public class ControllerView: UIView, GameController
             var touchViews = [ControllerSkin.Item.ID: TouchInputView]()
             var previousTouchViews = self.touchViews
             
+            var switchViews = [ControllerSkin.Item.ID: SwitchView]()
+            var previousSwitchViews = self.switchViews
+            
             for item in items ?? []
             {
                 switch item.kind
@@ -565,6 +608,27 @@ public class ControllerView: UIView, GameController
                     }
                     
                     touchViews[item.id] = touchView
+                    
+                case .switchButton:
+                    guard case .switch(let input) = item.inputs else { continue }
+                    let switchView: SwitchView
+                    if let previousSwitchView = previousSwitchViews[item.id] {
+                        switchView = previousSwitchView
+                        previousSwitchViews[item.id] = nil
+                    } else {
+                        switchView = SwitchView(input: input, selfRetracting: item.selfRetracting)
+                        contentView.addSubview(switchView)
+                    }
+                    switchView.valueChangedHandler = { [weak self] input in
+                        guard let self else { return }
+                        activate(input)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: {
+                            self.deactivate(input)
+                        })
+                    }
+                    
+                    switchView.isHapticEnabled = isThumbstickHaptic
+                    switchViews[item.id] = switchView
                 }
             }
             
@@ -573,6 +637,9 @@ public class ControllerView: UIView, GameController
             
             previousTouchViews.values.forEach { $0.removeFromSuperview() }
             self.touchViews = touchViews
+            
+            previousSwitchViews.values.forEach { $0.removeFromSuperview() }
+            self.switchViews = switchViews
         }
         else
         {
@@ -584,6 +651,9 @@ public class ControllerView: UIView, GameController
             
             touchViews.values.forEach { $0.removeFromSuperview() }
             touchViews = [:]
+            
+            switchViews.values.forEach { $0.removeFromSuperview() }
+            switchViews = [:]
         }
         
         updateGameViews()
@@ -638,7 +708,7 @@ public class ControllerView: UIView, GameController
                 
                 let gameView = previousGameViews[screen.id] ?? GameView(frame: .zero)
                 gameView.update(for: screen)
-
+                
                 previousGameViews[screen.id] = nil
                 gameViews[screen.id] = gameView
             }
@@ -710,16 +780,16 @@ public class ControllerView: UIView, GameController
     func presentInputView()
     {
         guard !isControllerInputView else { return }
-
+        
         guard let controllerSkin = controllerSkin, let traits = controllerSkinTraits else { return }
-
+        
         if self.controllerInputView == nil
         {
             let inputControllerView = ControllerInputView(frame: CGRect(x: 0, y: 0, width: 1024, height: 300))
             inputControllerView.controllerView.addReceiver(self, inputMapping: nil)
             controllerInputView = inputControllerView
         }
-
+        
         if controllerSkin.supports(traits)
         {
             controllerInputView?.controllerView.controllerSkin = controllerSkin
@@ -849,11 +919,11 @@ extension ControllerView: ControllerReceiverProtocol
 //    public var hasText: Bool {
 //        return false
 //    }
-//    
+//
 //    public func insertText(_ text: String)
 //    {
 //    }
-//    
+//
 //    public func deleteBackward()
 //    {
 //    }

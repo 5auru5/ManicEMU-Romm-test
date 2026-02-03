@@ -85,7 +85,10 @@ class GameCoverView: UIView {
     func setData(game: Game, coverSize: CGSize, style: CoverStyle, scalePlatform: Bool = true) {
         if height > 0 {
             autoCornerRadius = false
-            layerCornerRadius = Constants.Size.GameCoverCornerRatio * style.maxCornerRadius(frameHeight: height)
+            let gameCoverCornerRatio = Constants.Size.GameCoverCornerRatio
+            let maxCornerRadius = style.maxCornerRadius(frameHeight: coverSize.height)
+            let cornerRadius = gameCoverCornerRatio * maxCornerRadius
+            layerCornerRadius = cornerRadius
         } else {
             autoCornerRadius = true
         }
@@ -218,6 +221,16 @@ class GameCoverView: UIView {
                 image = style == .style2 ? R.image.arcade_cover_v() : R.image.arcade_cover_h()
             } else if gameType == .ns {
                 image = style == .style2 ? R.image.ns_cover_v() : R.image.ns_cover_h()
+            } else if gameType == .a2600 {
+                image = style == .style2 ? R.image.a2600_cover_v() : R.image.a2600_cover_h()
+            } else if gameType == .a5200 {
+                image = style == .style2 ? R.image.a5200_cover_v() : R.image.a5200_cover_h()
+            } else if gameType == .a7800 {
+                image = style == .style2 ? R.image.a7800_cover_v() : R.image.a7800_cover_h()
+            } else if gameType == .jaguar {
+                image = style == .style2 ? R.image.jaguar_cover_v() : R.image.jaguar_cover_h()
+            } else if gameType == .lynx {
+                image = style == .style2 ? R.image.lynx_cover_v() : R.image.lynx_cover_h()
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))

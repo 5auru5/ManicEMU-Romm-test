@@ -13,8 +13,8 @@ import IceCream
 
 class GameInfoView: BaseView {
     /// 充当导航条 内部会加入一个游戏封面缩略图 当collectionView网上滑动时才会展示出来
-    private var navigationBlurView: UIView = {
-        let view = UIView()
+    private var navigationBlurView: NavigationBlurView = {
+        let view = NavigationBlurView()
         view.makeBlur()
         view.alpha = 0
         return view
@@ -184,7 +184,8 @@ class GameInfoView: BaseView {
         
         addSubview(navigationBlurView)
         navigationBlurView.snp.makeConstraints { make in
-            make.leading.top.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.leading.trailing.equalTo(self.safeAreaLayoutGuide)
             make.height.equalTo(Constants.Size.ItemHeightMax)
         }
         
