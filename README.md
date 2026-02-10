@@ -57,6 +57,17 @@ Your support keeps this app going
 - Sega CD/Mega-CD (MCD)
 - Sega Genesis/MegaDrive (MD)
 
+#### Atari
+- Atari Jaguar (Jaguar)
+- Atari Lynx (LYNX)
+- Atari 7800 (7800)
+- Atari 5200 (5200)
+- Atari 2600 (2600)
+
+#### Arcade
+- Arcade (MAME)
+- Arcade (FBneo)
+
 More platforms coming soon!
 
 ### [Key Features]
