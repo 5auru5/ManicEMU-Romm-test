@@ -685,7 +685,7 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             return true
-        case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm, .arcade:
+        case .gba, .gbc, .gb, .nes, .fds, .snes, .md, .mcd, ._32x, .gg, .sg1000, .ms, .ss, .vb, .pm, .arcade, .doom:
             if (gameType == .gb || gameType == .vb || gameType == .pm || gameType == .nes || gameType == .fds) && type == .palette {
                 return true
             }
@@ -707,7 +707,7 @@ struct GameSetting: SettingCellItem {
                 return true
             }
             
-            if (gameType == .vb || gameType == .pm) && type == .cheatCode {
+            if (gameType == .vb || gameType == .pm || gameType == .doom) && type == .cheatCode {
                 return false
             }
             

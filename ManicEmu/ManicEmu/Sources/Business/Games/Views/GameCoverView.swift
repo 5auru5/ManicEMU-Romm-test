@@ -217,6 +217,8 @@ class GameCoverView: UIView {
                 image = style == .style2 ? R.image.ps1_cover_v() : R.image.ps1_cover_h()
             } else if gameType == .dc {
                 image = style == .style2 ? R.image.dc_cover_v() : R.image.dc_cover_h()
+            } else if gameType == .doom {
+                image = style == .style2 ? R.image.arcade_cover_v() : R.image.arcade_cover_h()
             } else if gameType == .arcade {
                 image = style == .style2 ? R.image.arcade_cover_v() : R.image.arcade_cover_h()
             } else if gameType == .ns {

@@ -2649,6 +2649,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.bsnes.libretroPath)
             } else if manicGame.gameType == .ds {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DSSavePath.libretroPath)
+            } else if manicGame.gameType == .doom {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.PrBoom.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
             }
@@ -3395,6 +3397,8 @@ extension PlayViewController {
                     customSaveDir = Constants.Path.bsnes
                 } else if manicGame.gameType == .ds {
                     customSaveDir = Constants.Path.DSSavePath
+                } else if manicGame.gameType == .doom {
+                    customSaveDir = Constants.Path.PrBoom
                 } else if manicGame.isAzahar3DS {
                     customSaveDir = Constants.Path.ThreeDS
                 }

@@ -84,6 +84,8 @@ extension GameType {
             self = .ps1
         } else if ["cdi", "gdi", "chd", "cue", "bin", "m3u"].contains(ext) {
             self = .dc
+        } else if ["wad", "iwad", "pwad"].contains(ext) {
+            self = .doom
         } else if ["zip", "7z", "cmd"].contains(ext) {
             self = .arcade
         } else if ["a26", "bin"].contains(ext) {
@@ -154,6 +156,8 @@ extension GameType {
             self = .ps1
         } else if shortName.uppercased() == "DC" {
             self = .dc
+        } else if shortName.uppercased() == "DOOM" {
+            self = .doom
         } else if shortName.uppercased() == "Arcade".uppercased() {
             self = .arcade
         } else if shortName.uppercased() == "NS" {
@@ -197,6 +201,7 @@ extension GameType {
         case .pm: return "Pokémon Mini"
         case .ps1: return "PlayStation"
         case .dc: return "Dreamcast"
+        case .doom: return "DOOM"
         case .arcade: return "Arcade"
         case .ns: return "Nintendo Switch"
         case .a2600: return "Atari 2600"
@@ -232,6 +237,7 @@ extension GameType {
         case .pm: return NSLocalizedString("PM", comment: "")
         case .ps1: return NSLocalizedString("PS1", comment: "")
         case .dc: return NSLocalizedString("DC", comment: "")
+        case .doom: return NSLocalizedString("DOOM", comment: "")
         case .arcade: return NSLocalizedString("Arcade", comment: "")
         case .ns: return  NSLocalizedString("NS", comment: "")
         case .a2600: return  NSLocalizedString("2600", comment: "")
@@ -268,6 +274,7 @@ extension GameType {
         case .pm: return 2001
         case .ps1: return 1995
         case .dc: return 1998
+        case .doom: return 1993
         case .arcade: return 1971
         case .ns: return 2017
         case .a2600: return 1977
@@ -303,6 +310,7 @@ extension GameType {
         case .pm: return PM.core
         case .ps1: return PS1.core
         case .dc: return DC.core
+        case .doom: return DOOM.core
         case .arcade: return Arcade.core
         case .a2600: return A2600.core
         case .a5200: return A5200.core
@@ -318,6 +326,8 @@ extension GameType {
             return .md
         } else if self == .fds {
             return .nes
+        } else if self == .doom {
+            return .arcade
         }
         return self
     }
@@ -395,7 +405,7 @@ extension GameType {
             return .sony
         case .md, .mcd, ._32x, .sg1000, .gg, .ms, .ss, .dc:
             return .sega
-        case .arcade:
+        case .arcade, .doom:
             return .arcade
         case .a2600, .a5200, .a7800, .jaguar, .lynx:
             return .atari

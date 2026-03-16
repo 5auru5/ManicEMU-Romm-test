@@ -840,6 +840,7 @@
 		57FC198D2DF04E160076D93C /* right_eye_disabler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57FC198C2DF04E160076D93C /* right_eye_disabler.cpp */; };
 		57FC19982DF051180076D93C /* hack_manager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57FC19962DF051180076D93C /* hack_manager.cpp */; };
 		57FC19992DF051180076D93C /* hack_list.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 57FC19952DF051180076D93C /* hack_list.cpp */; };
+		7E864E4CE64E0E64CCE47550 /* DOOM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2068D6E791D56FF6148997EA /* DOOM.swift */; };
 		A392D5652E96682C00F920E7 /* DisabledTapSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = A392D5632E96682600F920E7 /* DisabledTapSwitch.swift */; };
 		A392D5B32E9796B900F920E7 /* ServiceIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A392D5B22E9796B800F920E7 /* ServiceIconView.swift */; };
 		A3A043802E9BF57A006442C2 /* UIScrollViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3A0437F2E9BF57A006442C2 /* UIScrollViewExtensions.swift */; };
@@ -866,6 +867,7 @@
 		B2F4B7B02A138C74003B0E07 /* PhotoSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F4B7AF2A138C74003B0E07 /* PhotoSaver.swift */; };
 		B2F4B7B22A147226003B0E07 /* UIViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F4B7B12A147226003B0E07 /* UIViewExtensions.swift */; };
 		CA9648A74704D76821691375 /* libPods-ManicEmu.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF2E8F8EA477A62C025C6FCF /* libPods-ManicEmu.a */; };
+		D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 20B6A88FB41ED3142FD4FD9E /* prboom.libretro.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -926,6 +928,7 @@
 				57BFBE732DD3361800AABF98 /* ppsspp.libretro.framework in Embed Frameworks */,
 				57BFBE1E2DD32F7700AABF98 /* Libretro.framework in Embed Frameworks */,
 				5768FE6C2DAE018E009974D1 /* MoltenVK.xcframework in Embed Frameworks */,
+				D90358FF409D7405F5E406CC /* prboom.libretro.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -944,7 +947,9 @@
 
 /* Begin PBXFileReference section */
 		165A3334DE78D830F5BF67BC /* Pods-ManicEmu.sideloaddebug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManicEmu.sideloaddebug.xcconfig"; path = "Target Support Files/Pods-ManicEmu/Pods-ManicEmu.sideloaddebug.xcconfig"; sourceTree = "<group>"; };
+		2068D6E791D56FF6148997EA /* DOOM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DOOM.swift; sourceTree = "<group>"; };
 		209AFDF51E7FF4D72ADD0678 /* Pods-ManicEmu.sideloadrelease.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ManicEmu.sideloadrelease.xcconfig"; path = "Target Support Files/Pods-ManicEmu/Pods-ManicEmu.sideloadrelease.xcconfig"; sourceTree = "<group>"; };
+		20B6A88FB41ED3142FD4FD9E /* prboom.libretro.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = prboom.libretro.framework; path = ../Cores/prboom.libretro.framework; sourceTree = SOURCE_ROOT; };
 		57047A092D85217400C62FF6 /* PurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseView.swift; sourceTree = "<group>"; };
 		57047A0B2D852E7200C62FF6 /* FeaturesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturesView.swift; sourceTree = "<group>"; };
 		57047A132D856DB000C62FF6 /* PriceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceView.swift; sourceTree = "<group>"; };
@@ -4056,6 +4061,7 @@
 				57655C1E2DF6B94C003E4A6E /* picodrive.libretro.framework */,
 				57F0D83C2DE2C59900760F57 /* nestopia.libretro.framework */,
 				57BFBE712DD3360A00AABF98 /* ppsspp.libretro.framework */,
+				20B6A88FB41ED3142FD4FD9E /* prboom.libretro.framework */,
 			);
 			path = Cores;
 			sourceTree = "<group>";
@@ -4292,6 +4298,7 @@
 				57F0D8412DE2CD8B00760F57 /* NES.swift */,
 				57BFBE8F2DD435C700AABF98 /* PSP.swift */,
 				571BB8062DA4357900830134 /* ThreeDS.swift */,
+				2068D6E791D56FF6148997EA /* DOOM.swift */,
 			);
 			path = Cores;
 			sourceTree = "<group>";
@@ -5665,6 +5672,7 @@
 				5726FEE72D71D7FA00041AD5 /* SettingsListFooterCollectionReusableView.swift in Sources */,
 				57F632B72D700A06007270E8 /* LanServiceEditCollectionViewCell.swift in Sources */,
 				5754D8C82E27A864001EA5ED /* VB.swift in Sources */,
+				7E864E4CE64E0E64CCE47550 /* DOOM.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
