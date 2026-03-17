@@ -1215,7 +1215,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                     } else if game.gameType == .n64 {
                         updateN64FunctionButton()
                     } else if game.gameType == .vb || game.gameType == .pm || game.isJGenesisCore {
-                        updateNoCheatCodeFunctionButton()
+                        hideDefaultFunctionButtons([cheatCodeButton])
                     } else if game.gameType == .ps1 {
                         updatePS1FunctionButton()
                     } else if game.gameType == .dc {
@@ -1230,6 +1230,8 @@ class GameInfoDetailReusableView: UICollectionReusableView {
                         updateAtariFunctionButton()
                     } else if game.isJ2MECore {
                         updateJ2MEFunctionButton()
+                    } else if game.gameType == .doom || (game.gameType == .arcade && game.defaultCore == 0) {
+                        hideDefaultFunctionButtons([retroButton])
                     }
                     addManualsButton()
                     hasSetupViews = true
@@ -1355,7 +1357,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateCitra3DSFunctionButton() {
-        manualButton.removeFromSuperview()
+        hideDefaultFunctionButtons([retroButton])
         threeDSAdvancedModeButton.removeFromSuperview()
         jitContextMenuButton.removeFromSuperview()
         jitButton.removeFromSuperview()
@@ -1451,6 +1453,7 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateAzahar3DSFunctionButton() {
+        hideDefaultFunctionButtons([retroButton])
         if let lastView = functionButtonContainerView.subviews.last {
             functionButtonContainerView.addSubview(threeDSAdvancedSettingButton)
             threeDSAdvancedSettingButton.snp.makeConstraints { make in
@@ -1642,18 +1645,22 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         }
     }
     
-    private func updateNoCheatCodeFunctionButton() {
-        cheatCodeButton.removeFromSuperview()
-        
-        retroButton.snp.makeConstraints { make in
-            make.leading.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeHuge)
+    private func hideDefaultFunctionButtons(_ buttons: [UIView]) {
+        guard buttons.count > 0 else { return }
+        var removeButtons = [UIView]()
+        functionButtonContainerView.subviews.forEach { button in
+            if buttons.contains(where: { $0 == button }) {
+                removeButtons.append(button)
+            }
         }
-        
-        skinButton.snp.makeConstraints { make in
-            make.leading.equalTo(retroButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.size.equalTo(Constants.Size.IconSizeHuge)
-            make.trailing.equalToSuperview()
+        if removeButtons.count > 0 {
+            removeButtons.forEach { $0.removeFromSuperview() }
+        }
+        if let firstView = functionButtonContainerView.subviews.first {
+            firstView.snp.makeConstraints { make in
+                make.leading.centerY.equalToSuperview()
+                make.size.equalTo(Constants.Size.IconSizeHuge)
+            }
         }
     }
     
@@ -1800,23 +1807,15 @@ class GameInfoDetailReusableView: UICollectionReusableView {
     }
     
     private func updateAtariFunctionButton() {
-        cheatCodeButton.removeFromSuperview()
-        
-        retroButton.snp.makeConstraints { make in
-            make.leading.centerY.equalToSuperview()
-            make.size.equalTo(Constants.Size.IconSizeHuge)
-        }
-        
-        skinButton.snp.makeConstraints { make in
-            make.leading.equalTo(retroButton.snp.trailing).offset(Constants.Size.ContentSpaceMin)
-            make.size.equalTo(Constants.Size.IconSizeHuge)
-            make.trailing.equalToSuperview()
+        if let game, game.gameType == .a5200 {
+            hideDefaultFunctionButtons([retroButton, cheatCodeButton])
+        } else {
+            hideDefaultFunctionButtons([cheatCodeButton])
         }
     }
     
     private func updateJ2MEFunctionButton() {
-        retroButton.removeFromSuperview()
-        cheatCodeButton.removeFromSuperview()
+        hideDefaultFunctionButtons([retroButton, cheatCodeButton])
         j2mesettingButton.removeFromSuperview()
         
         skinButton.snp.makeConstraints { make in

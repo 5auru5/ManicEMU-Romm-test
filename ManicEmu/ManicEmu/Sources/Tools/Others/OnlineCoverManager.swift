@@ -133,6 +133,8 @@ class OnlineCoverManager {
                                      isCallBackMain: isCallBackMain,
                                      completion: completion)
                 return
+            case .doom:
+                boxArtUrl = host.appendingPathComponent("DOOM/Named_Boxarts")
             default:
                 boxArtUrl = nil
             }

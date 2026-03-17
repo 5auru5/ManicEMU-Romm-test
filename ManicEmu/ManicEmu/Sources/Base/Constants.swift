@@ -94,6 +94,7 @@ struct Constants {
                 case .ss: return 0.638
                 case .n64: return 1.369
                 case .mcd: return (Locale.prefersUS ? 0.5864 : 1.1)
+                case .doom: return 0.731
                 case .arcade: return 0.731
                 case .ns: return 0.611
                 case .a2600: return 0.735
@@ -309,6 +310,13 @@ struct Constants {
         static let Flycast = Document.appendingPathComponent(LibretroCore.Cores.Flycast.name)
         static let bsnes = Document.appendingPathComponent(LibretroCore.Cores.bsnes.name)
         static let MAME = Document.appendingPathComponent(LibretroCore.Cores.MAME.name)
+        static var PrBoom: String {
+            let path = Document.appendingPathComponent(LibretroCore.Cores.PrBoom.name)
+            if !FileManager.default.fileExists(atPath: path) {
+                try? FileManager.default.createDirectory(atPath: path, withIntermediateDirectories: true)
+            }
+            return path
+        }
         static let Stella = Document.appendingPathComponent(LibretroCore.Cores.Stella.name)
         static let Atari800 = Document.appendingPathComponent(LibretroCore.Cores.Atari800.name)
         static let ProSystem = Document.appendingPathComponent(LibretroCore.Cores.ProSystem.name)
@@ -623,7 +631,7 @@ struct Constants {
         }
         static let Retro = URL(string: "https://retroachievements.org")!
         static let MobyGames = URL(string: "https://www.mobygames.com")!
-        static let InstallSideload = URL(string: "sidestore://source?url=apps.manicemu.site/altstore")!
+        static let InstallSideload = URL(string: "sidestore://source?url=https://apps.manicemu.site/altstore")!
         static let SideStore = URL(string: "https://sidestore.io")!
         static let GLSLShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip")!
         static let SlangShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_slang.zip")!

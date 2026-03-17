@@ -177,6 +177,8 @@ class Game: Object, ObjectUpdatable {
             return URL(fileURLWithPath: Constants.Path.PokeMini.appendingPathComponent("\(name).eep"))
         } else if gameType == .ps1 {
             return URL(fileURLWithPath: Constants.Path.BeetlePSXHW.appendingPathComponent("\(name).srm"))
+        } else if gameType == .doom {
+            return URL(fileURLWithPath: Constants.Path.PrBoom.appendingPathComponent(name))
         } else if gameType == .arcade {
             return URL(fileURLWithPath: Constants.Path.MAME.appendingPathComponent("\(name).srm"))
         } else if gameType == .a2600 {
@@ -379,6 +381,8 @@ class Game: Object, ObjectUpdatable {
             } else {
                 return Bundle.main.path(forResource: "desmume.libretro", ofType: "framework", inDirectory: "Frameworks")
             }
+        } else if gameType == .doom {
+            return Bundle.main.path(forResource: "prboom.libretro", ofType: "framework", inDirectory: "Frameworks")
         } else if gameType == .arcade {
             if defaultCore == 0 {
                 return Bundle.main.path(forResource: "mame.libretro", ofType: "framework", inDirectory: "Frameworks")
@@ -496,7 +500,7 @@ class Game: Object, ObjectUpdatable {
     }
     
     var supportRetroAchievements: Bool {
-        if gameType == ._3ds {
+        if gameType == ._3ds || gameType == .doom || gameType == .a5200 {
             return false
         }
         if gameType == .arcade, defaultCore == 0 {

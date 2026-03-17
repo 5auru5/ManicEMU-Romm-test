@@ -235,6 +235,8 @@ class GameCoverView: UIView {
                 image = style == .style2 ? R.image.xbox360_cover_v() : R.image.xbox360_cover_h()
             } else if gameType == .j2me {
                 image = style == .style2 ? R.image.j2me_cover_v() : R.image.j2me_cover_h()
+            }  else if gameType == .doom {
+                image = style == .style2 ? R.image.doom_cover_v() : R.image.doom_cover_h()
             }
             if UIDevice.isPhone, !UIDevice.isLandscape, scalePlatform, Constants.Size.GamesPerRow != 2, let unwrapImage = image {
                 image = unwrapImage.scaled(toWidth: unwrapImage.size.width * (1/(Constants.Size.GamesPerRow-1)))

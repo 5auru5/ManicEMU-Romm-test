@@ -216,6 +216,8 @@ class GamesCollectionReusableView: UICollectionReusableView {
                 image = R.image.xbox360_group_brand(compatibleWith: traitCollection)
             } else if gameType == .j2me {
                 image = R.image.j2me_group_brand(compatibleWith: traitCollection)
+            } else if gameType == .doom {
+                image = R.image.doom_group_brand(compatibleWith: traitCollection)
             }
             Self.brandImageCaches[key] = image
             return image

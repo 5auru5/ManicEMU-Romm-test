@@ -280,6 +280,18 @@
 		</dict>
 		<dict>
 			<key>CFBundleTypeName</key>
+			<string>DOOM Game</string>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSHandlerRank</key>
+			<string>Owner</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>public.aoshuang.game.doom</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeName</key>
 			<string>2600 Game</string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
@@ -1111,6 +1123,29 @@
 					<string>zip</string>
 					<string>7z</string>
 					<string>cmd</string>
+				</array>
+			</dict>
+		</dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>DOOM Game</string>
+			<key>UTTypeIconFiles</key>
+			<array>
+				<string>file_icon.png</string>
+			</array>
+			<key>UTTypeIdentifier</key>
+			<string>public.aoshuang.game.doom</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>wad</string>
+					<string>iwad</string>
+					<string>pwad</string>
 				</array>
 			</dict>
 		</dict>

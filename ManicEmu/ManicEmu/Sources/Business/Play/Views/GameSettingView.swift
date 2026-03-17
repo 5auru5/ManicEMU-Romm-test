@@ -635,7 +635,14 @@ extension GameSettingView: UICollectionViewDelegate {
                 }
                 return UIContextMenuConfiguration(actionProvider:  { _ in UIMenu(children: actions) })
             } else {
-                let actions = GameSetting.Resolution.allCases.filter({ $0 != .undefine }).map { resolution in
+                let actions = GameSetting.Resolution.allCases.filter({
+                    if game.gameType == .doom && ($0 == .undefine || $0 == .nine || $0 == .ten) {
+                        return false
+                    } else if $0 == .undefine {
+                        return false
+                    }
+                    return true
+                }).map { resolution in
                     UIAction(title: resolution.title,
                              image: resolution == game.resolution ? UIImage(symbol: .checkmarkCircleFill) : nil) { [weak self] _ in
                         guard let self = self else { return }

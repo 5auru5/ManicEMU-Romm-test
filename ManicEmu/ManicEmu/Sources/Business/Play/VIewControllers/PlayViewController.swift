@@ -1800,7 +1800,7 @@ extension PlayViewController {
             }
         case .resolution:
             //MARK: handleMenuGameSetting.resolution
-            guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 || manicGame.gameType == .dc || (manicGame.gameType == .ds && manicGame.defaultCore == 1) else { return true }
+            guard manicGame.gameType == ._3ds || manicGame.gameType == .psp || manicGame.gameType == .n64 || manicGame.gameType == .ps1 || manicGame.gameType == .dc || (manicGame.gameType == .ds && manicGame.defaultCore == 1) || manicGame.gameType == .doom else { return true }
             Log.debug("设置分辨率")
             if manicGame.resolution != item.resolution {
                 Game.change { realm in
@@ -1825,6 +1825,11 @@ extension PlayViewController {
                     let scale = UInt32(item.resolution == .undefine ? 1 : item.resolution.rawValue)
                     let option = "\(256*scale)x\(192*scale)"
                     LibretroCore.sharedInstance().updateRunningCoreConfigs(["desmume_internal_resolution": option], flush: false)
+                } else if manicGame.gameType == .doom {
+                    let scale = UInt32(item.resolution == .undefine ? 1 : item.resolution.rawValue)
+                    let option = "\(320*scale)x\(200*scale)"
+                    LibretroCore.sharedInstance().updateRunningCoreConfigs(["prboom-resolution": option], flush: true)
+                    LibretroCore().reload(byKeepState: true)
                 }
             }
             let message: String
@@ -2661,6 +2666,13 @@ extension PlayViewController {
                                                                  "virtualjaguar_p2_retropad_analog_ru": "hash"
                                                                 ],
                                                        reload: false)
+        } else if manicGame.gameType == .doom {
+            let scale = UInt32(manicGame.resolution == .undefine ? 1 : manicGame.resolution.rawValue)
+            let option = "\(320*scale)x\(200*scale)"
+            LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.PrBoom.name,
+                                                       configs: ["prboom-resolution": option,
+                                                                 "prboom-rumble": "enabled"],
+                                                       reload: false)
         }
         
         //配置静音模式
@@ -2738,6 +2750,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.bsnes.libretroPath)
             } else if manicGame.gameType == .ds {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DSSavePath.libretroPath)
+            } else if manicGame.gameType == .doom {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.PrBoom.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
             }
@@ -2830,7 +2844,6 @@ extension PlayViewController {
                 DSEmulatorBridge.shared.isDeSmuMECore = false
             } else {
                 //DeSmuME
-                let scale = UInt32(manicGame.resolution == .undefine ? 1 : manicGame.resolution.rawValue)
                 LibretroCore.sharedInstance().updateConfig(LibretroCore.Cores.DeSmuME.name,
                                                            configs: ["desmume_pointer_type": "touch",
                                                                      "desmume_internal_resolution": "256x192",
@@ -2996,7 +3009,6 @@ extension PlayViewController {
             enableLibretroLog = "true"
             libretroLogLevel = "0"
 #endif
-            let enableMircophone = (manicGame.gameType == .ds && (manicGame.getExtraBool(key: ExtraKey.microphone.rawValue) ?? false)) || manicGame.isAzahar3DS
             LibretroCore.sharedInstance().updateLibretroConfigs([
                 "fastforward_frameskip": "false",
                 "log_verbosity": enableLibretroLog,
@@ -3027,6 +3039,8 @@ extension PlayViewController {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.bsnes.libretroPath)
             } else if manicGame.gameType == .ds {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.DSSavePath.libretroPath)
+            } else if manicGame.gameType == .doom {
+                LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.PrBoom.libretroPath)
             } else {
                 LibretroCore.sharedInstance().updateLibretroConfig("savefile_directory", value: Constants.Path.LibretroSavePath.libretroPath)
             }
@@ -3492,6 +3506,8 @@ extension PlayViewController {
                     customSaveDir = Constants.Path.bsnes
                 } else if manicGame.gameType == .ds {
                     customSaveDir = Constants.Path.DSSavePath
+                } else if manicGame.gameType == .doom {
+                    customSaveDir = Constants.Path.PrBoom
                 } else if manicGame.isAzahar3DS {
                     customSaveDir = Constants.Path.ThreeDS
                 }

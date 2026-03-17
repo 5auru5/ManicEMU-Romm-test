@@ -36,21 +36,26 @@ class AddCheatCodeView: BaseView {
             guard let self = self else { return }
             self.collectionView.endEditing(true)
             if let editGameCheat = self.editGameCheat,
-                cheatCode == editGameCheat.code,
-                cheatCodeName == editGameCheat.name,
-                cheatCodeType == editGameCheat.type {
+               self.cheatCode == editGameCheat.code,
+               self.cheatCodeName == editGameCheat.name,
+               self.cheatCodeType == editGameCheat.type {
                 //尝试编辑，但是没有任何改动
-                didTapClose?()
+                self.didTapClose?()
                 return
             }
             
             var isValid = false
             if CheatType(cheatCodeType) == .autoDetect {
-                //自动检测模式下需要帮用户做一下检查
-                if let result = Self.checkCheat(cheatCode: cheatCode, supportedCheatFormats: supportedCheatFormats) {
+                if self.game.gameType == .doom, !self.cheatCode.trimmed.isEmpty {
                     isValid = true
-                    cheatCode = result.formatString
-                    cheatCodeType = result.cheatFormat.type.rawValue
+                    self.cheatCodeType = CheatType.doomCommands.rawValue
+                } else {
+                    //自动检测模式下需要帮用户做一下检查
+                    if let result = Self.checkCheat(cheatCode: self.cheatCode, supportedCheatFormats: supportedCheatFormats) {
+                        isValid = true
+                        self.cheatCode = result.formatString
+                        self.cheatCodeType = result.cheatFormat.type.rawValue
+                    }
                 }
             } else {
                 //指定了作弊码类型 且已经通过校验
@@ -209,7 +214,7 @@ class AddCheatCodeView: BaseView {
     
     private func validateInput() {
         var isValid = true
-        if cheatCodeName.isEmpty || cheatCodeType.isEmpty || cheatCode.isEmpty  {
+        if cheatCodeName.trimmed.isEmpty || cheatCodeType.trimmed.isEmpty || cheatCode.trimmed.isEmpty  {
             //验证名称 不能为空
             isValid = false
         } else {
@@ -296,8 +301,13 @@ class AddCheatCodeView: BaseView {
                            currentCheatFormat: CheatFormat? = nil,
                            supportedCheatFormats: [CheatFormat] = []) -> (formatString: String, cheatFormat: CheatFormat)? {
         if let currentCheatFormat {
+            if currentCheatFormat.type == .doomCommands {
+                if cheatCode.trimmed.isEmpty {
+                    return nil
+                }
+                return (cheatCode, currentCheatFormat)
+            }
             //指定作弊码类型的检查
-            var isValid = true
             let formatString: String
             if currentCheatFormat.type == .cwCheat {
                 formatString = Self.formattedCWCheat(code: cheatCode)

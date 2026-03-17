@@ -707,6 +707,12 @@ struct GameSetting: SettingCellItem {
                 return false
             }
             return true
+            
+        case .doom:
+            if type == .swapScreen || type == .consoleHome || type == .amiibo || type == .simBlowing || type == .palette || type == .retro {
+                return false
+            }
+            return true
                 
         case .a2600, .a5200, .a7800, .lynx, .jaguar:
             if gameType == .a5200, type == .retro {
