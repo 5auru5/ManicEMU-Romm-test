@@ -614,7 +614,7 @@ struct Constants {
         }
         static let Retro = URL(string: "https://retroachievements.org")!
         static let MobyGames = URL(string: "https://www.mobygames.com")!
-        static let InstallSideload = URL(string: "sidestore://source?url=apps.manicemu.site/altstore")!
+        static let InstallSideload = URL(string: "sidestore://source?url=https://apps.manicemu.site/altstore")!
         static let SideStore = URL(string: "https://sidestore.io")!
         static let GLSLShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_glsl.zip")!
         static let SlangShaders = URL(string: "https://buildbot.libretro.com/assets/frontend/shaders_slang.zip")!
