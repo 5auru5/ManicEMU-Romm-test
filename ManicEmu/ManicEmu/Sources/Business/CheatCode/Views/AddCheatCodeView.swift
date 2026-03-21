@@ -342,8 +342,6 @@ class AddCheatCodeView: BaseView {
                 }
                 if isMatchThisFormat {
                     return (formatString, cheatFormat)
-                } else {
-                    return nil
                 }
             }
         }

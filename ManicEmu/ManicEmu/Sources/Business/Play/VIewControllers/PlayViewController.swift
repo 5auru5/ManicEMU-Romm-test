@@ -2422,13 +2422,15 @@ extension PlayViewController {
                     LibretroCore.sharedInstance().resetCheatCode()
                     for (index, cheatCode) in self.manicGame.gameCheats.enumerated() {
                         if cheatCode.activate {
+                            // Convert newline separators to '+' (libretro standard for multi-line cheats)
+                            let coreCode: String
                             if CheatType(cheatCode.type) == .actionReplay16, self.manicGame.isPicodriveCore, cheatCode.code.count > 6 {
                                 //MD不支持0123456789格式的作弊码，需要转换成012345:6789格式
-                                let processedCode = cheatCode.code[...5] + ":" + cheatCode.code[6...]
-                                LibretroCore.sharedInstance().addCheatCode(String(processedCode), index: UInt32(index), enable: true)
+                                coreCode = cheatCode.code[...5] + ":" + cheatCode.code[6...]
                             } else {
-                                LibretroCore.sharedInstance().addCheatCode(cheatCode.code, index: UInt32(index), enable: true)
+                                coreCode = cheatCode.code.replacingOccurrences(of: "\n", with: "+")
                             }
+                            LibretroCore.sharedInstance().addCheatCode(String(coreCode), index: UInt32(index), enable: true)
                         }
                     }
                 }
