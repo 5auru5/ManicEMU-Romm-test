@@ -71,7 +71,7 @@ Your support keeps this app going
 #### Microsoft
 - MS-DOS (DOS)
 
-#### Micro Sunsystems
+#### Sun Microsystems
 - J2ME (J2ME)
 
 More platforms coming soon!
