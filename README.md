@@ -68,6 +68,12 @@ Your support keeps this app going
 - Arcade (MAME)
 - Arcade (FBneo)
 
+#### Microsoft
+- MS-DOS (DOS)
+
+#### Micro Sunsystems
+- J2ME (J2ME)
+
 More platforms coming soon!
 
 ### [Key Features]
