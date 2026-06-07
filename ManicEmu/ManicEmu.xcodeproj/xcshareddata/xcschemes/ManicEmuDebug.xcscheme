@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1620"
-   version = "1.3">
+   LastUpgradeVersion = "2640"
+   version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      buildArchitectures = "Automatic">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -14,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A5A001EE24555A5F006E0F0E"
-               BuildableName = "ManicEmu.app"
-               BlueprintName = "ManicEmu"
+               BlueprintIdentifier = "57CDCD872FD5CBD3005BA4C8"
+               BuildableName = "ManicEmuDebug.app"
+               BlueprintName = "ManicEmuDebug"
                ReferencedContainer = "container:ManicEmu.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -26,9 +27,8 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-      </Testables>
+      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldAutocreateTestPlan = "YES">
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -39,27 +39,18 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
+      allowLocationSimulation = "YES"
+      queueDebuggingEnableBacktraceRecording = "Yes">
       <BuildableProductRunnable
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A5A001EE24555A5F006E0F0E"
-            BuildableName = "ManicEmu.app"
-            BlueprintName = "ManicEmu"
+            BlueprintIdentifier = "57CDCD872FD5CBD3005BA4C8"
+            BuildableName = "ManicEmuDebug.app"
+            BlueprintName = "ManicEmuDebug"
             ReferencedContainer = "container:ManicEmu.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <CommandLineArguments>
-         <CommandLineArgument
-            argument = "-FIRAnalyticsDebugEnabled"
-            isEnabled = "NO">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-noFIRAnalyticsDebugEnabled"
-            isEnabled = "YES">
-         </CommandLineArgument>
-      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -71,9 +62,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "A5A001EE24555A5F006E0F0E"
-            BuildableName = "ManicEmu.app"
-            BlueprintName = "ManicEmu"
+            BlueprintIdentifier = "57CDCD872FD5CBD3005BA4C8"
+            BuildableName = "ManicEmuDebug.app"
+            BlueprintName = "ManicEmuDebug"
             ReferencedContainer = "container:ManicEmu.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

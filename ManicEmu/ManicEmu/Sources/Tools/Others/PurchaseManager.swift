@@ -11,6 +11,9 @@ import Foundation
 import StoreKit
 import WidgetKit
 import SmartCodable
+#if !SIDE_LOAD && !DEBUG
+import KeychainAccess
+#endif
 
 enum PurchaseProductType: String, CaseIterable {
     case annual = "com.aoshuang.AnnualPlan"
@@ -20,7 +23,7 @@ enum PurchaseProductType: String, CaseIterable {
 
 struct PurchaseManager {
     
-#if targetEnvironment(simulator) || SIDE_LOAD || DEBUG
+#if SIDE_LOAD || DEBUG
     private(set) static var isMember: Bool = true
 #else
     private(set) static var isMember: Bool = {
@@ -55,7 +58,7 @@ struct PurchaseManager {
     private(set) static var isMonthlyMember: Bool = false
     
     
-#if targetEnvironment(simulator) || SIDE_LOAD || DEBUG
+#if SIDE_LOAD || DEBUG
     private(set) static var isForeverMember: Bool = true
 #else
     private(set) static var isForeverMember: Bool = false
@@ -254,7 +257,7 @@ struct PurchaseManager {
     }
     
     static func refreshPurchase(transaction: Transaction? = nil) async {
-#if targetEnvironment(simulator) || SIDE_LOAD || DEBUG
+#if SIDE_LOAD || DEBUG
         return
 #endif
         //遍历当前有效的内购项目

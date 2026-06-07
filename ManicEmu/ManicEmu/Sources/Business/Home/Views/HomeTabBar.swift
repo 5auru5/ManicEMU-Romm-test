@@ -130,8 +130,13 @@ class HomeTabBar: UIView {
                                       normalSymbol: .gearshape,
                                       selectedSymbol: .gearshapeFill,
                                       title: R.string.localizable.tabbarTitleSettings())
-    private var indicatorView: AnimatedGradientView = {
-        let view = AnimatedGradientView(notifiedUpadate: true)
+    private var indicatorView: UIView = {
+        let view = UIView()
+        let animView = AnimatedGradientView(notifiedUpadate: true)
+        view.addSubview(animView)
+        animView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         view.layerCornerRadius = Constants.Size.ItemHeightTiny/2
         return view
     }()

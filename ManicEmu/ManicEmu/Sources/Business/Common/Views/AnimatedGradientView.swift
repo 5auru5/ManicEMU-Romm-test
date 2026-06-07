@@ -28,7 +28,7 @@ class AnimatedGradientView: AnimatedMulticolorGradientView {
     }
     
     init(colors: [UIColor] = Constants.Color.Gradient, notifiedUpadate: Bool = false, alphaComponent: CGFloat = 1) {
-        super.init()
+        super.init(animationDirector: SpeckleAnimationRandomDirector())
         if alphaComponent > 0 && alphaComponent < 1 {
             self.setColors(colors.map({ $0.withAlphaComponent(alphaComponent) }), animated: false)
         } else {
@@ -38,6 +38,7 @@ class AnimatedGradientView: AnimatedMulticolorGradientView {
         self.transitionSpeed = 10
         self.bias = 0.0025
         self.renderScale = 2
+        self.frameLimit = 5
         
         if notifiedUpadate {
             gradientColorChangeNotification = NotificationCenter.default.addObserver(forName: Constants.NotificationName.GradientColorChange, object: nil, queue: .main) { [weak self] notification in

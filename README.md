@@ -121,53 +121,25 @@ More platforms coming soon!
  **Build Environment**: Requires Xcode 16+, iOS SDK 15+, and Swift 5.9+
 
  **Build Step**
-1. Install VulkanSDK  
-2. Install C++ Boost
-3. `git clone --recursive https://github.com/Manic-EMU/ManicEMU.git`
-4. `cd ManicEMU/Cores/Azahar && ./build_xcode.sh`
-5. `cd ManicEMU/ManicEmu && pod install`
-6. `open ManicEMU/ManicEmu/ManicEmu.xcworkspace`
-7. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities
-8. Wait for SPM to finish loading. Press CMD+R to run Manic EMU
+1. `git clone --recursive https://github.com/Manic-EMU/ManicEMU.git`
+2. `open ManicEMU/ManicEmu/ManicEmu.xcodeproj`
+3. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities
+4. Wait for SPM to finish loading. Press CMD+R to run Manic EMU
 
   **PS.**
 - Some Apple services require a Developer Program account to work properly—like App Groups, In-App Purchases, and iCloud. You’ll need to set these up yourself. If you don’t have a Developer Program account, you can remove these services before compiling.
 
 - Some third-party services also need your own API keys to function correctly. You can configure these in the `Cipher` section of `Constant.swift`.   
 
-- The binary build instructions in the `/Cores` directory: To simplify the project's build process, some cores are integrated as binaries, while most cores are built from upstream source code without any modifications. The cores and some components listed below have been partially modified.
-  - [azahar](https://github.com/Daiuno/azahar)
+- The binary build instructions in the `/Cores` directory: To simplify the project's build process, some cores are integrated as binaries, while most cores are built from upstream source code without any modifications. All the changes made to the core can be found [here](https://github.com/Daiuno?tab=repositories).
   
-  - [desmume](https://github.com/Daiuno/desmume)
-  
-  - [melonds-ds](https://github.com/Daiuno/melonds-ds)
-  
-  - [dynarmic](https://github.com/Daiuno/dynarmic)
-  
-  - [oaknut](https://github.com/Daiuno/oaknut)
-  
-  - [melonDS](https://github.com/Daiuno/melonDS)
-  
-  - [libretro-common](https://github.com/Daiuno/libretro-common)
-  
-  - [flycast](https://github.com/Daiuno/flycast)
-  
-  - [beetle-psx-libretro](https://github.com/Daiuno/beetle-psx-libretro)
-  
-  - [ppsspp](https://github.com/Daiuno/ppsspp)
-  
-  - [dosbox-pure](https://github.com/Daiuno/dosbox-pure)
-
-  - [freej2me](https://github.com/Daiuno/freej2me-web.git)
-  
-  - [jgenesis](https://github.com/Daiuno/jgenesis.git)
 
 ## Acknowledgements
 This project is made possible by the contributions of many outstanding open-source projects:
 - Open source emulator cores
 - Architectural design of DeltaCore
 - Toolchain support from the Libretro community
-- Additional dependencies (see `SPM` and `Podfile` listings)
+- Additional dependencies (see SPM package listings in Xcode)
 
 ## Links
 [<img src="manicemu-badge.png" height="80">](https://manicemu.site) [<img src="discord-badge.png" height="80">](https://discord.gg/qsaTHzknAZ)

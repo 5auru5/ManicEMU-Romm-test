@@ -16,3 +16,4 @@ APP_VERSION = 1.9.2
 
 // Prebuilt cores under ProjectManicEMU/Cores (Citra.framework, *.libretro.framework, …)
 FRAMEWORK_SEARCH_PATHS = $(inherited) $(PROJECT_DIR)/../Cores
+OTHER_LDFLAGS = $(inherited) -framework SQLCipher
