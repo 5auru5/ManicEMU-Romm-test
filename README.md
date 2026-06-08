@@ -1,152 +1,208 @@
-# Manic-EMU [![AGPLv3 License](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+<div align="center">
+  <img src="docs/assets/branding/manic-emu-logo.svg" alt="Manic EMU" width="720">
+  <p>
+    <strong>All-in-one retro game emulation for iOS, with a clean interface and broad platform support.</strong>
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/status-active-2f855a?style=flat-square" alt="Status: active">
+    <img src="https://img.shields.io/badge/platform-iOS%2015%2B%20%2F%20iPadOS-111827?style=flat-square" alt="Platform: iOS 15+ and iPadOS">
+    <img src="https://img.shields.io/badge/distribution-App%20Store%20%2F%20StikStore%20%2F%20SideStore-1f6feb?style=flat-square" alt="Distribution: App Store, StikStore, SideStore">
+    <img src="https://img.shields.io/badge/license-AGPL%20v3-blue?style=flat-square" alt="License: AGPL v3">
+  </p>
+</div>
 
-Manic EMU is an all-in-one retro game emulator for iOS. It packs powerful features while keeping a clean, sleek UI and delivering buttery-smooth gameplay.
+Manic EMU is an all-in-one retro game emulator for iOS. It brings console,
+arcade, computer, and mobile Java systems into one app while keeping a clean,
+sleek UI and smooth gameplay-focused controls.
 
-<p float="center">
-  <img src="images_manicemu_ver4_a01.jpg" width="13%">
-  <img src="images_manicemu_ver4_a02.jpg" width="13%">
-  <img src="images_manicemu_ver4_a03.jpg" width="13%">
-  <img src="images_manicemu_ver4_a04.jpg" width="13%">
-  <img src="images_manicemu_ver4_a05.jpg" width="13%">
-  <img src="images_manicemu_ver4_a06.jpg" width="13%">
-  <img src="images_manicemu_ver4_a07.jpg" width="13%">
+The sections below keep the app details up front, then connect availability,
+features, development notes, related documentation, repository layout, and
+licensing in one place.
+
+> Manic EMU does not include ROMs, ISOs, BIOS files, or copyrighted game data.
+> Use legally owned backups, homebrew, and public-domain software only. See
+> the upstream [anti-piracy policy](https://github.com/Manic-EMU/ManicEMU/blob/main/ANTI_PIRACY.md)
+> for the full project position.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a01.jpg" alt="Manic EMU screenshot 1" width="13%">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a02.jpg" alt="Manic EMU screenshot 2" width="13%">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a03.jpg" alt="Manic EMU screenshot 3" width="13%">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a04.jpg" alt="Manic EMU screenshot 4" width="13%">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a05.jpg" alt="Manic EMU screenshot 5" width="13%">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a06.jpg" alt="Manic EMU screenshot 6" width="13%">
+  <img src="https://raw.githubusercontent.com/Manic-EMU/ManicEMU/main/images_manicemu_ver4_a07.jpg" alt="Manic EMU screenshot 7" width="13%">
 </p>
 
-</br>
+## At a Glance
 
-[<img src="appstore-badge.png" height="50">](https://itunes.apple.com/us/app/id6743335790)
-</br>
-Manic EMU is now available on the AppStore
+- App distribution: App Store, StikStore, and SideStore.
+- Source target: iOS app built with Xcode 16+, iOS SDK 15+, and Swift 5.9+.
+- Emulator model: multiple emulator cores, including Libretro-based frameworks
+  and dedicated cores.
+- User experience: game library, custom skins, saves, cheats, filters,
+  screenshots, landscape mode, and custom shortcuts.
+- Sync and import: iCloud sync plus Google Drive, Dropbox, OneDrive, Baidu
+  Cloud, Aliyun, WebDAV, and SMB import paths.
+- Online and big-screen play: RetroAchievements, select online-capable cores,
+  AirPlay mirroring, and controller support.
+- Project stance: open source, community-driven, and anti-piracy.
 
-</br>
+## Availability
 
-[<img src="kofi-badge.png" height="50">](https://ko-fi.com/maftymanicemu)
-</br>
-Your support keeps this app going
+Manic EMU is available through Apple's App Store and through sideloading
+channels including StikStore and SideStore.
 
-</br>
+<p align="center">
+  <a href="https://itunes.apple.com/us/app/id6743335790">
+    <img src="docs/assets/branding/appstore-badge.png" alt="Download on the App Store" width="170">
+  </a>
+  <a href="https://stikstore.app">
+    <img src="docs/assets/branding/stikstore-badge.png" alt="Available on StikStore" width="170">
+  </a>
+  <a href="https://sidestore.io">
+    <img src="docs/assets/branding/sidestore-badge.png" alt="Available on SideStore" width="170">
+  </a>
+</p>
+
+Compatibility and performance vary by device, iOS version, emulator core, game,
+and JIT availability. App Store builds and sideloaded builds may differ where
+Apple services, signing, or JIT workflows are involved.
+
+## Supported Platforms
+
+| Category | Platforms |
+| --- | --- |
+| Nintendo | Nintendo 3DS\*, Nintendo 64, Nintendo DS\*, Game Boy Advance, Game Boy Color, Game Boy, NES, Famicom Disk System, SNES, Virtual Boy, Pokemon Mini |
+| Sony | PlayStation, PlayStation Portable\* |
+| Sega | Dreamcast\*, Saturn, Master System, Game Gear, SG-1000, Genesis 32X/Super 32X, Sega CD/Mega-CD, Genesis/MegaDrive |
+| Atari | Jaguar, Lynx, 7800, 5200, 2600 |
+| Arcade | MAME, FBneo |
+| Microsoft | MS-DOS |
+| Sun Microsystems | J2ME |
+
+\* Marked consoles support online play. Some online functions require Third-Party Services.
+
+More platforms are planned upstream.
 
 ## Features
 
-### [Supported Platforms]
-
-#### Nintendo
-- Nintendo 3DS (3DS)
-- Nintendo 64 (N64)
-- Nintendo DS (NDS) *supports online play via WFC
-- Game Boy Advance (GBA)
-- Game Boy Color (GBC)
-- Game Boy (GB)
-- Nintendo Entertainment System (NES)
-- Famicom Disk System (FDS)
-- Super Nintendo Entertainment System (SNES)
-- Virtual Boy (VB)
-- Pokémon Mini (PM)
-
-#### SONY
-- PlayStation (PS1)
-- PlayStation Portable (PSP)
-
-#### SEGA
-- Sega Dreamcast (DC) *supports online play
-- Sega Saturn (SS)
-- Sega Master System (MS)
-- Sega Game Gear (GG)
-- Sega SG-1000 (SG)
-- Sega Genesis 32X/Super 32X (32X)
-- Sega CD/Mega-CD (MCD)
-- Sega Genesis/MegaDrive (MD)
-
-#### Atari
-- Atari Jaguar (Jaguar)
-- Atari Lynx (LYNX)
-- Atari 7800 (7800)
-- Atari 5200 (5200)
-- Atari 2600 (2600)
-
-#### Arcade
-- Arcade (MAME)
-- Arcade (FBneo)
-
-#### Microsoft
-- MS-DOS (DOS)
-
-#### Sun Microsystems
-- J2ME (J2ME)
-
-More platforms coming soon!
-
-### [Key Features]
-- Unlimited Saves: Manual & 50 auto-save slots
-- 5x Speed: Control the game’s pace
-- Cheat Codes: Unlimited library for perfect playthroughs
-- Retro Filters: Immersive visual effects
-- Custom Skins: Authentic feel, third-party compatible
-- Screenshot Tool: Share your epic moments
-- Landscape Mode: Enhanced gameplay experience
-- Custom Shortcuts: Redefine your controls
-
-
-### [RetroAchievements Integration • Challenge Yourself]
-- Hardcore Mode Verified by RetroAchievements
-- Track and Share your Achievements with ease
-- RetroAchievements Account required
-
-
-### [iCloud Sync • Your Gaming Universe]
-- Cross-device sync for games, saves, and settings
-- Encrypted storage • Cloud backups • No progress loss
-- Switch between phone and tablet seamlessly
-- Play anywhere—your journey never pauses!
-
-
-### [Cloud Integration • One-Click Import]
-- Google Drive, Dropbox, OneDrive, Baidu Cloud, Aliyun
-- WebDAV/SMB protocol support—access the entire web!
-
-
-### [Controller Freedom • Play Your Way]
-- Native Joy-Con/DUALSHOCK/Xbox support
-- Bluetooth controllers/keyboards • Mac compatible
-- Multi-controller connectivity
-- Switch between solo play and multiplayer battles
-
-
-### [Cross-Screen Play • Conquer the Big Screen]
-- AirPlay mirroring for lag-free streaming
-- Phone-to-TV switching for parties or couch gaming
-- Big screen + controller = Ultimate immersion
+| Category | Details |
+| --- | --- |
+| Saves | Manual saves plus 50 auto-save slots. |
+| Gameplay controls | 5x speed control, cheat-code support, custom shortcuts, and landscape mode. |
+| Visuals | Retro filters, screenshot capture, and custom third-party-compatible skins. |
+| Achievements | RetroAchievements integration with Hardcore Mode support. A RetroAchievements account is required. |
+| Sync | iCloud sync for games, saves, and settings, with encrypted storage and cloud backups. |
+| Cloud import | Google Drive, Dropbox, OneDrive, Baidu Cloud, Aliyun, WebDAV, and SMB support. |
+| Controllers | Native Joy-Con, DUALSHOCK, Xbox, Bluetooth controller, keyboard, Mac, and multi-controller support. |
+| Cross-screen play | AirPlay mirroring and phone-to-TV play for big-screen sessions. |
 
 ## Development Notes
- **Build Environment**: Requires Xcode 16+, iOS SDK 15+, and Swift 5.9+
- 
- **Prerequisites: Install Git LFS (macOS)**
-1. `brew install git-lfs`
-2. `git lfs install`
 
- **Build Step**
-1. `git clone --recursive https://github.com/Manic-EMU/ManicEMU.git`
-2. `open ManicEMU/ManicEmu/ManicEmu.xcodeproj`
-3. Change the developer team info and Bundle Identifier in ManicEmu Target - Signing & Capabilities
-4. Wait for SPM to finish loading. Press CMD+R to run Manic EMU
+### Runtime
 
-  **PS.**
-- Some Apple services require a Developer Program account to work properly—like App Groups, In-App Purchases, and iCloud. You’ll need to set these up yourself. If you don’t have a Developer Program account, you can remove these services before compiling.
+- iPhone or iPad hardware capable of running the selected emulator core.
+- Legally obtained game backups and any required system files.
+- Optional RetroAchievements account for achievement tracking.
+- Optional cloud provider accounts for cloud import and sync workflows.
 
-- Some third-party services also need your own API keys to function correctly. You can configure these in the `Cipher.swift`.   
+### Build
 
-- The binary build instructions in the `/Cores` directory: To simplify the project's build process, some cores are integrated as binaries, while most cores are built from upstream source code without any modifications. All the changes made to the core can be found [here](https://github.com/Daiuno?tab=repositories).
-  
+- macOS with Xcode 16 or newer.
+- iOS SDK 15 or newer.
+- Swift 5.9 or newer.
+- Git LFS for binary cores and bundled system assets.
+- Apple Developer Program account for services such as App Groups,
+  In-App Purchases, and iCloud. These capabilities must be configured by the
+  builder or removed before compiling.
+- Third-party API keys for services configured through `Cipher.swift`, when
+  those services are enabled.
+
+### Build Steps
+
+1. Install Git LFS:
+
+   ```sh
+   brew install git-lfs
+   git lfs install
+   ```
+
+2. Clone the upstream Manic EMU repository:
+
+   ```sh
+   git clone --recursive https://github.com/Manic-EMU/ManicEMU.git
+   ```
+
+3. Open the Xcode project:
+
+   ```sh
+   open ManicEMU/ManicEmu/ManicEmu.xcodeproj
+   ```
+
+4. Update the developer team and bundle identifier in the ManicEmu target's
+   Signing & Capabilities settings.
+5. Wait for Swift Package Manager to finish resolving packages, then run the
+   app with `Cmd+R`.
+
+Some cores are integrated as binary frameworks, while most cores are built from
+upstream source code without modifications. Upstream core changes are tracked
+through the [Daiuno repositories](https://github.com/Daiuno?tab=repositories).
+
+## Documentation
+
+- [Manic EMU upstream README](https://github.com/Manic-EMU/ManicEMU/blob/main/README.md)
+- [Anti-piracy policy](https://github.com/Manic-EMU/ManicEMU/blob/main/ANTI_PIRACY.md)
+- [Contributing guide](https://github.com/Manic-EMU/ManicEMU/blob/main/CONTRIBUTING.md)
+- [Code of conduct](https://github.com/Manic-EMU/ManicEMU/blob/main/CODE_OF_CONDUCT.md)
+- [Security policy](https://github.com/Manic-EMU/ManicEMU/blob/main/SECURITY.md)
+- [Third-party notices](https://github.com/Manic-EMU/ManicEMU/blob/main/THIRD_PARTY_NOTICES.md)
+- [AGPL-3.0 license](https://github.com/Manic-EMU/ManicEMU/blob/main/LICENSE)
+
+## Community
+
+<p align="center">
+  <a href="https://manicemu.site">
+    <img src="docs/assets/branding/manicemu-badge.png" alt="Manic EMU website" height="70">
+  </a>
+  <a href="https://discord.gg/qsaTHzknAZ">
+    <img src="docs/assets/branding/discord-badge.png" alt="Manic EMU Discord" height="70">
+  </a>
+  <a href="https://ko-fi.com/maftymanicemu">
+    <img src="docs/assets/branding/kofi-badge.png" alt="Support Manic EMU on Ko-fi" height="70">
+  </a>
+</p>
+
+## Repository Layout
+
+The upstream Manic EMU repository is organized around the native iOS app,
+bundled emulator cores, runtime assets, and supporting project documentation:
+
+| Path | Purpose |
+| --- | --- |
+| `ManicEmu/` | The Xcode project and iOS app source. |
+| `Cores/` | Emulator core frameworks, including Git LFS-managed binary assets. |
+| `System.core/` | Runtime system assets used by emulator cores. |
+| `Dependencies/` | App dependencies. |
+| `Scripts/` | Build and maintenance scripts. |
+| `ANTI_PIRACY.md` | Project policy for legal game backups, BIOS files, homebrew, and public-domain content. |
+| `CONTRIBUTING.md` | Contributor setup, issue-reporting, pull-request, and commit-message guidance. |
+| `THIRD_PARTY_NOTICES.md` | Notices for bundled open-source components and dependencies. |
 
 ## Acknowledgements
-This project is made possible by the contributions of many outstanding open-source projects:
-- Open source emulator cores
-- Architectural design of DeltaCore
-- Toolchain support from the Libretro community
-- Additional dependencies (see SPM package listings in Xcode)
 
-## Links
-[<img src="manicemu-badge.png" height="80">](https://manicemu.site) [<img src="discord-badge.png" height="80">](https://discord.gg/qsaTHzknAZ)
+Manic EMU is made possible by many open-source emulator projects and community
+toolchains, including emulator core maintainers, the architectural influence of
+DeltaCore, Libretro community tooling, and additional Swift Package Manager
+dependencies listed in Xcode.
 
+## Upstream And Licensing
 
+Manic EMU source is licensed under AGPL-3.0 in the upstream
+[ManicEMU repository](https://github.com/Manic-EMU/ManicEMU). Additional
+notices for bundled emulator cores, app dependencies, and supporting projects
+are maintained in
+[THIRD_PARTY_NOTICES.md](https://github.com/Manic-EMU/ManicEMU/blob/main/THIRD_PARTY_NOTICES.md).
 
+Manic EMU is not affiliated with Apple, Nintendo, Sony, Sega, Atari, Microsoft,
+Sun Microsystems, Libretro, or any console manufacturer or game publisher.
