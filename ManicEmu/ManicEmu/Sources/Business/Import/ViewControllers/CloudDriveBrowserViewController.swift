@@ -70,13 +70,9 @@ class CloudDriveBrowserViewController: BaseViewController {
     private let navigationTitle: String?
 
     private var isRomm: Bool { provider is RommServiceProvider }
-    ///当前目录的全部条目（搜索前）
     private var allItems: [CloudItem] = []
-    ///当前展示的条目（搜索后）
     private var displayItems: [CloudItem] = []
-    ///当前搜索关键字
     private var searchText: String = ""
-    ///字母索引标题
     private var indexTitles: [String] = []
 
     private lazy var searchController: UISearchController = {
@@ -87,7 +83,6 @@ class CloudDriveBrowserViewController: BaseViewController {
         return controller
     }()
 
-    ///右侧字母索引栏
     private lazy var indexView: SectionIndexView = {
         let view = SectionIndexView()
         view.isItemIndicatorAlwaysInCenterY = true
@@ -125,7 +120,6 @@ class CloudDriveBrowserViewController: BaseViewController {
         })
 
         if isRomm {
-            //搜索栏
             navigationItem.searchController = searchController
             navigationItem.hidesSearchBarWhenScrolling = false
             definesPresentationContext = true
@@ -204,7 +198,6 @@ class CloudDriveBrowserViewController: BaseViewController {
         }
     }
 
-    ///按当前搜索关键字过滤后刷新列表与字母索引
     private func reloadDisplay() {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         if query.isEmpty {
@@ -454,7 +447,6 @@ extension CloudDriveBrowserViewController: SectionIndexViewDataSource, SectionIn
         sectionIndexView.selectItem(at: section)
         sectionIndexView.showCurrentItemIndicator()
         sectionIndexView.impact()
-        //拖动索引时禁用列表自身的滚动手势，否则手指移动会被列表的pan手势抢走导致只能点选
         collectionView.panGestureRecognizer.isEnabled = false
         guard section < indexTitles.count else { return }
         let letter = indexTitles[section]

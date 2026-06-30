@@ -40,8 +40,6 @@ final class RommSyncManager {
         return map[fileName] != nil
     }
 
-    /// Sync saves/states for a game that was just imported from RomM (download left a pending link).
-    /// Does nothing for games not downloaded from RomM so ordinary imports never hit the network.
     @MainActor
     func syncAfterImport(gameId: String) {
         guard isConfigured() else { return }
@@ -70,9 +68,6 @@ final class RommSyncManager {
     func syncAllOnLaunch() {
         guard isConfigured() else { return }
         guard Settings.defalut.getExtraBool(key: ExtraKey.rommSyncOnLaunch.rawValue) ?? true else { return }
-        // Run entirely off the launch-critical path. Scanning the whole library to find RomM-linked
-        // games (parsing each game's extras) is the expensive part, so do it on a background Realm so
-        // the app opens normally; only hop back to the main actor to build the few needed snapshots.
         Task.detached(priority: .utility) {
             let linkedIds: [String] = {
                 let realm = Database.realm

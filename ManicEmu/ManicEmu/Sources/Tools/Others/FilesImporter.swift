@@ -563,10 +563,6 @@ extension FilesImporter {
                             }
                             do {
                                 try realm.write {
-                                    // Guard against a duplicate primary key (the ROM hash). Two identical
-                                    // files importing concurrently can both pass the earlier existence
-                                    // check, and realm.add on an existing key throws an uncatchable
-                                    // RLMException, so re-check inside the transaction.
                                     if realm.object(ofType: Game.self, forPrimaryKey: game.id) == nil {
                                         realm.add(game)
                                     }
@@ -580,7 +576,6 @@ extension FilesImporter {
                                     }
                                 }
                                 OnlineCoverManager.shared.addCoverMatch(OnlineCoverManager.CoverMatch(game: game))
-                                //如果是从RomM下载导入的新游戏，立即同步其存档
                                 let importedGameId = game.id
                                 DispatchQueue.main.async {
                                     RommSyncManager.shared.syncAfterImport(gameId: importedGameId)
