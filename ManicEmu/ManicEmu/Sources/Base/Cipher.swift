@@ -21,5 +21,6 @@ extension Constants {
         static let ManicKey = ""
         static let DeepSeek = ""
         static let RetroAPI = ""
+        static let RommAPI = ""
     }
 }
