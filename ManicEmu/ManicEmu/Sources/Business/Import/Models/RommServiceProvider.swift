@@ -17,9 +17,16 @@ class RommServiceProvider: CloudServiceProvider {
     var name: String { "RomM" }
 
     private let client: RommClient?
-    
-    private let RommPathString = "/api/roms/%@/content/%@"
 
+    let serviceId: String
+
+    private let romContentPathTemplate = "/api/roms/{romID}/content/{fileName}"
+
+    private func romContentPath(romID: Int, fileName: String) -> String {
+        romContentPathTemplate
+            .replacingOccurrences(of: "{romID}", with: "\(romID)")
+            .replacingOccurrences(of: "{fileName}", with: fileName)
+    }
 
     var rootItem: CloudItem {
         CloudItem(id: name, name: name, path: "/", isDirectory: true)
@@ -30,6 +37,7 @@ class RommServiceProvider: CloudServiceProvider {
     }
 
     init(service: ImportService) {
+        self.serviceId = "\(service.id)"
         self.client = RommClient(scheme: service.scheme ?? "http",
                                  host: service.host ?? "",
                                  port: service.port,
@@ -47,7 +55,6 @@ class RommServiceProvider: CloudServiceProvider {
             do {
                 let items: [CloudItem]
                 if directory.path == "/" {
-                    // Top level: platforms become folders.
                     items = try await client.platforms().map { platform in
                         CloudItem(id: "\(platform.id)",
                                   name: platform.name,
@@ -55,12 +62,11 @@ class RommServiceProvider: CloudServiceProvider {
                                   isDirectory: true)
                     }
                 } else {
-                    // Inside a platform: its ROMs become files.
                     let platformID = Int(directory.id) ?? 0
                     items = try await client.roms(platformID: platformID).map { rom in
                         let item = CloudItem(id: "\(rom.id)/\(rom.fs_name)",
-                                             name: rom.name ?? rom.fs_name,
-                                             path: String(format: RommPathString, platformID, rom.fs_name),
+                                             name: rom.fs_name,
+                                             path: romContentPath(romID: rom.id, fileName: rom.fs_name),
                                              isDirectory: false)
                         item.size = rom.fs_size_bytes ?? 0
                         return item

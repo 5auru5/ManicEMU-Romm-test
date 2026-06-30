@@ -68,7 +68,35 @@ class CloudDriveBrowserViewController: BaseViewController {
     private let directory: CloudItem
     
     private let navigationTitle: String?
-    
+
+    private var isRomm: Bool { provider is RommServiceProvider }
+    ///当前目录的全部条目（搜索前）
+    private var allItems: [CloudItem] = []
+    ///当前展示的条目（搜索后）
+    private var displayItems: [CloudItem] = []
+    ///当前搜索关键字
+    private var searchText: String = ""
+    ///字母索引标题
+    private var indexTitles: [String] = []
+
+    private lazy var searchController: UISearchController = {
+        let controller = UISearchController(searchResultsController: nil)
+        controller.searchResultsUpdater = self
+        controller.obscuresBackgroundDuringPresentation = false
+        controller.searchBar.placeholder = R.string.localizable.gamesSearchPlaceHolder()
+        return controller
+    }()
+
+    ///右侧字母索引栏
+    private lazy var indexView: SectionIndexView = {
+        let view = SectionIndexView()
+        view.isItemIndicatorAlwaysInCenterY = true
+        view.hideSearch = true
+        view.delegate = self
+        view.dataSource = self
+        return view
+    }()
+
     init(provider: CloudServiceProvider, directory: CloudItem, navigationTitle: String? = nil) {
         self.provider = provider
         self.directory = directory
@@ -95,6 +123,21 @@ class CloudDriveBrowserViewController: BaseViewController {
         downloadManageButton.customView?.snp.makeConstraints({ make in
             make.size.equalTo(Constants.Size.ItemHeightUltraTiny)
         })
+
+        if isRomm {
+            //搜索栏
+            navigationItem.searchController = searchController
+            navigationItem.hidesSearchBarWhenScrolling = false
+            definesPresentationContext = true
+            //字母索引栏
+            view.addSubview(indexView)
+            indexView.snp.makeConstraints { make in
+                make.top.bottom.equalTo(collectionView)
+                make.trailing.equalToSuperview()
+                make.width.equalTo(31)
+            }
+            indexView.isHidden = true
+        }
     }
     
     private func setupCollectionView() {
@@ -152,15 +195,49 @@ class CloudDriveBrowserViewController: BaseViewController {
             guard let self = self else { return }
             switch result {
             case .success(let items):
-                var snapshot = NSDiffableDataSourceSnapshot<Section, CloudItem>()
-                snapshot.appendSections([.main])
-                snapshot.appendItems(items.sorted(by: { $0.name < $1.name }))
-                self.dataSource.apply(snapshot, animatingDifferences: false)
+                self.allItems = items.sorted(by: { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending })
+                self.reloadDisplay()
             case .failure(let error):
                 Log.debug("applySnapshot error:\(error)")
                 UIView.makeToast(message: error.localizedDescription)
             }
         }
+    }
+
+    ///按当前搜索关键字过滤后刷新列表与字母索引
+    private func reloadDisplay() {
+        let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if query.isEmpty {
+            displayItems = allItems
+        } else {
+            displayItems = allItems.filter { $0.name.localizedCaseInsensitiveContains(query) }
+        }
+        var snapshot = NSDiffableDataSourceSnapshot<Section, CloudItem>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(displayItems)
+        dataSource.apply(snapshot, animatingDifferences: false)
+
+        if isRomm {
+            var titles: [String] = []
+            var seen = Set<String>()
+            for item in displayItems {
+                let letter = indexLetter(for: item.name)
+                if seen.insert(letter).inserted { titles.append(letter) }
+            }
+            indexTitles = titles.sorted { a, b in
+                if a == "#" { return false }
+                if b == "#" { return true }
+                return a < b
+            }
+            indexView.isHidden = displayItems.isEmpty
+            indexView.reloadData()
+        }
+    }
+
+    ///条目名称对应的索引首字母（非字母归为“#”）
+    private func indexLetter(for name: String) -> String {
+        guard let first = name.uppercased().first else { return "#" }
+        return first.isLetter ? String(first) : "#"
     }
     
     private func selectAll() {
@@ -270,6 +347,18 @@ class CloudDriveBrowserViewController: BaseViewController {
                         downloadItems[item.name] = url
                     }
                     headers = request?.allHTTPHeaderFields
+                } else if let provider = provider as? RommServiceProvider {
+                    let request = provider.downloadableRequest(of: item)
+                    if let url = request?.url {
+                        downloadItems[item.name] = url
+                    }
+                    headers = request?.allHTTPHeaderFields
+                    // save the remote rom ref this file belongs to so we can later sync its saves/states  CloudItem.id is "<romId>/<fs_name>".
+                    if let romId = Int(item.id.components(separatedBy: "/").first ?? "") {
+                        RommSyncManager.registerDownloadedRom(fileName: item.name,
+                                                              romId: romId,
+                                                              serviceId: provider.serviceId)
+                    }
                 }
             }
         }
@@ -334,5 +423,54 @@ extension CloudDriveBrowserViewController: UICollectionViewDelegate {
             return true
         }
         return false
+    }
+}
+
+extension CloudDriveBrowserViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        searchText = searchController.searchBar.text ?? ""
+        reloadDisplay()
+    }
+}
+
+extension CloudDriveBrowserViewController: SectionIndexViewDataSource, SectionIndexViewDelegate {
+    func numberOfScetions(in sectionIndexView: SectionIndexView) -> Int {
+        indexTitles.count
+    }
+
+    func sectionIndexView(_ sectionIndexView: SectionIndexView, itemAt section: Int) -> any SectionIndexViewItem {
+        let item = SectionIndexViewItemView()
+        item.title = indexTitles[section]
+        item.titleColor = Constants.Color.LabelTertiary
+        item.titleSelectedColor = Constants.Color.LabelPrimary.forceStyle(.dark)
+        item.selectedColor = Constants.Color.Main
+        item.titleFont = Constants.Font.caption(size: .s, weight: .bold)
+        return item
+    }
+
+    func sectionIndexView(_ sectionIndexView: SectionIndexView, didSelect section: Int) {
+        sectionIndexView.hideCurrentItemIndicator()
+        sectionIndexView.deselectCurrentItem()
+        sectionIndexView.selectItem(at: section)
+        sectionIndexView.showCurrentItemIndicator()
+        sectionIndexView.impact()
+        //拖动索引时禁用列表自身的滚动手势，否则手指移动会被列表的pan手势抢走导致只能点选
+        collectionView.panGestureRecognizer.isEnabled = false
+        guard section < indexTitles.count else { return }
+        let letter = indexTitles[section]
+        if let row = displayItems.firstIndex(where: { indexLetter(for: $0.name) == letter }) {
+            collectionView.scrollToItem(at: IndexPath(row: row, section: 0), at: .top, animated: false)
+        }
+    }
+
+    func sectionIndexViewDidSelectSearch(_ sectionIndexView: SectionIndexView) {
+        collectionView.setContentOffset(.zero, animated: true)
+    }
+
+    func sectionIndexViewToucheEnded(_ sectionIndexView: SectionIndexView) {
+        UIView.animate(withDuration: 0.3) {
+            sectionIndexView.hideCurrentItemIndicator()
+        }
+        collectionView.panGestureRecognizer.isEnabled = true
     }
 }

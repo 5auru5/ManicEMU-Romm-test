@@ -103,7 +103,7 @@ class ImportService: Object, ObjectUpdatable {
         case .romPatcher:
             "RomPatcher"
         case .romm:
-            R.string.localizable.romm()
+            "Romm"
         }
     }
     
@@ -134,8 +134,7 @@ class ImportService: Object, ObjectUpdatable {
         case .romPatcher:
             R.image.import_rom_patcher()!
         case .romm:
-            //TODO: Replace with a dedicated RomM asset (e.g. R.image.import_romm())
-            UIImage(systemName: "server.rack") ?? UIImage()
+            R.image.import_romm()!
         }
     }()
     
