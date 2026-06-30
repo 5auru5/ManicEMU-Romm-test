@@ -42,6 +42,7 @@ class RommSettingsView: BaseView {
     }()
 
     ///点击关闭按钮回调
+    ///The on close button callback
     var didTapClose: (()->Void)? = nil
 
     deinit {
@@ -130,7 +131,6 @@ class RommSettingsView: BaseView {
         return layout
     }
 
-    ///卡片背景装饰
     class RommSettingsDecorationView: UICollectionReusableView, DynamicShadow {
         var backgroundView: UIView = {
             let view = UIView()

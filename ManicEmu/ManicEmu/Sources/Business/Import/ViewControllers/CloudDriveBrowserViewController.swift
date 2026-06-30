@@ -227,7 +227,6 @@ class CloudDriveBrowserViewController: BaseViewController {
         }
     }
 
-    ///条目名称对应的索引首字母（非字母归为“#”）
     private func indexLetter(for name: String) -> String {
         guard let first = name.uppercased().first else { return "#" }
         return first.isLetter ? String(first) : "#"

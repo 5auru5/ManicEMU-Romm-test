@@ -93,7 +93,7 @@ final class RommClient {
         return req
     }
 
-    /// json decoder that understands RomM's UTC ISO-8601 timestamps
+    /// JSON decoder that understands RomM's UTC ISO-8601 timestamps
     private static let jsonDecoder: JSONDecoder = {
         let withFraction = ISO8601DateFormatter()
         withFraction.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
