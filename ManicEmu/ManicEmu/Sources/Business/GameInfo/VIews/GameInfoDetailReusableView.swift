@@ -1281,7 +1281,6 @@ class GameInfoDetailReusableView: UICollectionReusableView {
         return view
     }()
 
-    // 使用独立的类型，这样 resetForGamingUsing 在游戏中不会重新布局它（会被隐藏）
     private class RommSyncSymbolButton: SymbolButton {}
     var didSyncSaveState: (()->Void)?
     private lazy var syncSaveStateButton: RommSyncSymbolButton = {

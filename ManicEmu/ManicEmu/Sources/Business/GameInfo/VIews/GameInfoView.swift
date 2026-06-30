@@ -522,6 +522,7 @@ extension GameInfoView: UICollectionViewDelegate {
             let alphaProgress = 1 - ((BlankCellHeight - contentOffsetY)/BlankCellHeight)
             gameCoverView.maskTopView.alpha = alphaProgress < 0 ? 0 : alphaProgress
             
+            //下面的alpha值比封面的变化晚一些
             let navigationChangeOffset = BlankCellHeight - contentOffsetY
             if  navigationChangeOffset < Constants.Size.ItemHeightMax {
                 let alphaProgress = (Constants.Size.ItemHeightMax - navigationChangeOffset)/Constants.Size.ItemHeightMax
